@@ -43,7 +43,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
       try
       {
         soilMoistureMonitor = new DuinoCommunicator("/dev/ttyUSB0", 9600);
-        soilMoistureSimulator = new ArduinoSerialDevice("/dev/ttyACM0", 9600);
+        soilMoistureSimulator = new ArduinoSerialDevice("/dev/ttyUSB1", 9600);
       
         soilMoistureMonitor.Open();
         soilMoistureSimulator.Connect();

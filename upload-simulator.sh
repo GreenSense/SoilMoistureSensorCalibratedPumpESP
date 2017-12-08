@@ -16,7 +16,7 @@ git clone https://github.com/CompulsiveCoder/ArduinoSerialController.git && \
 cd ArduinoSerialController && \
 
 # Upload
-sh upload-to-port.sh "/dev/ttyACM0" && \
+sh upload-to-port.sh "/dev/ttyUSB1" && \
 
 # Remove the temporary directory
 rm -rf $SIMULATOR_TMP_DIR
