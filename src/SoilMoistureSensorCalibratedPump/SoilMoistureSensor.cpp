@@ -134,6 +134,8 @@ void takeSoilMoistureSensorReading()
       {
         turnSoilMoistureSensorOff();
       }
+      
+      soilMoistureSensorReadingHasBeenTaken = true;
     }
   }
 }
