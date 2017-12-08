@@ -11,12 +11,12 @@ mkdir -p $SIMULATOR_TMP_DIR
 cd $SIMULATOR_TMP_DIR
 
 # Clone the latest version
-git clone https://github.com/CompulsiveCoder/ArduinoSerialController.git
+git clone https://github.com/CompulsiveCoder/ArduinoSerialController.git && \
 
-cd ArduinoSerialController
+cd ArduinoSerialController && \
 
-# Upload to USB1
-sudo sh upload-to-port.sh "/dev/ttyUSB1"
+# Upload
+sh upload-to-port.sh "/dev/ttyACM0" && \
 
 # Remove the temporary directory
 rm -rf $SIMULATOR_TMP_DIR

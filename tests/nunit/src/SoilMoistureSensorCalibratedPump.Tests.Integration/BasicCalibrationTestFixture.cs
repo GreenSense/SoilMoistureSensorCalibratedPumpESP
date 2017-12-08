@@ -75,18 +75,22 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
         if (calibrationIsReversed)
           expectedCalibratedValue = ArduinoConvert.ReversePercentage(percentageValue);
         
-        var calibratedValueIsWithinRange = IsWithinRange(expectedCalibratedValue, data["C"], 5);
+        Assert.IsTrue(data.ContainsKey("Calibrated"), "Key not found: 'Calibrated'");
         
-        Assert.IsTrue(calibratedValueIsWithinRange, "Invalid value for 'C' (calibrated value).");
+        var calibratedValueIsWithinRange = IsWithinRange(expectedCalibratedValue, data["Calibrated"], 5);
+        
+        Assert.IsTrue(calibratedValueIsWithinRange, "Invalid value for 'Calibrated' (calibrated value).");
         
         Console.WriteLine("");
         Console.WriteLine("Checking raw value");
         
         var expectedRawValue = ArduinoConvert.PercentageToAnalog(percentageValue);
         
-        var rawValueIsWithinRange = IsWithinRange(expectedRawValue, data["R"], 50);
+        Assert.IsTrue(data.ContainsKey("Raw"), "Key not found: 'Raw'");
         
-        Assert.IsTrue(rawValueIsWithinRange, "Invalid value for 'R' (raw value).");
+        var rawValueIsWithinRange = IsWithinRange(expectedRawValue, data["Raw"], 50);
+        
+        Assert.IsTrue(rawValueIsWithinRange, "Invalid value for 'Raw' (raw value).");
       }
       catch(Exception ex)
       {
