@@ -1,1 +1,1 @@
-
+sh init-testing.sh
