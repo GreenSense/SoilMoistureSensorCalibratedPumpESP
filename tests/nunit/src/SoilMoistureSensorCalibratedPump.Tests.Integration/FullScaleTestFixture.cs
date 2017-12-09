@@ -5,6 +5,7 @@ using System.Threading;
 using ArduinoSerialControllerClient;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
 
 namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 {
@@ -24,6 +25,18 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 
       int totalCyclesToRun = 100;
 
+      var irrigatorPortName = "/dev/ttyUSB0";
+      var simulatorPortName = "/dev/ttyUSB1";
+
+      string[] ports = SerialPort.GetPortNames();
+      var multipleDevicePairsDetected = Array.IndexOf(ports, "/dev/ttyUSB2") > -1;
+      if (multipleDevicePairsDetected)
+      {
+        Console.WriteLine("Multiple device pairs detected. Automatically configuring port names to become the second device pair.");
+
+        irrigatorPortName = "/dev/ttyUSB2";
+        simulatorPortName = "/dev/ttyUSB3";
+      }
       try
       {
         irrigator = new SerialClient("/dev/ttyUSB0", 9600);
