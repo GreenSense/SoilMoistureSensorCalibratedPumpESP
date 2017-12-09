@@ -1,4 +1,6 @@
-# May need be run as sudo
+#!/bin/bash
+
+. ./common.sh
 
 # Specify a temporary directory name
 SIMULATOR_TMP_DIR="_simulatortmp"
@@ -16,7 +18,7 @@ git clone https://github.com/CompulsiveCoder/ArduinoSerialController.git && \
 cd ArduinoSerialController && \
 
 # Upload
-sh upload-to-port.sh "/dev/ttyUSB1" && \
+sh upload-to-port.sh "$SIMULATOR_PORT" && \
 
 # Remove the temporary directory
 rm -rf $SIMULATOR_TMP_DIR
