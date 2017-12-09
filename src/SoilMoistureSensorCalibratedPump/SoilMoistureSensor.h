@@ -26,6 +26,8 @@ double getAverageSoilMoistureSensorReading();
 
 double calculateSoilMoistureLevel(int soilMoistureSensorReading);
 
+void reverseSoilMoistureCalibrationValues();
+
 void setEEPROMIsCalibratedFlag();
 
 void setDrySoilMoistureCalibrationValueToCurrent();

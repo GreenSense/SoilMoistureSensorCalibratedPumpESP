@@ -33,15 +33,15 @@
       <HintPath>..\..\lib\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="duinocom">
-      <HintPath>..\..\lib\ArduinoSerialControllerClient\lib\duinocom\bin\Release\duinocom.dll</HintPath>
+      <HintPath>..\..\lib\ArduinoSerialControllerClient.1.0.6\lib\net40\duinocom.core.dll</HintPath>
     </Reference>
-    <Reference Include="duinocom">
-      <HintPath>..\..\lib\ArduinoSerialControllerClient\bin\Release\ArduinoSerialControllerClient.dll</HintPath>
+    <Reference Include="ArduinoSerialControllerClient">
+      <HintPath>..\..\lib\ArduinoSerialControllerClient.1.0.6\lib\net40\ArduinoSerialControllerClient.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTestFixture.cs" />
-    <Compile Include="BasicCalibrationTestFixture.cs" />
+    <Compile Include="FullScaleTestFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

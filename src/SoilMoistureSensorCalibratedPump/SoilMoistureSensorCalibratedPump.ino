@@ -11,7 +11,7 @@ int threshold = 30;
 bool pumpIsOn = 0;
 long pumpStartTime = 0;
 long lastPumpFinishTime = 0;
-int pumpBurstDuration = 1 * 1000;
+int pumpBurstDuration = 5 * 1000;
 long pumpWaitOffDuration = 5 * 1000;
 
 #define PUMP_STATUS_OFF 0
@@ -120,6 +120,9 @@ void checkCommand()
       case 'Z':
         Serial.println("Toggling IsDebug");
         isDebugMode = !isDebugMode;
+        break;
+      case 'R':
+        reverseSoilMoistureCalibrationValues();
         break;
     }
   }

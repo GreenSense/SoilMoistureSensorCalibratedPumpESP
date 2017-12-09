@@ -264,6 +264,23 @@ int getWetSoilMoistureCalibrationValue()
   return wetSoilMoistureSensorValue;
 }
 
+void reverseSoilMoistureCalibrationValues()
+{
+  Serial.println("Reversing soil moisture sensor calibration values");
+
+  int tmpValue = drySoilMoistureCalibrationValue;
+
+  drySoilMoistureCalibrationValue = wetSoilMoistureCalibrationValue;
+
+  wetSoilMoistureCalibrationValue = tmpValue;
+
+  if (EEPROM.read(soilMoistureSensorIsCalibratedFlagAddress) == 99)
+  {
+    setWetSoilMoistureCalibrationValue(wetSoilMoistureCalibrationValue);
+    setDrySoilMoistureCalibrationValue(drySoilMoistureCalibrationValue);
+  }
+}
+
 void setEEPROMIsCalibratedFlag()
 {
   if (EEPROM.read(soilMoistureSensorIsCalibratedFlagAddress) != 99)

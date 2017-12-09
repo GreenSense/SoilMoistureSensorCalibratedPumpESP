@@ -3,4 +3,4 @@ echo "Dir: $PWD"
 
 DIR=$PWD
 
-xbuild src/SoilMoistureSensorCalibratedPump.sln /p:Configuration=Release
+msbuild src/SoilMoistureSensorCalibratedPump.sln /p:Configuration=Release
