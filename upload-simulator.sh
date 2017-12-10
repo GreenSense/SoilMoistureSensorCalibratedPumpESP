@@ -2,6 +2,8 @@
 
 . ./common.sh
 
+echo "Uploading simulator to port $SIMULATOR_PORT"
+
 # Specify a temporary directory name
 SIMULATOR_TMP_DIR="_simulatortmp"
 
