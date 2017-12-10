@@ -1,4 +1,4 @@
-sudo apt-get update && \
+sudo apt-get update
 
 # curl
 if ! type "curl" > /dev/null; then
@@ -29,7 +29,3 @@ if ! type "msbuild" > /dev/null; then
 
   sudo apt-get update && apt-get install -y mono-devel mono-complete ca-certificates-mono msbuild
 fi
-
-cd tests/nunit && \
-  sh prepare.sh && \
-cd $DIR
