@@ -47,9 +47,8 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 
         Thread.Sleep(5000);
 
-        // Reverse calibration back to normal for the test
-        if (CalibrationIsReversedByDefault)
-          irrigator.WriteLine("R");
+        // Reset defaults
+        irrigator.WriteLine("X");
 
         int soilMoistureValue = 5;
 
