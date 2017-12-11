@@ -41,6 +41,11 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
       {
         irrigator = new SerialClient(irrigatorPortName, 9600);
         soilMoistureSimulator = new ArduinoSerialDevice(simulatorPortName, 9600);
+
+        Console.WriteLine("");
+        Console.WriteLine("Irrigator port: " + irrigatorPortName);
+        Console.WriteLine("Simulator port: " + simulatorPortName);
+        Console.WriteLine("");
       
         irrigator.Open();
         soilMoistureSimulator.Connect();
