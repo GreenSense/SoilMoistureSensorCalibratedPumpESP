@@ -55,6 +55,10 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
         // Reset defaults
         irrigator.WriteLine("X");
 
+        // Reverse calibration (if needed)
+	if (CalibrationIsReversedByDefault)
+	        irrigator.WriteLine("R");
+
         int soilMoistureValue = 5;
 
         for (int i = 0; i <= totalCyclesToRun; i++)
