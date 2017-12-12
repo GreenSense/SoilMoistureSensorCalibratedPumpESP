@@ -23,7 +23,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
       SerialClient irrigator = null;
       ArduinoSerialDevice soilMoistureSimulator = null;
 
-      int totalCyclesToRun = 100;
+      int totalCyclesToRun = 20;
 
       var irrigatorPortName = "/dev/ttyUSB0";
       var simulatorPortName = "/dev/ttyUSB1";
@@ -56,7 +56,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
         irrigator.WriteLine("X");
 
         // Reverse calibration (if needed)
-	if (CalibrationIsReversedByDefault)
+      	if (CalibrationIsReversedByDefault)
 	        irrigator.WriteLine("R");
 
         int soilMoistureValue = 5;
