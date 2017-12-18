@@ -35,5 +35,5 @@ sh test.sh
 rm $TEMPORARY_DIR -rf
 
 echo ""
-echo "Finised testing SoilMoistureSensorCalibratedSerial project from github"
+echo "Finished testing SoilMoistureSensorCalibratedSerial project from github"
 echo ""
