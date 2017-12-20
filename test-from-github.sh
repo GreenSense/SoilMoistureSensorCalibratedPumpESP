@@ -12,7 +12,7 @@ then
   echo "Branch not specified as argument. Using current branch: $BRANCH"
 fi
 
-TIMESTAMP=$(date +"%Y_%m_%d_%I_%M_%p")
+TIMESTAMP=$(date +"%Y_%m_%d_%I_%M_%p_%s")
 TEMPORARY_DIR="/home/j/tmp/$TIMESTAMP"
 
 echo "Branch: $BRANCH"
