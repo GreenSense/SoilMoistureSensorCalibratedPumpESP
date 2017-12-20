@@ -12,8 +12,8 @@ then
   echo "Branch not specified as argument. Using current branch: $BRANCH"
 fi
 
-TIMESTAMP=$(date +"%Y_%m_%d_%I_%M_%p")
-TEMPORARY_DIR="/home/j/tmp/$TIMESTAMP"
+TIMESTAMP=$(date +"%Y_%m_%d_%I_%M_%p_%s")
+TEMPORARY_DIR="/home/$USER/tmp/$TIMESTAMP"
 
 echo "Branch: $BRANCH"
 echo "Tmp project dir:"
