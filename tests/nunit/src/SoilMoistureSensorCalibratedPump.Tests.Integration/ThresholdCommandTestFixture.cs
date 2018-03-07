@@ -13,16 +13,6 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 	[TestFixture(Category="Integration")]
 	public class ThresholdCommandTestFixture : BaseTestFixture
 	{
-		/*[Test]
-		public void Test_CalibrateDryToCurrentValueCommand()
-		{
-			var percentage = 20;
-
-			var raw = 219;//(percentage * 1024 / 100)-1;
-
-			TestCalibrateToCurrentCommand ("dry", "D", percentage, raw);
-		}*/
-
 		[Test]
 		public void Test_SetThresholdToSpecifiedValueCommand()
 		{
@@ -35,26 +25,6 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			TestSetThresholdToSpecifiedValue (0, 25);
 		}
 
-		/*[Test]
-		public void Test_CalibrateWetToCurrentValueCommand()
-		{
-			var percentage = 80;
-
-			var raw = 880;
-
-			TestCalibrateToCurrentCommand ("wet", "W", percentage, raw);
-		}
-
-		[Test]
-		public void Test_CalibrateWetToSpecifiedValueCommand()
-		{
-			var percentage = 80;
-
-			var raw = 880;//(percentage * 1024 / 100)-1;
-
-			TestCalibrateToCurrentCommand ("wet", "W" + raw, -1, raw);
-		}*/
-
 		public void TestSetThresholdToSpecifiedValue(int threshold, int simulatedSoilMoisturePercentage)
 		{
 
@@ -62,8 +32,8 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			Console.WriteLine ("==============================");
 			Console.WriteLine ("Starting set threshold command test");
 			Console.WriteLine ("");
-			//Console.WriteLine ("Percentage in: " + percentageIn);
-			//Console.WriteLine ("Expected raw: " + expectedRaw);
+			Console.WriteLine ("Threshold: " + threshold);
+			Console.WriteLine ("Simulated soil moisture percentage: " + simulatedSoilMoisturePercentage);
 
 			SerialClient soilMoistureMonitor = null;
 			ArduinoSerialDevice soilMoistureSimulator = null;
@@ -97,7 +67,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Thread.Sleep (2000);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the monitor device...");
+				Console.WriteLine("Reading the output from the device...");
 				Console.WriteLine("");
 
 				// Read the output
@@ -116,7 +86,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Thread.Sleep(1000);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the monitor device...");
+				Console.WriteLine("Reading the output from the device...");
 				Console.WriteLine("");
 
 				// Read the output
@@ -138,12 +108,9 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 					soilMoistureSimulator.AnalogWritePercentage (9, simulatedSoilMoisturePercentage);
 
 					Thread.Sleep(5000);
-					// Works but slow
-					//Thread.Sleep(8000);
-					//Thread.Sleep(12000);
 
 					Console.WriteLine("");
-					Console.WriteLine("Reading output from the monitor device...");
+					Console.WriteLine("Reading output from the device...");
 					Console.WriteLine("");
 
 					// Read the output
@@ -168,7 +135,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Thread.Sleep(6000);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the monitor device...");
+				Console.WriteLine("Reading the output from the device...");
 				Console.WriteLine("");
 
 				// Read the output
