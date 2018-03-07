@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <EEPROM.h>
+#include <duinocom.h>
 
 #include "Common.h"
 #include "SoilMoistureSensor.h"
@@ -85,19 +86,27 @@ void checkCommand()
     Serial.println("Checking incoming serial commands");
   }
 
-  while (Serial.available() > 0)
+  if (checkMsgReady())
   {
-    char command = Serial.read();
+    char* msg = getMsg();
+        
+    char letter = msg[0];
 
-    Serial.println(command);
+    int length = strlen(msg);
 
-    switch (command)
+    Serial.print("Received message: ");
+    Serial.println(msg);
+
+    switch (letter)
     {
+      case 'T':
+        setThreshold(msg);
+        break;
       case 'D':
-        setDrySoilMoistureCalibrationValueToCurrent();
+        setDrySoilMoistureCalibrationValue(msg);
         break;
       case 'W':
-        setWetSoilMoistureCalibrationValueToCurrent();
+        setWetSoilMoistureCalibrationValue(msg);
         break;
       case 'X':
         restoreDefaultSettings();
@@ -154,28 +163,28 @@ void serialPrintData()
     if (serialMode == SERIAL_MODE_CSV)
     {
       Serial.print("D;"); // This prefix indicates that the line contains data.
-      Serial.print("Raw:");
+      Serial.print("R:");
       Serial.print(soilMoistureLevelRaw);
       Serial.print(";");
-      Serial.print("Calibrated:");
+      Serial.print("C:");
       Serial.print(soilMoistureLevelCalibrated);
       Serial.print(";");
-      Serial.print("Threshold:");
+      Serial.print("T:");
       Serial.print(threshold);
       Serial.print(";");
-      Serial.print("WaterNeeded:");
+      Serial.print("WN:"); // Water needed
       Serial.print(soilMoistureLevelCalibrated < threshold);
       Serial.print(";");
-      Serial.print("PumpOn:");
+      Serial.print("PO:"); // Pump on
       Serial.print(pumpIsOn);
       Serial.print(";");
-      Serial.print("SecondsSincePumpOn:");
+      Serial.print("SSPO:"); // Seconds since pump on
       Serial.print((millis() - lastPumpFinishTime) / 1000);
       Serial.print(";");
-      Serial.print("Dry:");
+      Serial.print("D:"); // Dry calibration value
       Serial.print(drySoilMoistureCalibrationValue);
       Serial.print(";");
-      Serial.print("Wet:");
+      Serial.print("W:"); // Wet calibration value
       Serial.print(wetSoilMoistureCalibrationValue);
       Serial.print(";");
       Serial.println();
@@ -273,6 +282,23 @@ void pumpOff()
   lastPumpFinishTime = millis();
 }
 
+void setThreshold(char* msg)
+{
+  int length = strlen(msg);
+
+  if (length == 1)
+    setThresholdToCurrent();
+  else
+  {
+    int value = readInt(msg, 1, length-1);
+
+//    Serial.println("Value:");
+//    Serial.println(value);
+
+    setThreshold(value);
+  }
+}
+
 void setThreshold(int newThreshold)
 {
   threshold = newThreshold;
@@ -288,6 +314,13 @@ void setThreshold(int newThreshold)
   EEPROM.write(thresholdEEPROMAddress, compactValue); // Must divide by 4 to make it fit in eeprom
 
   setThresholdIsSetEEPROMFlag();
+}
+
+void setThresholdToCurrent()
+{
+  lastSoilMoistureSensorReadingTime = 0;
+  takeSoilMoistureSensorReading();
+  setThreshold(soilMoistureLevelCalibrated);
 }
 
 int getThreshold()

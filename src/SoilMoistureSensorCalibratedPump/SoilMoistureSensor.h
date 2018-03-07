@@ -7,10 +7,13 @@ extern int soilMoistureLevelRaw;
 extern long lastSoilMoistureSensorReadingTime;
 extern long soilMoistureSensorReadingInterval;
 
-extern bool soilMoistureSensorReadingHasBeenTaken;
-
 extern int drySoilMoistureCalibrationValue;
 extern int wetSoilMoistureCalibrationValue;
+
+extern bool soilMoistureSensorIsOn;
+extern long lastSensorOnTime;
+extern int delayAfterTurningSensorOn;
+extern bool soilMoistureSensorReadingHasBeenTaken;
 
 void setupSoilMoistureSensor();
 
@@ -26,17 +29,21 @@ double getAverageSoilMoistureSensorReading();
 
 double calculateSoilMoistureLevel(int soilMoistureSensorReading);
 
-void reverseSoilMoistureCalibrationValues();
-
 void setEEPROMIsCalibratedFlag();
+
+void setDrySoilMoistureCalibrationValue(char* msg);
 
 void setDrySoilMoistureCalibrationValueToCurrent();
 
 void setDrySoilMoistureCalibrationValue(int drySoilMoistureCalibrationValue);
 
+void setWetSoilMoistureCalibrationValue(char* msg);
+
 void setWetSoilMoistureCalibrationValueToCurrent();
 
 void setWetSoilMoistureCalibrationValue(int wetSoilMoistureCalibrationValue);
+
+void reverseSoilMoistureCalibrationValues();
 
 int getDrySoilMoistureCalibrationValue();
 

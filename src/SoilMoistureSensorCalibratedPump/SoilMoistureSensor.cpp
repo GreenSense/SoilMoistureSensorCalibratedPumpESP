@@ -2,6 +2,8 @@
 
 #include <EEPROM.h>
 
+#include <duinocom.h>
+
 #include "Common.h"
 #include "SoilMoistureSensor.h"
 
@@ -14,15 +16,16 @@ int delayAfterTurningSensorOn = 3 * 1000;
 
 long lastSoilMoistureSensorReadingTime = 0;
 long soilMoistureSensorReadingInterval = 3 * 1000;
+//long soilMoistureSensorReadingInterval = 1;
 
 int soilMoistureLevelCalibrated = 0;
 int soilMoistureLevelRaw = 0;
 
 bool reverseSoilMoistureSensor = false;
-//int drySoilMoistureCalibrationValue = 1024;
-int drySoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 0 : 1024);
+//int drySoilMoistureCalibrationValue = 1023;
+int drySoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 0 : 1023);
 //int wetSoilMoistureCalibrationValue = 0;
-int wetSoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 1024 : 0);
+int wetSoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 1023 : 0);
 
 int soilMoistureSensorIsCalibratedFlagAddress = 0;
 int drySoilMoistureCalibrationValueAddress = 2;
@@ -186,6 +189,23 @@ void setupCalibrationValues()
   }
 }
 
+void setDrySoilMoistureCalibrationValue(char* msg)
+{
+  int length = strlen(msg);
+
+  if (length == 1)
+    setDrySoilMoistureCalibrationValueToCurrent();
+  else
+  {
+    int value = readInt(msg, 1, length-1);
+
+//    Serial.println("Value:");
+//    Serial.println(value);
+
+    setDrySoilMoistureCalibrationValue(value);
+  }
+}
+
 void setDrySoilMoistureCalibrationValueToCurrent()
 {
   lastSoilMoistureSensorReadingTime = 0;
@@ -207,6 +227,23 @@ void setDrySoilMoistureCalibrationValue(int newValue)
   setEEPROMIsCalibratedFlag();
 }
 
+void setWetSoilMoistureCalibrationValue(char* msg)
+{
+  int length = strlen(msg);
+
+  if (length == 1)
+    setWetSoilMoistureCalibrationValueToCurrent();
+  else
+  {
+    int value = readInt(msg, 1, length-1);
+
+//    Serial.println("Value:");
+//    Serial.println(value);
+
+    setWetSoilMoistureCalibrationValue(value);
+  }
+}
+
 void setWetSoilMoistureCalibrationValueToCurrent()
 {
   lastSoilMoistureSensorReadingTime = 0;
@@ -226,6 +263,23 @@ void setWetSoilMoistureCalibrationValue(int newValue)
   EEPROM.write(wetSoilMoistureCalibrationValueAddress, compactValue); // Must divide by 4 to make it fit in eeprom
   
   setEEPROMIsCalibratedFlag();
+}
+
+void reverseSoilMoistureCalibrationValues()
+{
+  Serial.println("Reversing soil moisture sensor calibration values");
+
+  int tmpValue = drySoilMoistureCalibrationValue;
+
+  drySoilMoistureCalibrationValue = wetSoilMoistureCalibrationValue;
+
+  wetSoilMoistureCalibrationValue = tmpValue;
+
+  if (EEPROM.read(soilMoistureSensorIsCalibratedFlagAddress) == 99)
+  {
+    setWetSoilMoistureCalibrationValue(wetSoilMoistureCalibrationValue);
+    setDrySoilMoistureCalibrationValue(drySoilMoistureCalibrationValue);
+  }
 }
 
 int getDrySoilMoistureCalibrationValue()
@@ -264,23 +318,6 @@ int getWetSoilMoistureCalibrationValue()
   return wetSoilMoistureSensorValue;
 }
 
-void reverseSoilMoistureCalibrationValues()
-{
-  Serial.println("Reversing soil moisture sensor calibration values");
-
-  int tmpValue = drySoilMoistureCalibrationValue;
-
-  drySoilMoistureCalibrationValue = wetSoilMoistureCalibrationValue;
-
-  wetSoilMoistureCalibrationValue = tmpValue;
-
-  if (EEPROM.read(soilMoistureSensorIsCalibratedFlagAddress) == 99)
-  {
-    setWetSoilMoistureCalibrationValue(wetSoilMoistureCalibrationValue);
-    setDrySoilMoistureCalibrationValue(drySoilMoistureCalibrationValue);
-  }
-}
-
 void setEEPROMIsCalibratedFlag()
 {
   if (EEPROM.read(soilMoistureSensorIsCalibratedFlagAddress) != 99)
@@ -296,8 +333,8 @@ void restoreDefaultCalibrationSettings()
 {
   removeEEPROMIsCalibratedFlag();
 
-  drySoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 0 : 1024);
-  wetSoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 1024 : 0);
+  drySoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 0 : 1023);
+  wetSoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 1023 : 0);
 
   setDrySoilMoistureCalibrationValue(drySoilMoistureCalibrationValue);
   setWetSoilMoistureCalibrationValue(wetSoilMoistureCalibrationValue);

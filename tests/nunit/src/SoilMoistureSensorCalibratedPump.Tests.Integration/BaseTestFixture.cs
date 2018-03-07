@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
 
-namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
+namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 {
 	public class BaseTestFixture
 	{
