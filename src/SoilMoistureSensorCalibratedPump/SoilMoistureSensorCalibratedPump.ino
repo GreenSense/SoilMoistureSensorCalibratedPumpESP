@@ -4,35 +4,18 @@
 
 #include "Common.h"
 #include "SoilMoistureSensor.h"
+#include "Irrigation.h"
 
-#define pumpPin 11
-
-int threshold = 30;
-
-bool pumpIsOn = 0;
-long pumpStartTime = 0;
-long lastPumpFinishTime = 0;
-int pumpBurstDuration = 5 * 1000;
-long pumpWaitOffDuration = 5 * 1000;
-
-#define PUMP_STATUS_OFF 0
-#define PUMP_STATUS_ON 1
-#define PUMP_STATUS_AUTO 2
-
-int pumpStatus = PUMP_STATUS_AUTO;
-
-long lastSerialOutputTime = 0;
-long serialOutputInterval = 3 * 1000;
+long lastSerialOutputTime = 0; // Milliseconds
+long serialOutputInterval = 3; // Seconds
 
 #define SERIAL_MODE_CSV 1
 #define SERIAL_MODE_QUERYSTRING 2
 
 int serialMode = SERIAL_MODE_CSV;
 
-int thresholdIsSetEEPROMFlagAddress = 10;
-int thresholdEEPROMAddress = thresholdIsSetEEPROMFlagAddress+1;
 
-int loopNumber = 0;
+long loopNumber = 0;
 
 void setup()
 {
@@ -40,13 +23,25 @@ void setup()
 
   Serial.println("Starting irrigator");
 
-  pinMode(pumpPin, OUTPUT);
+
+/*for (int i = 0; i < EEPROM.length();i++)
+{
+  EEPROM.write(i, 0);
+}*/
 
   setupSoilMoistureSensor();
+
+  setupIrrigation();
+
+  serialOutputInterval = soilMoistureSensorReadingInterval;
+
 }
 
 void loop()
 {
+// Disabled. Used for debugging
+//  Serial.print(".");
+
   loopNumber++;
 
   if (isDebugMode)
@@ -99,6 +94,9 @@ void checkCommand()
 
     switch (letter)
     {
+      case 'P':
+        setPumpStatus(msg);
+        break;
       case 'T':
         setThreshold(msg);
         break;
@@ -107,6 +105,14 @@ void checkCommand()
         break;
       case 'W':
         setWetSoilMoistureCalibrationValue(msg);
+        break;
+      case 'V':
+        setSoilMoistureSensorReadingInterval(msg);
+      case 'B':
+        setPumpBurstOnTime(msg);
+        break;
+      case 'O':
+        setPumpBurstOffTime(msg);
         break;
       case 'X':
         restoreDefaultSettings();
@@ -142,13 +148,14 @@ void restoreDefaultSettings()
 {
   Serial.println("Restoring default settings");
 
-  restoreDefaultCalibrationSettings();
+  restoreDefaultSoilMoistureSensorSettings();
+  restoreDefaultIrrigationSettings();
 }
 
 /* Serial Output */
 void serialPrintData()
 {
-  bool isTimeToPrintData = lastSerialOutputTime + serialOutputInterval < millis()
+  bool isTimeToPrintData = lastSerialOutputTime + secondsToMilliseconds(serialOutputInterval) < millis()
       || lastSerialOutputTime == 0;
 
   bool isReadyToPrintData = isTimeToPrintData && soilMoistureSensorReadingHasBeenTaken;
@@ -172,6 +179,18 @@ void serialPrintData()
       Serial.print("T:");
       Serial.print(threshold);
       Serial.print(";");
+      Serial.print("P:");
+      Serial.print(pumpStatus);
+      Serial.print(";");
+      Serial.print("V:");
+      Serial.print(soilMoistureSensorReadingInterval);
+      Serial.print(";");
+      Serial.print("B:");
+      Serial.print(pumpBurstOnTime);
+      Serial.print(";");
+      Serial.print("O:");
+      Serial.print(pumpBurstOffTime);
+      Serial.print(";");
       Serial.print("WN:"); // Water needed
       Serial.print(soilMoistureLevelCalibrated < threshold);
       Serial.print(";");
@@ -186,10 +205,10 @@ void serialPrintData()
       Serial.print(";");
       Serial.print("W:"); // Wet calibration value
       Serial.print(wetSoilMoistureCalibrationValue);
-      Serial.print(";");
+      Serial.print(";;");
       Serial.println();
     }
-    else
+    /*else
     {
       Serial.print("raw=");
       Serial.print(soilMoistureLevelRaw);
@@ -203,6 +222,18 @@ void serialPrintData()
       Serial.print("waterNeeded=");
       Serial.print(soilMoistureLevelCalibrated < threshold);
       Serial.print("&");
+      Serial.print("pumpStatus=");
+      Serial.print(pumpStatus);
+      Serial.print("&");
+      Serial.print("readingInterval=");
+      Serial.print(soilMoistureSensorReadingInterval);
+      Serial.print("&");
+      Serial.print("pumpBurstOnTime=");
+      Serial.print(pumpBurstOnTime);
+      Serial.print("&");
+      Serial.print("pumpBurstOffTime=");
+      Serial.print(pumpBurstOffTime);
+      Serial.print("&");
       Serial.print("pumpOn=");
       Serial.print(pumpIsOn);
       Serial.print("&");
@@ -214,8 +245,9 @@ void serialPrintData()
       Serial.print("&");
       Serial.print("wet=");
       Serial.print(wetSoilMoistureCalibrationValue);
+      Serial.print(";;");
       Serial.println();
-    }
+    }*/
 
     if (isDebugMode)
     {
@@ -229,123 +261,3 @@ void serialPrintData()
   }
 }
 
-/* Irrigation */
-void irrigateIfNeeded()
-{
-  if (isDebugMode)
-  {
-    Serial.println("Irrigating (if needed)");
-  }
-
-  if (pumpStatus == PUMP_STATUS_AUTO)
-  {
-    bool readingHasBeenTaken = lastSoilMoistureSensorReadingTime > 0;
-    bool pumpBurstFinished = pumpStartTime + pumpBurstDuration < millis();
-    bool waterIsNeeded = soilMoistureLevelCalibrated <= threshold && readingHasBeenTaken;
-    bool pumpIsReady = lastPumpFinishTime + pumpWaitOffDuration < millis() || lastPumpFinishTime == 0;
-
-    if (pumpIsOn)
-    {
-      if (pumpBurstFinished)
-      {
-        if (isDebugMode)
-          Serial.println("  Pump burst finished");
-        pumpOff();
-      }
-    }
-    else if (waterIsNeeded && pumpIsReady)
-    {
-      if (isDebugMode)
-        Serial.println("  Pump is turning on");
-      pumpOn();
-    }
-  }
-  else
-  {
-    Serial.println("  Pump has been manually switched off. Switch to auto to enable irrigation again.");
-  }
-}
-
-void pumpOn()
-{
-  digitalWrite(pumpPin, HIGH);
-  pumpIsOn = true;
-
-  pumpStartTime = millis();
-}
-
-void pumpOff()
-{
-  digitalWrite(pumpPin, LOW);
-  pumpIsOn = false;
-
-  lastPumpFinishTime = millis();
-}
-
-void setThreshold(char* msg)
-{
-  int length = strlen(msg);
-
-  if (length == 1)
-    setThresholdToCurrent();
-  else
-  {
-    int value = readInt(msg, 1, length-1);
-
-//    Serial.println("Value:");
-//    Serial.println(value);
-
-    setThreshold(value);
-  }
-}
-
-void setThreshold(int newThreshold)
-{
-  threshold = newThreshold;
-
-  if (isDebugMode)
-  {
-    Serial.print("Setting threshold to EEPROM: ");
-    Serial.println(threshold);
-  }
-
-  int compactValue = threshold / 4;
-
-  EEPROM.write(thresholdEEPROMAddress, compactValue); // Must divide by 4 to make it fit in eeprom
-
-  setThresholdIsSetEEPROMFlag();
-}
-
-void setThresholdToCurrent()
-{
-  lastSoilMoistureSensorReadingTime = 0;
-  takeSoilMoistureSensorReading();
-  setThreshold(soilMoistureLevelCalibrated);
-}
-
-int getThreshold()
-{
-  int value = EEPROM.read(thresholdEEPROMAddress);
-
-  if (value == 0
-      || value == 255)
-    return threshold;
-  else
-  {
-    int threshold = value * 4; // Must multiply by 4 to get the original value
-
-    if (isDebugMode)
-    {
-      Serial.print("Threshold found in EEPROM: ");
-      Serial.println(threshold);
-    }
-
-    return threshold;
-  }
-}
-
-void setThresholdIsSetEEPROMFlag()
-{
-  if (EEPROM.read(thresholdIsSetEEPROMFlagAddress) != 99)
-    EEPROM.write(thresholdIsSetEEPROMFlagAddress, 99);
-}

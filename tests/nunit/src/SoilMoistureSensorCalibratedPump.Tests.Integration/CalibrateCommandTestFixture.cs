@@ -17,9 +17,9 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 		{
 			var percentage = 20;
 
-			var raw = 219;//(percentage * 1024 / 100)-1;
+			var raw = 218;
 
-			TestCalibrateToCurrentCommand ("dry", "D", percentage, raw);
+			TestCalibrateToCurrentValueCommand ("dry", "D", percentage, raw);
 		}
 
 		[Test]
@@ -29,7 +29,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 			var raw = 220;
 
-			TestCalibrateToCurrentCommand ("dry", "D" + raw, -1, raw);
+			TestCalibrateToCurrentValueCommand ("dry", "D" + raw, -1, raw);
 		}
 
 		[Test]
@@ -39,35 +39,33 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 			var raw = 880;
 
-			TestCalibrateToCurrentCommand ("wet", "W", percentage, raw);
+			TestCalibrateToCurrentValueCommand ("wet", "W", percentage, raw);
 		}
 
 		[Test]
 		public void Test_CalibrateWetToSpecifiedValueCommand()
 		{
-			var percentage = 80;
+			var raw = 880;
 
-			var raw = 880;//(percentage * 1024 / 100)-1;
-
-			TestCalibrateToCurrentCommand ("wet", "W" + raw, -1, raw);
+			TestCalibrateToCurrentValueCommand ("wet", "W" + raw, -1, raw);
 		}
 
-		public void TestCalibrateToCurrentCommand(string label, string command, int percentageIn, int expectedRaw)
+		public void TestCalibrateToCurrentValueCommand(string label, string command, int simulatedSoilMoisturePercentage, int expectedRaw)
 		{
 
 			Console.WriteLine ("");
 			Console.WriteLine ("==============================");
 			Console.WriteLine ("Starting calibrate " + label + " command test");
 			Console.WriteLine ("");
-			Console.WriteLine ("Percentage in: " + percentageIn);
+			Console.WriteLine ("Percentage in: " + simulatedSoilMoisturePercentage);
 			Console.WriteLine ("Expected raw: " + expectedRaw);
 
 			SerialClient soilMoistureMonitor = null;
 			ArduinoSerialDevice soilMoistureSimulator = null;
 
 			try {
-				soilMoistureMonitor = new SerialClient ("/dev/ttyUSB2", 9600);
-				soilMoistureSimulator = new ArduinoSerialDevice ("/dev/ttyUSB3", 9600);
+				soilMoistureMonitor = new SerialClient (GetDevicePort(), GetSerialBaudRate());
+				soilMoistureSimulator = new ArduinoSerialDevice (GetSimulatorPort(), GetSerialBaudRate());
 
 				Console.WriteLine("");
 				Console.WriteLine("Connecting to serial devices...");
@@ -110,14 +108,14 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Thread.Sleep(1000);
 
 				// If a percentage is specified for the simulator then set the simulated soil moisture value (otherwise skip)
-				if (percentageIn > -1)
+				if (simulatedSoilMoisturePercentage > -1)
 				{
 					Console.WriteLine("");
-					Console.WriteLine("Sending analog percentage to simulator: " + percentageIn);
+					Console.WriteLine("Sending analog percentage to simulator: " + simulatedSoilMoisturePercentage);
 					Console.WriteLine("");
 
 					// Set the simulated soil moisture
-					soilMoistureSimulator.AnalogWritePercentage (9, percentageIn);
+					soilMoistureSimulator.AnalogWritePercentage (9, simulatedSoilMoisturePercentage);
 
 					Thread.Sleep(6000);
 					// Works but slow
@@ -162,8 +160,10 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 					Console.WriteLine("Checking the values from the monitor device...");
 					Console.WriteLine("");
 
+					Console.WriteLine("Expected raw: " + expectedRaw);
+
 					// Ensure the raw value is in the valid range
-					Assert.IsTrue(rawValue >= expectedRaw-7 && rawValue <= expectedRaw+7, "Raw value is outside the valid range: " + rawValue);
+					Assert.IsTrue(rawValue >= expectedRaw-8 && rawValue <= expectedRaw+8, "Raw value is outside the valid range: " + rawValue);
 				}
 
 				Console.WriteLine("");

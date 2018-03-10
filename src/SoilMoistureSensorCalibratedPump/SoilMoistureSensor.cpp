@@ -1,5 +1,4 @@
 #include <Arduino.h>
-
 #include <EEPROM.h>
 
 #include <duinocom.h>
@@ -14,9 +13,9 @@ bool soilMoistureSensorIsOn = true;
 long lastSensorOnTime = 0;
 int delayAfterTurningSensorOn = 3 * 1000;
 
-long lastSoilMoistureSensorReadingTime = 0;
-long soilMoistureSensorReadingInterval = 3 * 1000;
-//long soilMoistureSensorReadingInterval = 1;
+bool soilMoistureSensorReadingHasBeenTaken = false;
+long soilMoistureSensorReadingInterval = 3; // Seconds
+long lastSoilMoistureSensorReadingTime = 0; // Milliseconds
 
 int soilMoistureLevelCalibrated = 0;
 int soilMoistureLevelRaw = 0;
@@ -27,16 +26,19 @@ int drySoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 0 : 1023);
 //int wetSoilMoistureCalibrationValue = 0;
 int wetSoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 1023 : 0);
 
-int soilMoistureSensorIsCalibratedFlagAddress = 0;
-int drySoilMoistureCalibrationValueAddress = 2;
-int wetSoilMoistureCalibrationValueAddress = 3;
+#define soilMoistureSensorIsCalibratedFlagAddress 1
+#define drySoilMoistureCalibrationValueAddress 2
+#define wetSoilMoistureCalibrationValueAddress 6
 
-extern bool soilMoistureSensorReadingHasBeenTaken = false;
+#define soilMoistureSensorReadIntervalIsSetFlagAddress 10
+#define soilMoistureSensorReadingIntervalAddress 13
 
 /* Setup */
 void setupSoilMoistureSensor()
 {
   setupCalibrationValues();
+
+  setupSoilMoistureSensorReadingInterval();
 
   pinMode(soilMoistureSensorPowerPin, OUTPUT);
 
@@ -74,14 +76,15 @@ void turnSoilMoistureSensorOff()
 /* Sensor Readings */
 void takeSoilMoistureSensorReading()
 {
-  bool sensorReadingIsDue = lastSoilMoistureSensorReadingTime + soilMoistureSensorReadingInterval < millis() || lastSoilMoistureSensorReadingTime == 0;
+  bool sensorReadingIsDue = lastSoilMoistureSensorReadingTime + secondsToMilliseconds(soilMoistureSensorReadingInterval) < millis()
+    || lastSoilMoistureSensorReadingTime == 0;
 
   if (sensorReadingIsDue)
   {
     if (isDebugMode)
       Serial.println("Sensor reading is due");
 
-  	bool sensorGetsTurnedOff = soilMoistureSensorReadingInterval > delayAfterTurningSensorOn;
+  	bool sensorGetsTurnedOff = secondsToMilliseconds(soilMoistureSensorReadingInterval) > delayAfterTurningSensorOn;
   
   	bool sensorIsOffAndNeedsToBeTurnedOn = !soilMoistureSensorIsOn && sensorGetsTurnedOff;
   
@@ -132,13 +135,13 @@ void takeSoilMoistureSensorReading()
       if (soilMoistureLevelCalibrated > 100)
         soilMoistureLevelCalibrated = 100;
 
+      soilMoistureSensorReadingHasBeenTaken = true;
+
       // If the interval is less than 2 seconds then don't turn the sensor off
-      if (soilMoistureSensorReadingInterval > delayAfterTurningSensorOn)
+      if (secondsToMilliseconds(soilMoistureSensorReadingInterval) > delayAfterTurningSensorOn)
       {
         turnSoilMoistureSensorOff();
       }
-      
-      soilMoistureSensorReadingHasBeenTaken = true;
     }
   }
 }
@@ -165,6 +168,78 @@ double calculateSoilMoistureLevel(int soilMoistureSensorReading)
   return map(soilMoistureSensorReading, drySoilMoistureCalibrationValue, wetSoilMoistureCalibrationValue, 0, 100);
 }
 
+/* Reading interval */
+void setupSoilMoistureSensorReadingInterval()
+{
+  bool eepromIsSet = EEPROM.read(soilMoistureSensorReadIntervalIsSetFlagAddress) == 99;
+
+  if (eepromIsSet)
+  {
+    if (isDebugMode)
+    	Serial.println("EEPROM read interval value has been set. Loading.");
+
+    soilMoistureSensorReadingInterval = getSoilMoistureSensorReadingInterval(); // Convert to milliseconds
+  }
+  else
+  {
+    if (isDebugMode)
+      Serial.println("EEPROM read interval value has not been set. Using defaults.");
+    
+    //setSoilMoistureSensorReadingInterval(soilMoistureSensorReadingInterval); // Convert to seconds
+  }
+}
+
+void setSoilMoistureSensorReadingInterval(char* msg)
+{
+    int value = readInt(msg, 1, strlen(msg)-1);
+
+    Serial.println("Value:");
+    Serial.println(value);
+
+    setSoilMoistureSensorReadingInterval(value);
+}
+
+void setSoilMoistureSensorReadingInterval(long newValue)
+{
+  Serial.print("Setting soil moisture sensor reading interval: ");
+  Serial.println(newValue);
+
+  EEPROMWriteLong(soilMoistureSensorReadingIntervalAddress, newValue);
+
+  setEEPROMSoilMoistureSensorReadingIntervalIsSetFlag();
+
+  soilMoistureSensorReadingInterval = newValue; 
+}
+
+long getSoilMoistureSensorReadingInterval()
+{
+  long value = EEPROMReadLong(soilMoistureSensorReadingIntervalAddress);
+
+  if (value == 0
+      || value == 255)
+    return soilMoistureSensorReadingInterval;
+  else
+  {
+    if (isDebugMode)
+    {
+      Serial.print("Read interval found in EEPROM: ");
+      Serial.println(value);
+    }
+
+    return value;
+  }
+}
+
+void setEEPROMSoilMoistureSensorReadingIntervalIsSetFlag()
+{
+  if (EEPROM.read(soilMoistureSensorReadIntervalIsSetFlagAddress) != 99)
+    EEPROM.write(soilMoistureSensorReadIntervalIsSetFlagAddress, 99);
+}
+
+void removeEEPROMSoilMoistureSensorReadingIntervalIsSetFlag()
+{
+    EEPROM.write(soilMoistureSensorReadIntervalIsSetFlagAddress, 0);
+}
 
 /* Calibration */
 void setupCalibrationValues()
@@ -184,8 +259,8 @@ void setupCalibrationValues()
     if (isDebugMode)
       Serial.println("EEPROM calibration values have not been set. Using defaults.");
     
-    setDrySoilMoistureCalibrationValue(drySoilMoistureCalibrationValue);
-    setWetSoilMoistureCalibrationValue(wetSoilMoistureCalibrationValue);
+    //setDrySoilMoistureCalibrationValue(drySoilMoistureCalibrationValue);
+    //setWetSoilMoistureCalibrationValue(wetSoilMoistureCalibrationValue);
   }
 }
 
@@ -220,9 +295,7 @@ void setDrySoilMoistureCalibrationValue(int newValue)
 
   drySoilMoistureCalibrationValue = newValue;
   
-  int compactValue = newValue / 4;
-
-  EEPROM.write(drySoilMoistureCalibrationValueAddress, compactValue); // Must divide by 4 to make it fit in eeprom
+  EEPROMWriteLong(drySoilMoistureCalibrationValueAddress, newValue); // Must divide by 4 to make it fit in eeprom
 
   setEEPROMIsCalibratedFlag();
 }
@@ -258,9 +331,7 @@ void setWetSoilMoistureCalibrationValue(int newValue)
 
   wetSoilMoistureCalibrationValue = newValue;
 
-  int compactValue = newValue / 4;
-
-  EEPROM.write(wetSoilMoistureCalibrationValueAddress, compactValue); // Must divide by 4 to make it fit in eeprom
+  EEPROMWriteLong(wetSoilMoistureCalibrationValueAddress, newValue);
   
   setEEPROMIsCalibratedFlag();
 }
@@ -284,14 +355,14 @@ void reverseSoilMoistureCalibrationValues()
 
 int getDrySoilMoistureCalibrationValue()
 {
-  int value = EEPROM.read(drySoilMoistureCalibrationValueAddress);
+  int value = EEPROMReadLong(drySoilMoistureCalibrationValueAddress);
 
-  if (value == 0
-      || value == 255)
+  if (value < 0
+      || value > 1023)
     return drySoilMoistureCalibrationValue;
   else
   {
-    int drySoilMoistureSensorValue = value * 4; // Must multiply by 4 to get the original value
+    int drySoilMoistureSensorValue = value;
   
     if (isDebugMode)
     {
@@ -305,17 +376,21 @@ int getDrySoilMoistureCalibrationValue()
 
 int getWetSoilMoistureCalibrationValue()
 {
-  int value = EEPROM.read(wetSoilMoistureCalibrationValueAddress);
+  int value = EEPROMReadLong(wetSoilMoistureCalibrationValueAddress);
 
-  int wetSoilMoistureSensorValue = value * 4; // Must multiply by 4 to get the original value
-
-  if (isDebugMode)
+  if (value > 0
+      || value > 1023)
+    return wetSoilMoistureCalibrationValue;
+  else
   {
-    Serial.print("Wet calibration value found in EEPROM: ");
-    Serial.println(wetSoilMoistureSensorValue);
+    if (isDebugMode)
+    {
+      Serial.print("Wet calibration value found in EEPROM: ");
+      Serial.println(value);
+    }
   }
 
-  return wetSoilMoistureSensorValue;
+  return value;
 }
 
 void setEEPROMIsCalibratedFlag()
@@ -327,6 +402,21 @@ void setEEPROMIsCalibratedFlag()
 void removeEEPROMIsCalibratedFlag()
 {
     EEPROM.write(soilMoistureSensorIsCalibratedFlagAddress, 0);
+}
+
+void restoreDefaultSoilMoistureSensorSettings()
+{
+  restoreDefaultCalibrationSettings();
+  restoreDefaultSoilMoistureSensorReadingIntervalSettings();
+}
+
+void restoreDefaultSoilMoistureSensorReadingIntervalSettings()
+{
+  removeEEPROMSoilMoistureSensorReadingIntervalIsSetFlag();
+
+  soilMoistureSensorReadingInterval = 3;
+
+  setSoilMoistureSensorReadingInterval(soilMoistureSensorReadingInterval);
 }
 
 void restoreDefaultCalibrationSettings()

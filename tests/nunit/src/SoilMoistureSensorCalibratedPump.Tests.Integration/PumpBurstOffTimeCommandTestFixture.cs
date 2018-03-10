@@ -11,49 +11,30 @@ using System.IO.Ports;
 namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 {
 	[TestFixture(Category="Integration")]
-	public class ThresholdCommandTestFixture : BaseTestFixture
+	public class PumpBurstOffTimeCommandTestFixture : BaseTestFixture
 	{
 		[Test]
-		public void Test_SetThresholdToSpecifiedValueCommand()
-		{
-			TestSetThresholdToSpecifiedValue (15, -1);
-		}
-
-		[Test]
-		public void Test_SetThresholdToCurrentValueCommand()
-		{
-			TestSetThresholdToSpecifiedValue (0, 25);
-		}
-
-		public void TestSetThresholdToSpecifiedValue(int threshold, int simulatedSoilMoisturePercentage)
+		public void Test_SetPumpBurstOffTime()
 		{
 
 			Console.WriteLine ("");
 			Console.WriteLine ("==============================");
-			Console.WriteLine ("Starting set threshold command test");
+			Console.WriteLine ("Starting set pump burst off time command test");
 			Console.WriteLine ("");
-			Console.WriteLine ("Threshold: " + threshold);
-			Console.WriteLine ("Simulated soil moisture percentage: " + simulatedSoilMoisturePercentage);
 
 			SerialClient soilMoistureMonitor = null;
 			ArduinoSerialDevice soilMoistureSimulator = null;
 
 			var irrigatorPortName = GetDevicePort();
-			var simulatorPortName = GetSimulatorPort();
 
 			try {
 				soilMoistureMonitor = new SerialClient (irrigatorPortName, GetSerialBaudRate());
-
-				if (simulatedSoilMoisturePercentage > -1)
-					soilMoistureSimulator = new ArduinoSerialDevice (simulatorPortName, GetSerialBaudRate());
 
 				Console.WriteLine("");
 				Console.WriteLine("Connecting to serial devices...");
 				Console.WriteLine("");
 
 				soilMoistureMonitor.Open ();
-				if (simulatedSoilMoisturePercentage > -1)
-					soilMoistureSimulator.Connect ();
 
 				Thread.Sleep (2000);
 
@@ -88,33 +69,9 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 				Thread.Sleep(1000);
 
-				// If a percentage is specified for the simulator then set the simulated soil moisture value (otherwise skip)
-				if (simulatedSoilMoisturePercentage > -1)
-				{
-					Console.WriteLine("");
-					Console.WriteLine("Sending analog percentage to simulator: " + simulatedSoilMoisturePercentage);
-					Console.WriteLine("");
+				var pumpBurstOffTime = 10; // Seconds
 
-					// Set the simulated soil moisture
-					soilMoistureSimulator.AnalogWritePercentage (9, simulatedSoilMoisturePercentage);
-
-					Thread.Sleep(5000);
-
-					Console.WriteLine("");
-					Console.WriteLine("Reading output from the device...");
-					Console.WriteLine("");
-
-					// Read the output
-					output = soilMoistureMonitor.Read ();
-
-					Console.WriteLine (output);
-					Console.WriteLine ("");
-				}
-
-				var command = "T";
-
-				if (threshold > 0)
-					command = command + threshold;
+				var command = "O" + pumpBurstOffTime;
 
 				Console.WriteLine("");
 				Console.WriteLine("Sending command to device: " + command);
@@ -142,33 +99,22 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				var data = ParseOutputLine(GetLastDataLine(output));
 
 				Console.WriteLine ("");
-				Console.WriteLine ("Checking threshold value");
+				Console.WriteLine ("Checking pump burst off time value");
 
-				var expectedThreshold = 0;
-				if (threshold > 0)
-					expectedThreshold = threshold;
-				else
-				{
-					expectedThreshold = simulatedSoilMoisturePercentage;
-					// Reverse the percentage if it is reversed in the sketch
-					if (CalibrationIsReversedByDefault)
-						expectedThreshold = ArduinoConvert.ReversePercentage(expectedThreshold);
-				}
-				
-				Assert.IsTrue(data.ContainsKey("T"));
+				Assert.IsTrue(data.ContainsKey("O"), "'O' (burst off time) key not found.");
 
-				var newThresholdValue = data["T"];
+				var newPumpBurstOffTimeValue = data["O"];
 
-				Console.WriteLine("Threshold: " + newThresholdValue);
+				Console.WriteLine("Pump burst off time: " + newPumpBurstOffTimeValue);
 
-				// If the threshold was specified in the command then the output should be exact
-				if (threshold > 0)
-					Assert.AreEqual(expectedThreshold, newThresholdValue, "Invalid threshold: " + newThresholdValue);
+				// If the pumpBurstOffTime was specified in the command then the output should be exact
+				if (pumpBurstOffTime > 0)
+					Assert.AreEqual(pumpBurstOffTime, newPumpBurstOffTimeValue, "Invalid pump burst off time: " + newPumpBurstOffTimeValue);
 				else // Otherwise going by the simulated soil moisture sensor theres a small margin of error
 				{
-					var thresholdIsWithinRange = IsWithinRange (expectedThreshold, newThresholdValue, 3);
+					var pumpBurstOffTimeIsWithinRange = IsWithinRange (pumpBurstOffTime, newPumpBurstOffTimeValue, 3);
 
-					Assert.IsTrue (thresholdIsWithinRange, "Invalid threshold: " + newThresholdValue);
+					Assert.IsTrue (pumpBurstOffTimeIsWithinRange, "Invalid pump burst off time: " + newPumpBurstOffTimeValue);
 
 				}
 

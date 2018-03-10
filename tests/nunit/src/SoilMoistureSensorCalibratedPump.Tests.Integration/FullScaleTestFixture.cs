@@ -25,20 +25,12 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 			int totalCyclesToRun = 20;
 
-			var irrigatorPortName = "/dev/ttyUSB0";
-			var simulatorPortName = "/dev/ttyUSB1";
+			var irrigatorPortName = GetDevicePort ();
+			var simulatorPortName = GetSimulatorPort ();
 
-			string[] ports = SerialPort.GetPortNames ();
-			var multipleDevicePairsDetected = Array.IndexOf (ports, "/dev/ttyUSB2") > -1;
-			if (multipleDevicePairsDetected) {
-				Console.WriteLine ("Multiple device pairs detected. Automatically configuring port names to become the second device pair.");
-
-				irrigatorPortName = "/dev/ttyUSB2";
-				simulatorPortName = "/dev/ttyUSB3";
-			}
 			try {
-				irrigator = new SerialClient (irrigatorPortName, 9600);
-				soilMoistureSimulator = new ArduinoSerialDevice (simulatorPortName, 9600);
+				irrigator = new SerialClient (irrigatorPortName, GetSerialBaudRate());
+				soilMoistureSimulator = new ArduinoSerialDevice (simulatorPortName, GetSerialBaudRate());
 
 				Console.WriteLine ("");
 				Console.WriteLine ("Irrigator port: " + irrigatorPortName);
@@ -62,6 +54,21 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 				// Reset defaults
 				irrigator.WriteLine ("X");
+
+				Thread.Sleep (1000);
+
+				Console.WriteLine("");
+				Console.WriteLine("Reading the output from the monitor device...");
+				Console.WriteLine("");
+
+				// Read the output
+				output = irrigator.Read ();
+
+				Console.WriteLine (output);
+				Console.WriteLine ("");
+
+				// Set pump burst off time to 0
+				irrigator.WriteLine ("O0");
 
 				Thread.Sleep (1000);
 
@@ -120,23 +127,21 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
       
 			int percentageValue = soilMoisturePercentage;
       
-        
-      
 			Console.WriteLine ("");
 			Console.WriteLine ("Sending percentage to simulator: " + percentageValue);
 			Console.WriteLine ("");
       
 			soilMoistureSimulator.AnalogWritePercentage (9, percentageValue);
       
-			Thread.Sleep (5000);
+			Thread.Sleep (8000);
       
 			Console.WriteLine ("");
-			Console.WriteLine ("Reading data from soil moisture monitor");
+			Console.WriteLine ("Reading data from device...");
 			Console.WriteLine ("");
       
-			var outputLine = soilMoistureMonitor.Read ();
+			var output = soilMoistureMonitor.Read ();
       
-			Console.WriteLine (outputLine);
+			Console.WriteLine (output);
 			Console.WriteLine ("");
 
 			Console.WriteLine ("");
@@ -171,8 +176,18 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
       
 			Console.WriteLine ("New soil moisture percentage: " + soilMoisturePercentage);
 
-			var data = ParseOutputLine (outputLine);
-      
+			Thread.Sleep (2000);
+
+			Console.WriteLine ("");
+			Console.WriteLine ("Reading data from device...");
+			Console.WriteLine ("");
+
+			output = soilMoistureMonitor.Read ();
+
+			Console.WriteLine (output);
+			Console.WriteLine ("");
+
+			var data = ParseOutputLine (output);
       
 			Console.WriteLine ("");
 			Console.WriteLine ("Checking calibrated value");
@@ -181,6 +196,8 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			//if (calibrationIsReversed)
 			//	expectedCalibratedValue = ArduinoConvert.ReversePercentage (percentageValue);
       
+			Assert.IsTrue (data.ContainsKey ("C"), "'C' key not found");
+
 			var calibratedValue = data ["C"];
 
 			Console.WriteLine ("Calibrated value: " + calibratedValue);
@@ -206,38 +223,6 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			Console.WriteLine ("");
 
 			return soilMoisturePercentage;
-		}
-		
-		public Dictionary<string, int> ParseOutputLine(string outputLine)
-		{
-			var dictionary = new Dictionary<string, int> ();
-		  
-			if (IsValidOutputLine (outputLine)) {
-				foreach (var pair in outputLine.Split(';')) {
-					var parts = pair.Split (':');
-  		    
-					if (parts.Length == 2) {
-						var key = parts [0];
-						var value = 0;
-						try {
-							value = Convert.ToInt32 (parts [1]);
-  		      
-							dictionary [key] = value;
-						} catch {
-							Console.WriteLine ("Warning: Invalid key/value pair '" + pair + "'");
-						}
-					}
-				}
-			}
-		  
-			return dictionary;
-		}
-		
-		public bool IsValidOutputLine(string outputLine)
-		{
-		  var dataPrefix = "D;";
-		  
-		  return outputLine.StartsWith(dataPrefix);
 		}
 	}
 }
