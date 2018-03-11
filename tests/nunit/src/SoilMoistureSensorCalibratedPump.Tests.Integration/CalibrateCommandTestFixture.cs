@@ -93,7 +93,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				// Reset defaults
 				soilMoistureMonitor.WriteLine ("X");
 
-				Thread.Sleep(1000);
+				Thread.Sleep(2000);
 
 				Console.WriteLine("");
 				Console.WriteLine("Reading the output from the monitor device...");
@@ -125,32 +125,15 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 					Console.WriteLine("");
 					Console.WriteLine("Reading output from the monitor device...");
 					Console.WriteLine("");
+
 					// Read the output
 					output = soilMoistureMonitor.Read ();
 
 					Console.WriteLine (output);
 					Console.WriteLine ("");
 
-					// Extract the data line
-					var dataLine = "";
-
-					var dataLines = output.Split('\n');
-
-					for (int i = dataLines.Length-1; i>=0; i--)
-					{
-						if (dataLines[i].StartsWith("D;"))
-						{
-							dataLine = dataLines[i];
-							break;
-						}
-					}
-
-					Console.WriteLine ("Data line:");
-					Console.WriteLine (dataLine);
-					Console.WriteLine ("");
-
 					// Parse the values in the data line
-					var values = ParseOutputLine(dataLine);
+					var values = ParseOutputLine(GetLastDataLine(output));
 
 					// Get the raw soil moisture value
 					var rawValue = values["R"];
@@ -163,7 +146,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 					Console.WriteLine("Expected raw: " + expectedRaw);
 
 					// Ensure the raw value is in the valid range
-					Assert.IsTrue(rawValue >= expectedRaw-8 && rawValue <= expectedRaw+8, "Raw value is outside the valid range: " + rawValue);
+					Assert.IsTrue(IsWithinRange(expectedRaw, rawValue, 10), "Raw value is outside the valid range: " + rawValue);
 				}
 
 				Console.WriteLine("");
@@ -221,7 +204,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("");
 
 				// Ensure the calibration value is in the valid range
-				Assert.IsTrue(calibrationValue >= expectedRaw-7 && calibrationValue <= expectedRaw+7, "Calibration value is outside the valid range: " + calibrationValue);
+				Assert.IsTrue(IsWithinRange(expectedRaw, calibrationValue, 8), "Calibration value is outside the valid range: " + calibrationValue);
 
 			} catch (IOException ex) {
 				Console.WriteLine (ex.ToString ());

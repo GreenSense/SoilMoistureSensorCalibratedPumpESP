@@ -6,14 +6,10 @@
 #include "SoilMoistureSensor.h"
 #include "Irrigation.h"
 
-long lastSerialOutputTime = 0; // Milliseconds
-long serialOutputInterval = 3; // Seconds
-
 #define SERIAL_MODE_CSV 1
 #define SERIAL_MODE_QUERYSTRING 2
 
 int serialMode = SERIAL_MODE_CSV;
-
 
 long loopNumber = 0;
 
@@ -24,10 +20,10 @@ void setup()
   Serial.println("Starting irrigator");
 
 
-/*for (int i = 0; i < EEPROM.length();i++)
+for (int i = 0; i < EEPROM.length();i++)
 {
   EEPROM.write(i, 0);
-}*/
+}
 
   setupSoilMoistureSensor();
 

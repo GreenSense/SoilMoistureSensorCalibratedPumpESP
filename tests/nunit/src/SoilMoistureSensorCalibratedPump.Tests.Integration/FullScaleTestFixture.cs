@@ -187,7 +187,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			Console.WriteLine (output);
 			Console.WriteLine ("");
 
-			var data = ParseOutputLine (output);
+			var data = ParseOutputLine (GetLastDataLine(output));
       
 			Console.WriteLine ("");
 			Console.WriteLine ("Checking calibrated value");
