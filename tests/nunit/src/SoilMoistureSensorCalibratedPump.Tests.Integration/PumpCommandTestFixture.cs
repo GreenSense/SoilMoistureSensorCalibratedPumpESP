@@ -37,12 +37,6 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			TestSetPump (2, 99, -1);
 		}
 
-		/*[Test]
-		public void Test_SetPumpToCurrentValueCommand()
-		{
-			TestSetPumpToSpecifiedValue (0, 25);
-		}*/
-
 		public void TestSetPump(int pumpStatus, int simulatedSoilMoisturePercentage, int expectedPumpOutput)
 		{
 
@@ -56,31 +50,19 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			SerialClient soilMoistureMonitor = null;
 			ArduinoSerialDevice soilMoistureSimulator = null;
 
-			var irrigatorPortName = "/dev/ttyUSB0";
-			var simulatorPortName = "/dev/ttyUSB1";
-
-			string[] ports = SerialPort.GetPortNames ();
-			var multipleDevicePairsDetected = Array.IndexOf (ports, "/dev/ttyUSB2") > -1;
-			if (multipleDevicePairsDetected) {
-				Console.WriteLine ("Multiple device pairs detected. Automatically configuring port names to become the second device pair.");
-
-				irrigatorPortName = "/dev/ttyUSB2";
-				simulatorPortName = "/dev/ttyUSB3";
-			}
+			var irrigatorPortName = GetDevicePort();
+			var simulatorPortName = GetSimulatorPort ();
 
 			try {
-				soilMoistureMonitor = new SerialClient (irrigatorPortName, 9600);
-
-				if (simulatedSoilMoisturePercentage > -1)
-					soilMoistureSimulator = new ArduinoSerialDevice (simulatorPortName, 9600);
+				soilMoistureMonitor = new SerialClient (irrigatorPortName, GetSerialBaudRate());
+				soilMoistureSimulator = new ArduinoSerialDevice (simulatorPortName, GetSerialBaudRate());
 
 				Console.WriteLine("");
 				Console.WriteLine("Connecting to serial devices...");
 				Console.WriteLine("");
 
 				soilMoistureMonitor.Open ();
-				if (simulatedSoilMoisturePercentage > -1)
-					soilMoistureSimulator.Connect ();
+				soilMoistureSimulator.Connect ();
 
 				Thread.Sleep (2000);
 
@@ -186,6 +168,14 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 					Assert.AreEqual(expectedPumpOutput, newPumpValue, "Invalid pump value: " + newPumpValue);
 				}
+
+				Console.WriteLine ("");
+				Console.WriteLine ("Reading value of pump pin...");
+				var pumpPinValue = soilMoistureSimulator.DigitalRead (2);
+				Console.WriteLine ("Pump pin value: " + pumpPinValue);
+
+				Assert.AreEqual(Convert.ToBoolean(expectedPumpOutput), pumpPinValue, "Invalid pump pin value");
+
 
 			} catch (IOException ex) {
 				Console.WriteLine (ex.ToString ());
