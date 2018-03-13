@@ -14,7 +14,7 @@ long lastSensorOnTime = 0;
 int delayAfterTurningSensorOn = 3 * 1000;
 
 bool soilMoistureSensorReadingHasBeenTaken = false;
-long soilMoistureSensorReadingInterval = 1; // Seconds
+long soilMoistureSensorReadingInterval = 5; // Seconds
 long lastSoilMoistureSensorReadingTime = 0; // Milliseconds
 
 int soilMoistureLevelCalibrated = 0;
@@ -193,16 +193,16 @@ void setSoilMoistureSensorReadingInterval(char* msg)
 {
     int value = readInt(msg, 1, strlen(msg)-1);
 
-    Serial.println("Value:");
-    Serial.println(value);
-
     setSoilMoistureSensorReadingInterval(value);
 }
 
 void setSoilMoistureSensorReadingInterval(long newValue)
 {
-  Serial.print("Setting soil moisture sensor reading interval: ");
-  Serial.println(newValue);
+  if (isDebugMode)
+  {
+    Serial.print("Setting soil moisture sensor reading interval: ");
+    Serial.println(newValue);
+  }
 
   EEPROMWriteLong(soilMoistureSensorReadingIntervalAddress, newValue);
 
@@ -292,8 +292,11 @@ void setDrySoilMoistureCalibrationValueToCurrent()
 
 void setDrySoilMoistureCalibrationValue(int newValue)
 {
-  Serial.print("Setting dry soil moisture sensor calibration value: ");
-  Serial.println(newValue);
+  if (isDebugMode)
+  {
+    Serial.print("Setting dry soil moisture sensor calibration value: ");
+    Serial.println(newValue);
+  }
 
   drySoilMoistureCalibrationValue = newValue;
   
@@ -328,8 +331,11 @@ void setWetSoilMoistureCalibrationValueToCurrent()
 
 void setWetSoilMoistureCalibrationValue(int newValue)
 {
-  Serial.print("Setting wet soil moisture sensor calibration value: ");
-  Serial.println(newValue);
+  if (isDebugMode)
+  {
+    Serial.print("Setting wet soil moisture sensor calibration value: ");
+    Serial.println(newValue);
+  }
 
   wetSoilMoistureCalibrationValue = newValue;
 
@@ -340,7 +346,8 @@ void setWetSoilMoistureCalibrationValue(int newValue)
 
 void reverseSoilMoistureCalibrationValues()
 {
-  Serial.println("Reversing soil moisture sensor calibration values");
+  if (isDebugMode)
+    Serial.println("Reversing soil moisture sensor calibration values");
 
   int tmpValue = drySoilMoistureCalibrationValue;
 
@@ -416,8 +423,8 @@ void restoreDefaultSoilMoistureSensorReadingIntervalSettings()
 {
   removeEEPROMSoilMoistureSensorReadingIntervalIsSetFlag();
 
-  soilMoistureSensorReadingInterval = 1;
-  serialOutputInterval = 1;
+  soilMoistureSensorReadingInterval = 5;
+  serialOutputInterval = 5;
 
   setSoilMoistureSensorReadingInterval(soilMoistureSensorReadingInterval);
 }

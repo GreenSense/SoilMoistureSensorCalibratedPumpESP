@@ -85,7 +85,7 @@ void checkCommand()
 
     int length = strlen(msg);
 
-    Serial.print("Received message: ");
+//    Serial.print("Received message: ");
     Serial.println(msg);
 
     switch (letter)
