@@ -60,28 +60,28 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			Console.WriteLine ("Percentage in: " + simulatedSoilMoisturePercentage);
 			Console.WriteLine ("Expected raw: " + expectedRaw);
 
-			SerialClient soilMoistureMonitor = null;
+			SerialClient irrigator = null;
 			ArduinoSerialDevice soilMoistureSimulator = null;
 
 			try {
-				soilMoistureMonitor = new SerialClient (GetDevicePort(), GetSerialBaudRate());
+				irrigator = new SerialClient (GetDevicePort(), GetSerialBaudRate());
 				soilMoistureSimulator = new ArduinoSerialDevice (GetSimulatorPort(), GetSerialBaudRate());
 
 				Console.WriteLine("");
 				Console.WriteLine("Connecting to serial devices...");
 				Console.WriteLine("");
 
-				soilMoistureMonitor.Open ();
+				irrigator.Open ();
 				soilMoistureSimulator.Connect ();
 
-				Thread.Sleep (1000);
+				Thread.Sleep (2000);
 
 				Console.WriteLine("");
 				Console.WriteLine("Reading the output from the monitor device...");
 				Console.WriteLine("");
 
 				// Read the output
-				var output = soilMoistureMonitor.Read ();
+				var output = irrigator.Read ();
 
 				Console.WriteLine (output);
 				Console.WriteLine ("");
@@ -91,7 +91,12 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("");
 
 				// Reset defaults
-				soilMoistureMonitor.WriteLine ("X");
+				irrigator.WriteLine ("X");
+
+				Thread.Sleep(1000);
+
+				// Set read interval to 1
+				irrigator.WriteLine ("V1");
 
 				Thread.Sleep(2000);
 
@@ -100,7 +105,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("");
 
 				// Read the output
-				output = soilMoistureMonitor.Read ();
+				output = irrigator.Read ();
 
 				Console.WriteLine (output);
 				Console.WriteLine ("");
@@ -127,7 +132,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 					Console.WriteLine("");
 
 					// Read the output
-					output = soilMoistureMonitor.Read ();
+					output = irrigator.Read ();
 
 					Console.WriteLine (output);
 					Console.WriteLine ("");
@@ -154,16 +159,16 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("");
 
 				// Send the command
-				soilMoistureMonitor.WriteLine (command);
+				irrigator.WriteLine (command);
 
-				Thread.Sleep(1000);
+				Thread.Sleep(2000);
 
 				Console.WriteLine("");
 				Console.WriteLine("Reading the output from the monitor device...");
 				Console.WriteLine("");
 
 				// Read the output
-				output = soilMoistureMonitor.Read ();
+				output = irrigator.Read ();
 
 				Console.WriteLine (output);
 				Console.WriteLine ("");
@@ -172,8 +177,15 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("Checking the output...");
 				Console.WriteLine("");
 
+				var data = ParseOutputLine(GetLastDataLine(output));
+
+				var value = data[command.Substring(0, 1)];
+
+				Console.Write("Value: " + value);
+
+				Assert.AreEqual(expectedRaw, value, "Calibration value invalid");
 				// Check the output
-				var expected = "Setting " + label + " soil moisture sensor calibration value:";
+				/*var expected = "Setting " + label + " soil moisture sensor calibration value:";
 				Assert.IsTrue(output.Contains(expected), "Didn't find expected output");
 
 				var lastLine = "";
@@ -204,14 +216,14 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("");
 
 				// Ensure the calibration value is in the valid range
-				Assert.IsTrue(IsWithinRange(expectedRaw, calibrationValue, 8), "Calibration value is outside the valid range: " + calibrationValue);
+				Assert.IsTrue(IsWithinRange(expectedRaw, calibrationValue, 8), "Calibration value is outside the valid range: " + calibrationValue);*/
 
 			} catch (IOException ex) {
 				Console.WriteLine (ex.ToString ());
 				Assert.Fail ();
 			} finally {
-				if (soilMoistureMonitor != null)
-					soilMoistureMonitor.Close ();
+				if (irrigator != null)
+					irrigator.Close ();
 
 				if (soilMoistureSimulator != null)
 					soilMoistureSimulator.Disconnect ();

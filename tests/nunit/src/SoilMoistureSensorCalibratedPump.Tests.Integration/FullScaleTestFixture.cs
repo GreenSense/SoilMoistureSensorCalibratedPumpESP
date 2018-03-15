@@ -67,6 +67,11 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine (output);
 				Console.WriteLine ("");
 
+				// Set read interval to 1
+				irrigator.WriteLine ("V1");
+
+				Thread.Sleep (1000);
+
 				// Set pump burst off time to 0
 				irrigator.WriteLine ("O0");
 
