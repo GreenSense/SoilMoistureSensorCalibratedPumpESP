@@ -28,13 +28,13 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 		[Test]
 		public void Test_SetPumpToAuto_Low()
 		{
-			TestSetPump (2, 1, -1);
+			TestSetPump (2, 1, 1);
 		}
 
 		[Test]
 		public void Test_SetPumpToAuto_High()
 		{
-			TestSetPump (2, 99, -1);
+			TestSetPump (2, 99, 0);
 		}
 
 		public void TestSetPump(int pumpStatus, int simulatedSoilMoisturePercentage, int expectedPumpOutput)
@@ -84,6 +84,24 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				soilMoistureMonitor.WriteLine ("X");
 
 				Thread.Sleep(1000);
+
+				// Set read/output interval to 1 sec
+				soilMoistureMonitor.WriteLine ("V1");
+
+				Thread.Sleep(1000);
+
+				// Set burst off time to 0 seconds
+				soilMoistureMonitor.WriteLine ("O0");
+
+				Thread.Sleep(1000);
+
+				if (CalibrationIsReversedByDefault)
+				{
+					// Reverse calibration values
+					soilMoistureMonitor.WriteLine ("R");
+
+					Thread.Sleep(1000);
+				}
 
 				Console.WriteLine("");
 				Console.WriteLine("Reading the output from the device...");

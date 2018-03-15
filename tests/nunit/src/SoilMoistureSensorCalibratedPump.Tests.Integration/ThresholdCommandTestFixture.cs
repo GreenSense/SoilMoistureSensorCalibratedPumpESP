@@ -35,14 +35,14 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			Console.WriteLine ("Threshold: " + threshold);
 			Console.WriteLine ("Simulated soil moisture percentage: " + simulatedSoilMoisturePercentage);
 
-			SerialClient soilMoistureMonitor = null;
+			SerialClient irrigator = null;
 			ArduinoSerialDevice soilMoistureSimulator = null;
 
 			var irrigatorPortName = GetDevicePort();
 			var simulatorPortName = GetSimulatorPort();
 
 			try {
-				soilMoistureMonitor = new SerialClient (irrigatorPortName, GetSerialBaudRate());
+				irrigator = new SerialClient (irrigatorPortName, GetSerialBaudRate());
 
 				if (simulatedSoilMoisturePercentage > -1)
 					soilMoistureSimulator = new ArduinoSerialDevice (simulatorPortName, GetSerialBaudRate());
@@ -51,7 +51,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("Connecting to serial devices...");
 				Console.WriteLine("");
 
-				soilMoistureMonitor.Open ();
+				irrigator.Open ();
 				if (simulatedSoilMoisturePercentage > -1)
 					soilMoistureSimulator.Connect ();
 
@@ -62,7 +62,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("");
 
 				// Read the output
-				var output = soilMoistureMonitor.Read ();
+				var output = irrigator.Read ();
 
 				Console.WriteLine (output);
 				Console.WriteLine ("");
@@ -72,7 +72,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("");
 
 				// Reset defaults
-				soilMoistureMonitor.WriteLine ("X");
+				irrigator.WriteLine ("X");
 
 				Thread.Sleep(1000);
 
@@ -81,7 +81,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("");
 
 				// Read the output
-				output = soilMoistureMonitor.Read ();
+				output = irrigator.Read ();
 
 				Console.WriteLine (output);
 				Console.WriteLine ("");
@@ -105,7 +105,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 					Console.WriteLine("");
 
 					// Read the output
-					output = soilMoistureMonitor.Read ();
+					output = irrigator.Read ();
 
 					Console.WriteLine (output);
 					Console.WriteLine ("");
@@ -121,7 +121,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("");
 
 				// Send the command
-				soilMoistureMonitor.WriteLine (command);
+				irrigator.WriteLine (command);
 
 				Thread.Sleep(6000);
 
@@ -130,7 +130,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("");
 
 				// Read the output
-				output = soilMoistureMonitor.Read ();
+				output = irrigator.Read ();
 
 				Console.WriteLine (output);
 				Console.WriteLine ("");
@@ -176,8 +176,8 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine (ex.ToString ());
 				Assert.Fail ();
 			} finally {
-				if (soilMoistureMonitor != null)
-					soilMoistureMonitor.Close ();
+				if (irrigator != null)
+					irrigator.Close ();
 
 				if (soilMoistureSimulator != null)
 					soilMoistureSimulator.Disconnect ();

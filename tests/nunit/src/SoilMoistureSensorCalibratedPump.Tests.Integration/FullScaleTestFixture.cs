@@ -43,7 +43,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Thread.Sleep (5000);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the monitor device...");
+				Console.WriteLine("Reading the output from the device...");
 				Console.WriteLine("");
 
 				// Read the output
@@ -57,16 +57,6 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 				Thread.Sleep (1000);
 
-				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the monitor device...");
-				Console.WriteLine("");
-
-				// Read the output
-				output = irrigator.Read ();
-
-				Console.WriteLine (output);
-				Console.WriteLine ("");
-
 				// Set read interval to 1
 				irrigator.WriteLine ("V1");
 
@@ -78,7 +68,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Thread.Sleep (1000);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the monitor device...");
+				Console.WriteLine("Reading the output from the device...");
 				Console.WriteLine("");
 
 				// Read the output
@@ -94,7 +84,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Thread.Sleep (1000);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the monitor device...");
+				Console.WriteLine("Reading the output from the device...");
 				Console.WriteLine("");
 
 				// Read the output
@@ -121,7 +111,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			}
 		}
 		
-		public int RunCycle(int soilMoisturePercentage, bool calibrationIsReversed, SerialClient soilMoistureMonitor, ArduinoSerialDevice soilMoistureSimulator)
+		public int RunCycle(int soilMoisturePercentage, bool calibrationIsReversed, SerialClient irrigator, ArduinoSerialDevice soilMoistureSimulator)
 		{
 		
 			Console.WriteLine ("");
@@ -144,7 +134,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			Console.WriteLine ("Reading data from device...");
 			Console.WriteLine ("");
       
-			var output = soilMoistureMonitor.Read ();
+			var output = irrigator.Read ();
       
 			Console.WriteLine (output);
 			Console.WriteLine ("");
@@ -187,7 +177,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			Console.WriteLine ("Reading data from device...");
 			Console.WriteLine ("");
 
-			output = soilMoistureMonitor.Read ();
+			output = irrigator.Read ();
 
 			Console.WriteLine (output);
 			Console.WriteLine ("");

@@ -183,40 +183,8 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 				Console.Write("Value: " + value);
 
-				Assert.AreEqual(expectedRaw, value, "Calibration value invalid");
-				// Check the output
-				/*var expected = "Setting " + label + " soil moisture sensor calibration value:";
-				Assert.IsTrue(output.Contains(expected), "Didn't find expected output");
+				Assert.IsTrue(IsWithinRange(expectedRaw, value, 8), "Calibration value is outside the valid range: " + value);
 
-				var lastLine = "";
-
-				var lines = output.Split('\n');
-
-				// Extract the line containing the calibration value
-				for (int i = lines.Length-1; i>=0; i--)
-				{
-					var line = lines[i];
-					if (line.StartsWith(expected))
-					{
-						lastLine = line;
-						break;
-					}
-				}
-
-				Console.WriteLine("Last line");
-				Console.WriteLine(lastLine);
-				Console.WriteLine("");
-
-				// Extraction the calibration value
-				int startPosition = lastLine.IndexOf(":")+2;
-				var cvString = lastLine.Substring(startPosition, lastLine.Length-startPosition);
-				var calibrationValue = Convert.ToInt32(cvString);
-
-				Console.WriteLine("Calibration value: " + calibrationValue);
-				Console.WriteLine("");
-
-				// Ensure the calibration value is in the valid range
-				Assert.IsTrue(IsWithinRange(expectedRaw, calibrationValue, 8), "Calibration value is outside the valid range: " + calibrationValue);*/
 
 			} catch (IOException ex) {
 				Console.WriteLine (ex.ToString ());
