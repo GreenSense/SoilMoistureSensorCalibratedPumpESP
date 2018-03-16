@@ -77,7 +77,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Thread.Sleep (2000);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the monitor device...");
+				Console.WriteLine("Reading the output from the device...");
 				Console.WriteLine("");
 
 				// Read the output
@@ -101,7 +101,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Thread.Sleep(2000);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the monitor device...");
+				Console.WriteLine("Reading the output from the device...");
 				Console.WriteLine("");
 
 				// Read the output
@@ -128,7 +128,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 					//Thread.Sleep(12000);
 
 					Console.WriteLine("");
-					Console.WriteLine("Reading output from the monitor device...");
+					Console.WriteLine("Reading outputdeviceor device...");
 					Console.WriteLine("");
 
 					// Read the output
@@ -145,7 +145,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 
 					Console.WriteLine("");
-					Console.WriteLine("Checking the values from the monitor device...");
+					Console.WriteLine("Checking the valuesdeviceor device...");
 					Console.WriteLine("");
 
 					Console.WriteLine("Expected raw: " + expectedRaw);
@@ -155,7 +155,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				}
 
 				Console.WriteLine("");
-				Console.WriteLine("Sending '" + command + "' command to monitor device...");
+				Console.WriteLine("Sending '" + command + "' cdeviceor device...");
 				Console.WriteLine("");
 
 				// Send the command
@@ -164,7 +164,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Thread.Sleep(2000);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the monitor device...");
+				Console.WriteLine("Reading the outputdeviceor device...");
 				Console.WriteLine("");
 
 				// Read the output
