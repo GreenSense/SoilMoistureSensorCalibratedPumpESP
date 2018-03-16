@@ -1,7 +1,7 @@
 pipeline {
     agent any
     triggers {
-        pollSCM 'H/10 * * * *'
+        pollSCM 'H/2 * * * *'
     }
     stages {
         stage('Checkout') {
@@ -42,7 +42,9 @@ pipeline {
         }
         stage('Graduate') {
             steps {
-                sh 'sh graduate.sh'
+                if($BRANCH_NAME == 'dev'){
+                  sh 'sh graduate.sh'
+                }
             }
         }
         stage('Clean') {
