@@ -57,6 +57,11 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 				Thread.Sleep(1000);
 
+				// Set output interval to 1
+				irrigator.WriteLine ("V1");
+
+				Thread.Sleep(1000);
+
 				Console.WriteLine("");
 				Console.WriteLine("Reading the output from the device...");
 				Console.WriteLine("");
