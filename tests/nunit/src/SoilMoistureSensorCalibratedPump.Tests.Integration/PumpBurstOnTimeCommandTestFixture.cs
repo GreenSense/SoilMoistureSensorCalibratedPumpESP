@@ -57,7 +57,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 				Thread.Sleep(1000);
 				
-				// Set output inverval to 1
+				// Set output interval to 1
 				irrigator.WriteLine ("V1");
 
 				Thread.Sleep(1000);
@@ -85,7 +85,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				// Send the command
 				irrigator.WriteLine (command);
 
-				Thread.Sleep(2000);
+				Thread.Sleep(3000);
 
 				Console.WriteLine("");
 				Console.WriteLine("Reading the output from the device...");
