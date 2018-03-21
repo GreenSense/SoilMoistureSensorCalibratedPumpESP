@@ -80,6 +80,14 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				irrigator.WriteLine ("V1");
 
 				Thread.Sleep(1000);
+				
+				if (CalibrationIsReversedByDefault)
+				{
+					// Reverse calibration to make it more readable
+					irrigator.WriteLine ("R");
+	
+					Thread.Sleep(1000);
+				}
 
 				Console.WriteLine("");
 				Console.WriteLine("Reading the output from the device...");
