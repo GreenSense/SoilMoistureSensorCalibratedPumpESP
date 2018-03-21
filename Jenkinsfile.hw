@@ -42,14 +42,7 @@ pipeline {
         }
         stage('Graduate') {
             steps {
-                if($BRANCH_NAME == 'dev'){
-                  sh 'sh graduate.sh'
-                }
-            }
-        }
-        stage('Clean') {
-            steps {
-              cleanWs()
+                sh 'sh graduate.sh'
             }
         }
     }
