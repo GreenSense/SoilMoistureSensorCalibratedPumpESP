@@ -163,9 +163,6 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				else
 				{
 					expectedThreshold = simulatedSoilMoisturePercentage;
-					// Reverse the percentage if it is reversed in the sketch
-					if (CalibrationIsReversedByDefault)
-						expectedThreshold = ArduinoConvert.ReversePercentage(expectedThreshold);
 				}
 				
 				Assert.IsTrue(data.ContainsKey("T"));
