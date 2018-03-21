@@ -387,7 +387,7 @@ void restoreDefaultThreshold()
 
 void restoreDefaultPumpBurstOnTime()
 {
-  Serial.println("resetting default pump burst on time");
+  Serial.println("Resetting default pump burst on time");
 
   removePumpBurstOnTimeEEPROMIsSetFlag();
 
