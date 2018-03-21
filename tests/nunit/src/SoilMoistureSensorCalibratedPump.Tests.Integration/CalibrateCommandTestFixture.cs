@@ -128,7 +128,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 					//Thread.Sleep(12000);
 
 					Console.WriteLine("");
-					Console.WriteLine("Reading outputdeviceor device...");
+					Console.WriteLine("Reading output from the device...");
 					Console.WriteLine("");
 
 					// Read the output
@@ -155,7 +155,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				}
 
 				Console.WriteLine("");
-				Console.WriteLine("Sending '" + command + "' cdeviceor device...");
+				Console.WriteLine("Sending '" + command + "' to the device...");
 				Console.WriteLine("");
 
 				// Send the command
@@ -164,7 +164,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Thread.Sleep(2000);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the outputdeviceor device...");
+				Console.WriteLine("Reading the output from the device...");
 				Console.WriteLine("");
 
 				// Read the output
