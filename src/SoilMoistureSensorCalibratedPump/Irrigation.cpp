@@ -368,7 +368,7 @@ void setPumpBurstOffTimeIsSetEEPROMFlag()
 /* Restore defaults */
 void restoreDefaultIrrigationSettings()
 {
-  Serial.println("Reseting default irrigation settings");
+  Serial.println("Resetting default irrigation settings");
 
   restoreDefaultThreshold();
   restoreDefaultPumpBurstOnTime();
@@ -376,7 +376,7 @@ void restoreDefaultIrrigationSettings()
 
 void restoreDefaultThreshold()
 {
-  Serial.println("Reseting default threshold");
+  Serial.println("Resetting default threshold");
 
   removeThresholdEEPROMIsSetFlag();
 
@@ -387,7 +387,7 @@ void restoreDefaultThreshold()
 
 void restoreDefaultPumpBurstOnTime()
 {
-  Serial.println("Reseting default pump burst on time");
+  Serial.println("resetting default pump burst on time");
 
   removePumpBurstOnTimeEEPROMIsSetFlag();
 
@@ -398,7 +398,7 @@ void restoreDefaultPumpBurstOnTime()
 
 void restoreDefaultPumpBurstOffTime()
 {
-  Serial.println("Reseting default pump burst off time");
+  Serial.println("Resetting default pump burst off time");
 
   removePumpBurstOffTimeEEPROMIsSetFlag();
 
