@@ -80,7 +80,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				// Send the command
 				irrigator.WriteLine (command);
 
-				Thread.Sleep(6000);
+				Thread.Sleep(2000);
 
 				Console.WriteLine("");
 				Console.WriteLine("Reading the output from the device...");
