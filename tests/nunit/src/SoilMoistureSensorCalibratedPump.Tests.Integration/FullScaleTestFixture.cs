@@ -128,7 +128,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
       
 			soilMoistureSimulator.AnalogWritePercentage (9, percentageValue);
       
-			Thread.Sleep (3000);
+			Thread.Sleep (2000);
       
 			Console.WriteLine ("");
 			Console.WriteLine ("Reading data from device...");
