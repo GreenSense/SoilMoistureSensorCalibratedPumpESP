@@ -163,15 +163,11 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 			if (soilMoisturePercentage > 100)
 				Assert.Fail ("Soil moisture hit 100%");
-//        soilMoisturePercentage = 100;
 
 			if (soilMoisturePercentage < 0)
 				Assert.Fail ("Soil moisture hit 0%");
-//        soilMoisturePercentage = 0;
       
 			Console.WriteLine ("New soil moisture percentage: " + soilMoisturePercentage);
-
-			Thread.Sleep (2000);
 
 			Console.WriteLine ("");
 			Console.WriteLine ("Reading data from device...");
