@@ -1,4 +1,4 @@
-sudo apt-get update
+sudo apt-get update -qq
 
 # curl
 if ! type "curl" > /dev/null; then
@@ -18,7 +18,6 @@ fi
 
 # platform.io
 if ! type "pio" > /dev/null; then
-  #sudo python -c "$(curl -fsSL https://raw.githubusercontent.com/platformio/platformio/master/scripts/get-platformio.py)"
   sudo python -c "$(curl -fsSL https://raw.githubusercontent.com/platformio/platformio/develop/scripts/get-platformio.py)"
 fi
 
