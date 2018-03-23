@@ -9,6 +9,8 @@
 #define SERIAL_MODE_CSV 1
 #define SERIAL_MODE_QUERYSTRING 2
 
+#define VERSION "1-0-0-0"
+
 int serialMode = SERIAL_MODE_CSV;
 
 long loopNumber = 0;
@@ -201,6 +203,9 @@ void serialPrintData()
       Serial.print(";");
       Serial.print("W:"); // Wet calibration value
       Serial.print(wetSoilMoistureCalibrationValue);
+      Serial.print(";");
+      Serial.print("Z:");
+      Serial.print(VERSION);
       Serial.print(";;");
       Serial.println();
     }
