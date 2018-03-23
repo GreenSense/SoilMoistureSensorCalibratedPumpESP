@@ -17,31 +17,43 @@ pipeline {
                 sh 'git checkout $BRANCH_NAME'
                 sh 'cp /usr/local/jenkins/set-soilmoisturesensorcalibratedpump-git-credentials.sh set-soilmoisturesensorcalibratedpump-git-credentials.sh'
                 sh 'sh set-soilmoisturesensorcalibratedpump-git-credentials.sh'
+		sh 'git config --global user.email "compulsivecoder@gmail.com"'
+                sh 'git config --global user.name "CompulsiveCoder CI"'
             }
         }
         stage('Init') {
             steps {
-                sh 'sh init.sh'
+                sh 'echo "Skipping" # sh init.sh'
+            }
+        }
+        stage('Inject Version') {
+            steps {
+                sh 'sh inject-version.sh'
             }
         }
         stage('Build') {
             steps {
-                sh 'sh build.sh'
+                sh 'echo "Skipping" # sh build-all.sh'
             }
         }
         stage('Upload') {
             steps {
-                sh 'sh upload.sh'
+                sh 'echo "Skipping" # sh upload.sh'
             }
         }
         stage('Upload simulator') {
             steps {
-                sh 'sh upload-simulator.sh'
+                sh 'echo "Skipping simulator upload to speed up test." #sh upload-simulator.sh'
             }
         }
         stage('Test') {
             steps {
-                sh 'sh test.sh'
+                sh 'echo "Skipping" # sh test.sh'
+            }
+        }
+        stage('Clean') {
+            steps {
+                sh 'git checkout src/SoilMoistureSensorCalibratedPump/SoilMoistureSensorCalibratedPump.ino'
             }
         }
         stage('Graduate') {
@@ -49,6 +61,16 @@ pipeline {
                 sh 'sh graduate.sh'
             }
         }
+        stage('Increment Version') {
+            steps {
+                sh 'sh increment-version.sh'
+            }
+        } 
+        stage('Push Version') {
+            steps {
+                sh 'sh push-version.sh'
+            }
+        } 
     }
     post {
         always {
