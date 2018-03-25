@@ -1,8 +1,9 @@
-#!/bin/bash
+PORT_NAME=$1
 
-. ./common.sh
+if [ ! $PORT_NAME ]; then
+  PORT_NAME="/dev/ttyUSB0"
+fi
 
-echo "Uploading to port $IRRIGATOR_PORT"
+echo "Port: $PORT_NAME"
 
-# pio run --target upload --environment=nanoatmega328 --upload-port=/dev/ttyUSB0
-pio run --target upload --environment=nanoatmega328 --upload-port=$IRRIGATOR_PORT
+pio run --target upload --environment=nanoatmega328 --upload-port=$PORT_NAME
