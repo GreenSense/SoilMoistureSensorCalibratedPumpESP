@@ -1,7 +1,10 @@
 #!/bin/bash
+PORT_NAME=$1
 
-. ./common.sh
+if [ ! $PORT_NAME ]; then
+  PORT_NAME="/dev/ttyUSB0"
+fi
 
-echo "Uploading to port $IRRIGATOR_PORT"
+echo "Port: $PORT_NAME"
 
-pio device monitor --port=$IRRIGATOR_PORT
+pio device monitor --port=$PORT_NAME
