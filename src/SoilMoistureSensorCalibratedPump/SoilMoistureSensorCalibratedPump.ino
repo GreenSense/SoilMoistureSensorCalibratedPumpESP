@@ -140,6 +140,7 @@ void checkCommand()
         reverseSoilMoistureCalibrationValues();
         break;
     }
+    forceSerialOutput();
   }
 }
 
