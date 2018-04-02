@@ -198,9 +198,9 @@ void serialPrintData()
       Serial.print("PO:"); // Pump on
       Serial.print(pumpIsOn);
       Serial.print(";");
-      Serial.print("SSPO:"); // Seconds since pump on
-      Serial.print((millis() - lastPumpFinishTime) / 1000);
-      Serial.print(";");
+      //Serial.print("SSPO:"); // Seconds since pump on
+      //Serial.print((millis() - lastPumpFinishTime) / 1000);
+      //Serial.print(";");
       Serial.print("D:"); // Dry calibration value
       Serial.print(drySoilMoistureCalibrationValue);
       Serial.print(";");
