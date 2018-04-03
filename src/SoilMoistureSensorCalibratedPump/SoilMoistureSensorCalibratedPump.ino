@@ -142,6 +142,7 @@ void checkCommand()
     }
     forceSerialOutput();
   }
+  delay(1);
 }
 
 /* Settings */
