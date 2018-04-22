@@ -145,7 +145,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 
 					Console.WriteLine("");
-					Console.WriteLine("Checking the valuesdeviceor device...");
+					Console.WriteLine("Checking the device...");
 					Console.WriteLine("");
 
 					Console.WriteLine("Expected raw: " + expectedRaw);
@@ -181,7 +181,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 				var value = data[command.Substring(0, 1)];
 
-				Console.Write("Value: " + value);
+				Console.WriteLine("Value: " + value);
 
 				Assert.IsTrue(IsWithinRange(expectedRaw, value, 10), "Calibration value is outside the valid range: " + value);
 
