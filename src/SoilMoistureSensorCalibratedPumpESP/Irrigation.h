@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define PUMP_PIN 11
+#define PUMP_PIN 4 // 4
 
 #define PUMP_STATUS_OFF 0
 #define PUMP_STATUS_ON 1

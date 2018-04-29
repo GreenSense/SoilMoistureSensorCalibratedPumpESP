@@ -7,7 +7,7 @@
 #include "SoilMoistureSensor.h"
 
 #define soilMoistureSensorPin A0
-#define soilMoistureSensorPowerPin 12
+#define soilMoistureSensorPowerPin 3 // 0
 
 bool soilMoistureSensorIsOn = true;
 long lastSensorOnTime = 0;
