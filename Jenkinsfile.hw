@@ -28,6 +28,18 @@ pipeline {
                 sh 'sh inject-version.sh'
             }
         }
+        stage('Inject Security Settings') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                sh 'sh inject-security-settings.sh'
+            }
+        }
+        stage('Inject Device Name') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                shHide( 'sh inject-device-name.sh TestIrrigatorESP' )
+            }
+        }
         stage('Build') {
             when { expression { !shouldSkipBuild() } }
             steps {
