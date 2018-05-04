@@ -28,7 +28,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			var irrigatorPortName = GetDevicePort();
 
 			try {
-				irrigator = new SerialClient (irrigatorPortName, GetSerialBaudRate());
+				irrigator = new SerialClient (irrigatorPortName, GetDeviceSerialBaudRate());
 
 				Console.WriteLine("");
 				Console.WriteLine("Connecting to serial devices...");
