@@ -25,39 +25,60 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 		public void Finish()
 		{
 		}
-
-		public string GetDevicePort()
+public string GetDevicePort()
 		{
-			var irrigatorPortName = "/dev/ttyUSB0";
-
-			string[] ports = SerialPort.GetPortNames ();
-			var multipleDevicePairsDetected = Array.IndexOf (ports, "/dev/ttyUSB2") > -1;
-			if (multipleDevicePairsDetected) {
-				irrigatorPortName = "/dev/ttyUSB2";
-			}
-
-			Console.WriteLine ("Device port: " + irrigatorPortName);
-
-			return irrigatorPortName;
+			var devicePort = Environment.GetEnvironmentVariable ("IRRIGATOR_ESP_PORT");
+			
+			if (String.IsNullOrEmpty(devicePort))
+				devicePort = "/dev/ttyUSB0";
+			
+			Console.WriteLine ("Device port: " + devicePort);
+			
+			return devicePort;
 		}
 
 		public string GetSimulatorPort()
 		{
-			var simulatorPortName = "/dev/ttyUSB1";
-
-			string[] ports = SerialPort.GetPortNames ();
-			var multipleDevicePairsDetected = Array.IndexOf (ports, "/dev/ttyUSB2") > -1;
-			if (multipleDevicePairsDetected) {
-				simulatorPortName = "/dev/ttyUSB3";
-			}
-
-			Console.WriteLine ("Simulator port: " + simulatorPortName);
-			return simulatorPortName;
+			var simulatorPort = Environment.GetEnvironmentVariable ("IRRIGATOR_ESP_SIMULATOR_PORT");
+			
+			if (String.IsNullOrEmpty(simulatorPort))
+				simulatorPort = "/dev/ttyUSB1";
+			
+			Console.WriteLine ("Simulator port: " + simulatorPort);
+			
+			return simulatorPort;
 		}
 
-		public int GetSerialBaudRate()
+		public int GetDeviceSerialBaudRate()
 		{
-			return 9600;
+			var baudRateString = Environment.GetEnvironmentVariable ("IRRIGATOR_ESP_BAUD_RATE");
+			
+			var baudRate = 0;
+			
+			if (String.IsNullOrEmpty(baudRateString))
+				baudRate = 9600;
+			else
+				baudRate = Convert.ToInt32(baudRateString);
+			
+			Console.WriteLine ("Device baud rate: " + baudRate);
+			
+			return baudRate;
+		}
+
+		public int GetSimulatorSerialBaudRate()
+		{
+			var baudRateString = Environment.GetEnvironmentVariable ("IRRIGATOR_ESP_SIMULATOR_BAUD_RATE");
+			
+			var baudRate = 0;
+			
+			if (String.IsNullOrEmpty(baudRateString))
+				baudRate = 9600;
+			else
+				baudRate = Convert.ToInt32(baudRateString);
+			
+			Console.WriteLine ("Simulator baud rate: " + baudRate);
+			
+			return baudRate;
 		}
 
 		public bool IsWithinRange(int expectedValue, int actualValue, int allowableMarginOfError)
