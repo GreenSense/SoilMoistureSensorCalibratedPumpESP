@@ -64,8 +64,8 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			ArduinoSerialDevice soilMoistureSimulator = null;
 
 			try {
-				irrigator = new SerialClient (GetDevicePort(), GetSerialBaudRate());
-				soilMoistureSimulator = new ArduinoSerialDevice (GetSimulatorPort(), GetSerialBaudRate());
+				irrigator = new SerialClient (GetDevicePort(), GetDeviceSerialBaudRate());
+				soilMoistureSimulator = new ArduinoSerialDevice (GetSimulatorPort(), GetSimulatorSerialBaudRate());
 
 				Console.WriteLine("");
 				Console.WriteLine("Connecting to serial devices...");
