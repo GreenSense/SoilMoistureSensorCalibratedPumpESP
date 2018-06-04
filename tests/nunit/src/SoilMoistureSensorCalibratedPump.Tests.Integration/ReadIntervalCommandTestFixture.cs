@@ -20,25 +20,25 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			Console.WriteLine ("Starting read interval command test");
 			Console.WriteLine ("");
 
-			SerialClient irrigator = null;
+			SerialClient soilMoistureMonitor = null;
 
 			try {
-				irrigator = new SerialClient (GetDevicePort(), GetDeviceSerialBaudRate());
+				soilMoistureMonitor = new SerialClient (GetDevicePort(), GetDeviceSerialBaudRate());
 
 				Console.WriteLine("");
 				Console.WriteLine("Connecting to serial devices...");
 				Console.WriteLine("");
 
-				irrigator.Open ();
+				soilMoistureMonitor.Open ();
 
-				Thread.Sleep (1000);
+				Thread.Sleep (DelayAfterConnecting);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the device...");
+				Console.WriteLine("Reading the output from the monitor device...");
 				Console.WriteLine("");
 
 				// Read the output
-				var output = irrigator.Read ();
+				var output = soilMoistureMonitor.Read ();
 
 				Console.WriteLine (output);
 				Console.WriteLine ("");
@@ -48,39 +48,39 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("");
 
 				// Reset defaults
-				irrigator.WriteLine ("X");
+				soilMoistureMonitor.WriteLine ("X");
 
-				Thread.Sleep(2000);
+				Thread.Sleep(3000);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the device...");
+				Console.WriteLine("Reading the output from the monitor device...");
 				Console.WriteLine("");
 
 				// Read the output
-				output = irrigator.Read ();
+				output = soilMoistureMonitor.Read ();
 
 				Console.WriteLine (output);
 				Console.WriteLine ("");
 
-				var readInterval = 100; // Seconds
+				var readInterval = 1; // Seconds
 
 				var command = "V" + readInterval;
 
 				Console.WriteLine("");
-				Console.WriteLine("Sending '" + command + "' command todevice...");
+				Console.WriteLine("Sending '" + command + "' command to monitor device...");
 				Console.WriteLine("");
 
 				// Send the command
-				irrigator.WriteLine (command);
+				soilMoistureMonitor.WriteLine (command);
 
-				Thread.Sleep(8000);
+				Thread.Sleep(3000);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the device...");
+				Console.WriteLine("Reading the output from the monitor device...");
 				Console.WriteLine("");
 
 				// Read the output
-				output = irrigator.Read ();
+				output = soilMoistureMonitor.Read ();
 
 				Console.WriteLine (output);
 				Console.WriteLine ("");
@@ -92,14 +92,14 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				var data = ParseOutputLine(GetLastDataLine(output));
 
 				// Ensure the calibration value is in the valid range
-				Assert.AreEqual(readInterval, data["V"], "Invalid read interval: " + data["V"]);
+				Assert.AreEqual(readInterval, Convert.ToInt32(data["V"]), "Invalid read interval: " + data["V"]);
 
 			} catch (IOException ex) {
 				Console.WriteLine (ex.ToString ());
 				Assert.Fail ();
 			} finally {
-				if (irrigator != null)
-					irrigator.Close ();
+				if (soilMoistureMonitor != null)
+					soilMoistureMonitor.Close ();
 			}
 		}
 

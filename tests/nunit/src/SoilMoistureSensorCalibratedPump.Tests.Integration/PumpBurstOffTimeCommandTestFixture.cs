@@ -108,7 +108,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 				Assert.IsTrue(data.ContainsKey("O"), "'O' (burst off time) key not found.");
 
-				var newPumpBurstOffTimeValue = data["O"];
+				var newPumpBurstOffTimeValue = Convert.ToInt32(data["O"]);
 
 				Console.WriteLine("Pump burst off time: " + newPumpBurstOffTimeValue);
 

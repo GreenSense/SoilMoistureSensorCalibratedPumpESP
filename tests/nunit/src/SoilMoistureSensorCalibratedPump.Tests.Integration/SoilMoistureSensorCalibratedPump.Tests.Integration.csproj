@@ -42,14 +42,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTestFixture.cs" />
-    <Compile Include="FullScaleTestFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CalibrateCommandTestFixture.cs" />
+    <Compile Include="ReadIntervalCommandTestFixture.cs" />
+    <Compile Include="PumpBurstOffTimeCommandTestFixture.cs" />
+    <Compile Include="PumpBurstOnTimeCommandTestFixture.cs" />
     <Compile Include="ThresholdCommandTestFixture.cs" />
     <Compile Include="PumpCommandTestFixture.cs" />
-    <Compile Include="ReadIntervalCommandTestFixture.cs" />
-    <Compile Include="PumpBurstOnTimeCommandTestFixture.cs" />
-    <Compile Include="PumpBurstOffTimeCommandTestFixture.cs" />
+    <Compile Include="FullScaleTestFixture.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

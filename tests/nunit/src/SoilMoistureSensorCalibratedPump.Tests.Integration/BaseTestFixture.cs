@@ -8,29 +8,32 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 	public class BaseTestFixture
 	{
 		public int PwmHigh = 255;
-		public int AnalogHigh = 1023;
+		public int AnalogHigh = 1024;
 		
 		public bool CalibrationIsReversedByDefault = true; // Reversed by default to matches common soil moisture sensors
+		
+		public int DelayAfterConnecting = 10 * 1000;
 		
 		public BaseTestFixture ()
 		{
 		}
 
 		[SetUp]
-		public void Initialize()
+		public virtual void Initialize()
 		{
 		}
 
 		[TearDown]
-		public void Finish()
+		public virtual void Finish()
 		{
 		}
-public string GetDevicePort()
+
+        public string GetDevicePort()
 		{
 			var devicePort = Environment.GetEnvironmentVariable ("IRRIGATOR_ESP_PORT");
 			
 			if (String.IsNullOrEmpty(devicePort))
-				devicePort = "/dev/ttyUSB0";
+				devicePort = "/dev/ttyUSB2";
 			
 			Console.WriteLine ("Device port: " + devicePort);
 			
@@ -42,7 +45,7 @@ public string GetDevicePort()
 			var simulatorPort = Environment.GetEnvironmentVariable ("IRRIGATOR_ESP_SIMULATOR_PORT");
 			
 			if (String.IsNullOrEmpty(simulatorPort))
-				simulatorPort = "/dev/ttyUSB1";
+				simulatorPort = "/dev/ttyUSB3";
 			
 			Console.WriteLine ("Simulator port: " + simulatorPort);
 			
@@ -56,7 +59,7 @@ public string GetDevicePort()
 			var baudRate = 0;
 			
 			if (String.IsNullOrEmpty(baudRateString))
-				baudRate = 9600;
+				baudRate = 115200;
 			else
 				baudRate = Convert.ToInt32(baudRateString);
 			
@@ -84,17 +87,18 @@ public string GetDevicePort()
 		public bool IsWithinRange(int expectedValue, int actualValue, int allowableMarginOfError)
 		{
 			Console.WriteLine("Checking value is within range...");
-			Console.WriteLine("Expected value: " + expectedValue);
-			Console.WriteLine("Actual value: " + actualValue);
-			Console.WriteLine("Allowable margin of error: " + allowableMarginOfError);
+			Console.WriteLine("  Expected value: " + expectedValue);
+			Console.WriteLine("  Actual value: " + actualValue);
+			Console.WriteLine("");
+			Console.WriteLine("  Allowable margin of error: " + allowableMarginOfError);
 			
 			var minAllowableValue = expectedValue-allowableMarginOfError;
 			if (minAllowableValue < 0)
 				minAllowableValue = 0;
 			var maxAllowableValue = expectedValue+allowableMarginOfError;
 			
-			Console.WriteLine("Max allowable value: " + maxAllowableValue);
-			Console.WriteLine("Min allowable value: " + minAllowableValue);
+			Console.WriteLine("  Max allowable value: " + maxAllowableValue);
+			Console.WriteLine("  Min allowable value: " + minAllowableValue);
 			
 			var isWithinRange = actualValue <= maxAllowableValue &&
 				actualValue >= minAllowableValue;
@@ -104,9 +108,9 @@ public string GetDevicePort()
 			return isWithinRange;
 		}
 
-		public Dictionary<string, int> ParseOutputLine(string outputLine)
+		public Dictionary<string, string> ParseOutputLine(string outputLine)
 		{
-			var dictionary = new Dictionary<string, int> ();
+			var dictionary = new Dictionary<string, string> ();
 
 			if (IsValidOutputLine (outputLine)) {
 				foreach (var pair in outputLine.Split(';')) {
@@ -114,14 +118,8 @@ public string GetDevicePort()
 
 					if (parts.Length == 2) {
 						var key = parts [0];
-						var value = 0;
-						try {
-							value = Convert.ToInt32 (parts [1]);
-
-							dictionary [key] = value;
-						} catch {
-							Console.WriteLine ("Warning: Invalid key/value pair '" + pair + "'");
-						}
+						var value = parts [1];
+						dictionary [key] = value;
 					}
 				}
 			}

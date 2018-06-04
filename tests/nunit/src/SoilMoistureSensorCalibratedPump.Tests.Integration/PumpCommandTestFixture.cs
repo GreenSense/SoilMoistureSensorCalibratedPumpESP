@@ -170,7 +170,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 				Assert.IsTrue(data.ContainsKey("P"));
 
-				var newPumpStatus = data["P"];
+				var newPumpStatus = Convert.ToInt32(data["P"]);
 
 				Console.WriteLine("Pump status: " + newPumpStatus);
 
@@ -180,7 +180,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				{
 					Assert.IsTrue(data.ContainsKey("PO"));
 
-					var newPumpValue = data["PO"];
+					var newPumpValue = Convert.ToInt32(data["PO"]);
 
 					Console.WriteLine("Pump: " + newPumpValue);
 

@@ -15,11 +15,11 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 		[Test]
 		public void Test_CalibrateDryToCurrentValueCommand()
 		{
-			var percentage = 20;
+			var percentage = 30;
 
-			var raw = 218;
+			var raw = 323;
 
-			TestCalibrateToCurrentValueCommand ("dry", "D", percentage, raw);
+			TestCalibrateToCurrentCommand ("dry", "D", percentage, raw);
 		}
 
 		[Test]
@@ -29,7 +29,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 			var raw = 220;
 
-			TestCalibrateToCurrentValueCommand ("dry", "D" + raw, -1, raw);
+			TestCalibrateToCurrentCommand ("dry", "D", -1, raw);
 		}
 
 		[Test]
@@ -37,9 +37,9 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 		{
 			var percentage = 80;
 
-			var raw = 880;
+			var raw = 871;
 
-			TestCalibrateToCurrentValueCommand ("wet", "W", percentage, raw);
+			TestCalibrateToCurrentCommand ("wet", "W", percentage, raw);
 		}
 
 		[Test]
@@ -47,43 +47,43 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 		{
 			var raw = 880;
 
-			TestCalibrateToCurrentValueCommand ("wet", "W" + raw, -1, raw);
+			TestCalibrateToCurrentCommand ("wet", "W", -1, raw);
 		}
 
-		public void TestCalibrateToCurrentValueCommand(string label, string command, int simulatedSoilMoisturePercentage, int expectedRaw)
+		public void TestCalibrateToCurrentCommand(string label, string letter, int percentageIn, int rawIn)
 		{
 
 			Console.WriteLine ("");
 			Console.WriteLine ("==============================");
 			Console.WriteLine ("Starting calibrate " + label + " command test");
 			Console.WriteLine ("");
-			Console.WriteLine ("Percentage in: " + simulatedSoilMoisturePercentage);
-			Console.WriteLine ("Expected raw: " + expectedRaw);
+			Console.WriteLine ("Percentage in: " + percentageIn);
+			Console.WriteLine ("Expected raw: " + rawIn);
 
-			SerialClient irrigator = null;
-			ArduinoSerialDevice soilMoistureSimulator = null;
+			SerialClient SoilMoistureMonitor = null;
+			ArduinoSerialDevice SoilMoistureSimulator = null;
 
 			try {
-				irrigator = new SerialClient (GetDevicePort(), GetDeviceSerialBaudRate());
-				soilMoistureSimulator = new ArduinoSerialDevice (GetSimulatorPort(), GetSimulatorSerialBaudRate());
+				SoilMoistureMonitor = new SerialClient (GetDevicePort(), GetDeviceSerialBaudRate());
+				SoilMoistureSimulator = new ArduinoSerialDevice (GetSimulatorPort(), GetSimulatorSerialBaudRate());
 
 				Console.WriteLine("");
 				Console.WriteLine("Connecting to serial devices...");
 				Console.WriteLine("");
 
-				irrigator.Open ();
-				soilMoistureSimulator.Connect ();
+				SoilMoistureMonitor.Open ();
+				SoilMoistureSimulator.Connect ();
 
-				Thread.Sleep (2000);
+				Thread.Sleep (DelayAfterConnecting);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the device...");
+				Console.WriteLine("Reading the output from the monitor device...");
 				Console.WriteLine("");
 
 				// Read the output
-				var output = irrigator.Read ();
+				var output = SoilMoistureMonitor.Read ();
 
-				Console.WriteLine (output);
+				//Console.WriteLine (output);
 				Console.WriteLine ("");
 
 				Console.WriteLine("");
@@ -91,21 +91,21 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("");
 
 				// Reset defaults
-				irrigator.WriteLine ("X");
+				SoilMoistureMonitor.WriteLine ("X");
 
-				Thread.Sleep(2000);
+				Thread.Sleep(1000);
 
-				// Set read interval to 1
-				irrigator.WriteLine ("V1");
+				// Set output interval to 1
+				SoilMoistureMonitor.WriteLine ("V1");
 
 				Thread.Sleep(2000);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the device...");
+				Console.WriteLine("Reading the output from the monitor device...");
 				Console.WriteLine("");
 
 				// Read the output
-				output = irrigator.Read ();
+				output = SoilMoistureMonitor.Read ();
 
 				Console.WriteLine (output);
 				Console.WriteLine ("");
@@ -113,26 +113,25 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Thread.Sleep(1000);
 
 				// If a percentage is specified for the simulator then set the simulated soil moisture value (otherwise skip)
-				if (simulatedSoilMoisturePercentage > -1)
+				if (percentageIn > -1)
 				{
 					Console.WriteLine("");
-					Console.WriteLine("Sending analog percentage to simulator: " + simulatedSoilMoisturePercentage);
+					Console.WriteLine("Sending analog percentage to simulator: " + percentageIn);
 					Console.WriteLine("");
 
 					// Set the simulated soil moisture
-					soilMoistureSimulator.AnalogWritePercentage (9, simulatedSoilMoisturePercentage);
+					SoilMoistureSimulator.AnalogWritePercentage (9, percentageIn);
 
-					Thread.Sleep(2000);
-					// Works but slow
-					//Thread.Sleep(8000);
-					//Thread.Sleep(12000);
+					Thread.Sleep(6000);
 
 					Console.WriteLine("");
-					Console.WriteLine("Reading output from the device...");
+					Console.WriteLine("Reading output from the monitor device...");
 					Console.WriteLine("");
 
 					// Read the output
-					output = irrigator.Read ();
+					output = SoilMoistureMonitor.Read ();
+
+					Assert.IsFalse(output.Contains("failed"));
 
 					Console.WriteLine (output);
 					Console.WriteLine ("");
@@ -141,34 +140,39 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 					var values = ParseOutputLine(GetLastDataLine(output));
 
 					// Get the raw soil moisture value
-					var rawValue = values["R"];
-
+					var rawValue = Convert.ToInt32(values["R"]);
 
 					Console.WriteLine("");
-					Console.WriteLine("Checking the device...");
+					Console.WriteLine("Checking the values from the monitor device...");
 					Console.WriteLine("");
 
-					Console.WriteLine("Expected raw: " + expectedRaw);
+					//Console.WriteLine("Expected raw: " + expectedRaw);
 
 					// Ensure the raw value is in the valid range
-					Assert.IsTrue(IsWithinRange(expectedRaw, rawValue, 12), "Raw value is outside the valid range: " + rawValue);
+					Assert.IsTrue(IsWithinRange(rawIn, rawValue, 20), "Raw value is outside the valid range: " + rawValue);
 				}
 
+				var command = letter;
+				
+				// If the simulated percentage isn't set then pass the raw value as part of the command
+				if (percentageIn == -1)
+					command = command + rawIn;
+
 				Console.WriteLine("");
-				Console.WriteLine("Sending '" + command + "' to the device...");
+				Console.WriteLine("Sending '" + command + "' command to monitor device...");
 				Console.WriteLine("");
 
 				// Send the command
-				irrigator.WriteLine (command);
+				SoilMoistureMonitor.WriteLine (command);
 
-				Thread.Sleep(2000);
+				Thread.Sleep(5000);
 
 				Console.WriteLine("");
-				Console.WriteLine("Reading the output from the device...");
+				Console.WriteLine("Reading the output from the monitor device...");
 				Console.WriteLine("");
 
 				// Read the output
-				output = irrigator.Read ();
+				output = SoilMoistureMonitor.Read ();
 
 				Console.WriteLine (output);
 				Console.WriteLine ("");
@@ -177,57 +181,64 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				Console.WriteLine("Checking the output...");
 				Console.WriteLine("");
 
-				var data = ParseOutputLine(GetLastDataLine(output));
+				var newValues = ParseOutputLine(GetLastDataLine(output));
+				
+				Console.WriteLine("Letter: " + letter);
+				
+				var valueString = newValues[letter];
+				
+				Console.WriteLine("Value string: " + valueString);
 
-				var value = data[command.Substring(0, 1)];
+				var calibrationValue = Convert.ToInt32(valueString);
 
-				Console.WriteLine("Value: " + value);
+				Console.WriteLine("Calibration value: " + calibrationValue);
+				Console.WriteLine("Expected value: " + rawIn);
+				Console.WriteLine(""); 
 
-				Assert.IsTrue(IsWithinRange(expectedRaw, value, 10), "Calibration value is outside the valid range: " + value);
+				// Ensure the calibration value is in the valid range
+				Assert.IsTrue(IsWithinRange(rawIn, calibrationValue, 20), "Calibration value is outside the valid range: " + calibrationValue);
 
-
-			} catch (IOException ex) {
-				Console.WriteLine (ex.ToString ());
-				Assert.Fail ();
+			} catch (Exception ex) {
+				Console.WriteLine (ex.ToString());
+				Assert.Fail (ex.ToString());
 			} finally {
-				if (irrigator != null)
-					irrigator.Close ();
+				if (SoilMoistureMonitor != null)
+					SoilMoistureMonitor.Close ();
 
-				if (soilMoistureSimulator != null)
-					soilMoistureSimulator.Disconnect ();
+				if (SoilMoistureSimulator != null)
+					SoilMoistureSimulator.Disconnect ();
 			}
+			Thread.Sleep(5000);
 		}
-
-		public Dictionary<string, int> ParseOutputLine(string outputLine)
+		
+		//[TestFixtureSetUp]
+		public override void Initialize()
 		{
-			var dictionary = new Dictionary<string, int> ();
+			base.Initialize();
 
-			if (IsValidOutputLine (outputLine)) {
-				foreach (var pair in outputLine.Split(';')) {
-					var parts = pair.Split (':');
+			/*SoilMoistureMonitor = new SerialClient (GetDevicePort(), GetDeviceSerialBaudRate());
+			SoilMoistureSimulator = new ArduinoSerialDevice (GetSimulatorPort(), GetSimulatorSerialBaudRate());
 
-					if (parts.Length == 2) {
-						var key = parts [0];
-						var value = 0;
-						try {
-							value = Convert.ToInt32 (parts [1]);
+			Console.WriteLine("");
+			Console.WriteLine("Connecting to serial devices...");
+			Console.WriteLine("");
 
-							dictionary [key] = value;
-						} catch {
-							Console.WriteLine ("Warning: Invalid key/value pair '" + pair + "'");
-						}
-					}
-				}
-			}
+			SoilMoistureMonitor.Open ();
+			SoilMoistureSimulator.Connect ();
 
-			return dictionary;
+			Thread.Sleep (DelayAfterConnecting);*/
 		}
-
-		public bool IsValidOutputLine(string outputLine)
+		
+		//[TestFixtureTearDown]
+		public override void Finish()
 		{
-			var dataPrefix = "D;";
+			/*if (SoilMoistureMonitor != null)
+				SoilMoistureMonitor.Close ();
 
-			return outputLine.StartsWith(dataPrefix);
+			if (SoilMoistureSimulator != null)
+				SoilMoistureSimulator.Disconnect ();
+			*/		
+			base.Finish();
 		}
 	}
 }

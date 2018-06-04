@@ -108,7 +108,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 				Assert.IsTrue(data.ContainsKey("B"));
 
-				var newPumpBurstOnTimeValue = data["B"];
+				var newPumpBurstOnTimeValue = Convert.ToInt32(data["B"]);
 
 				Console.WriteLine("Pump burst on time: " + newPumpBurstOnTimeValue);
 

@@ -7,14 +7,14 @@
 #include "SoilMoistureSensor.h"
 
 #define soilMoistureSensorPin A0
-#define soilMoistureSensorPowerPin 3 // 0
+#define soilMoistureSensorPowerPin 12
 
 bool soilMoistureSensorIsOn = true;
 long lastSensorOnTime = 0;
 int delayAfterTurningSensorOn = 3 * 1000;
 
 bool soilMoistureSensorReadingHasBeenTaken = false;
-long soilMoistureSensorReadingInterval = 5; // Seconds
+long soilMoistureSensorReadingInterval = 1; // Seconds
 long lastSoilMoistureSensorReadingTime = 0; // Milliseconds
 
 int soilMoistureLevelCalibrated = 0;
@@ -88,8 +88,7 @@ void takeSoilMoistureSensorReading()
   
   	bool sensorIsOffAndNeedsToBeTurnedOn = !soilMoistureSensorIsOn && sensorGetsTurnedOff;
   
-  	bool postSensorOnDelayHasPast = lastSensorOnTime + delayAfterTurningSensorOn < millis()
-                                      || lastSensorOnTime == 0;
+  	bool postSensorOnDelayHasPast = lastSensorOnTime + delayAfterTurningSensorOn < millis();
   
   	bool soilMoistureSensorIsOnAndReady = soilMoistureSensorIsOn && (postSensorOnDelayHasPast || !sensorGetsTurnedOff);
 
@@ -193,6 +192,9 @@ void setupSoilMoistureSensorReadingInterval()
 void setSoilMoistureSensorReadingInterval(char* msg)
 {
     int value = readInt(msg, 1, strlen(msg)-1);
+
+    //Serial.print("Value:");
+    //Serial.println(value);
 
     setSoilMoistureSensorReadingInterval(value);
 }

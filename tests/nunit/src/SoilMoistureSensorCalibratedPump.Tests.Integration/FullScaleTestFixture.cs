@@ -40,7 +40,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				irrigator.Open ();
 				soilMoistureSimulator.Connect ();
 
-				Thread.Sleep (5000);
+				Thread.Sleep (10000);
 
 				Console.WriteLine("");
 				Console.WriteLine("Reading the output from the device...");
@@ -101,7 +101,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 			} catch (IOException ex) {
 				Console.WriteLine (ex.ToString ());
-				Assert.Fail ();
+				Assert.Fail (ex.ToString());
 			} finally {
 				if (irrigator != null)
 					irrigator.Close ();
@@ -128,7 +128,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
       
 			soilMoistureSimulator.AnalogWritePercentage (9, percentageValue);
       
-			Thread.Sleep (2000);
+			Thread.Sleep (3000);
       
 			Console.WriteLine ("");
 			Console.WriteLine ("Reading data from device...");
@@ -173,7 +173,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			Console.WriteLine ("Reading data from device...");
 			Console.WriteLine ("");
 
-			output = irrigator.Read ();
+			//output = irrigator.Read ();
 
 			Console.WriteLine (output);
 			Console.WriteLine ("");
@@ -189,7 +189,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
       
 			Assert.IsTrue (data.ContainsKey ("C"), "'C' key not found");
 
-			var calibratedValue = data ["C"];
+			var calibratedValue = Convert.ToInt32(data ["C"]);
 
 			Console.WriteLine ("Calibrated value: " + calibratedValue);
 
@@ -204,7 +204,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
       
 			var expectedRawValue = ArduinoConvert.PercentageToAnalog (percentageValue);
       
-			var rawValueIsWithinRange = IsWithinRange (expectedRawValue, data ["R"], 60);
+			var rawValueIsWithinRange = IsWithinRange (expectedRawValue, Convert.ToInt32(data ["R"]), 60);
       
 			Assert.IsTrue (rawValueIsWithinRange, "Invalid value for 'R' (raw value): " + data["R"]);
       
