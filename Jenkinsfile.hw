@@ -12,13 +12,8 @@ pipeline {
                 sh "git fetch --no-tags"
                 sh 'git checkout $BRANCH_NAME'
                 shHide( 'git remote set-url origin https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedPumpESP.git' )
-	        sh 'git config --global user.email "compulsivecoder@gmail.com"'
+      	        sh 'git config --global user.email "compulsivecoder@gmail.com"'
                 sh 'git config --global user.name "CompulsiveCoder CI"'
-            }
-        }
-        stage('Update Submodules') {
-            steps {
-                sh 'sh update-submodules.sh'
             }
         }
         stage('Init') {
