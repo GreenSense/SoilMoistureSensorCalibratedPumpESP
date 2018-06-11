@@ -14,7 +14,7 @@
 #define SERIAL_MODE_CSV 1
 #define SERIAL_MODE_QUERYSTRING 2
 
-#define VERSION "1-0-0-20"
+#define VERSION "1-0-0-0"
 
 int serialMode = SERIAL_MODE_CSV;
 
@@ -33,8 +33,6 @@ String subscribeTopics[] = {"D", "W", "T", "V", "P", "B", "O"};
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-long loopNumber = 0;
-
 void setup()
 {
   Serial.begin(115200);
@@ -50,7 +48,7 @@ void setup()
 
   setupIrrigation();
 
-  serialOutputInterval = soilMoistureSensorReadingInterval;
+  serialOutputIntervalInSeconds = soilMoistureSensorReadingIntervalInSeconds;
 
 }
 
@@ -183,13 +181,7 @@ void loop()
 
   loopNumber++;
 
-  if (isDebugMode)
-  {
-    Serial.println("==============================");
-    Serial.print("===== Start Loop: ");
-    Serial.println(loopNumber);
-    Serial.println("==============================");
-  }
+  serialPrintLoopHeader();
 
   loopWiFi();
 
@@ -206,15 +198,7 @@ void loop()
   // Reset flag for this loop
   soilMoistureSensorReadingHasBeenTaken = false;
 
-  if (isDebugMode)
-  {
-    Serial.println("==============================");
-    Serial.print("===== End Loop: ");
-    Serial.println(loopNumber);
-    Serial.println("==============================");
-    Serial.println("");
-    Serial.println("");
-  }
+  serialPrintLoopFooter();
 }
 
 void loopWiFi()
@@ -235,7 +219,7 @@ void mqttPublishData()
     publishMqttValue("P", pumpStatus);
     publishMqttValue("B", pumpBurstOnTime);
     publishMqttValue("O", pumpBurstOffTime);
-    publishMqttValue("V", soilMoistureSensorReadingInterval);
+    publishMqttValue("V", soilMoistureSensorReadingIntervalInSeconds);
     publishMqttValue("WN", soilMoistureLevelCalibrated < threshold);
     publishMqttValue("PO", pumpIsOn);
     publishMqttValue("D", drySoilMoistureCalibrationValue);
@@ -374,7 +358,7 @@ void restoreDefaultSettings()
 /* Serial Output */
 void serialPrintData()
 {
-  bool isTimeToPrintData = lastSerialOutputTime + secondsToMilliseconds(serialOutputInterval) < millis()
+  bool isTimeToPrintData = lastSerialOutputTime + secondsToMilliseconds(serialOutputIntervalInSeconds) < millis()
       || lastSerialOutputTime == 0;
 
   bool isReadyToPrintData = isTimeToPrintData && soilMoistureSensorReadingHasBeenTaken;
@@ -402,7 +386,7 @@ void serialPrintData()
       Serial.print(pumpStatus);
       Serial.print(";");
       Serial.print("V:");
-      Serial.print(soilMoistureSensorReadingInterval);
+      Serial.print(soilMoistureSensorReadingIntervalInSeconds);
       Serial.print(";");
       Serial.print("B:");
       Serial.print(pumpBurstOnTime);
@@ -448,7 +432,7 @@ void serialPrintData()
       Serial.print(pumpStatus);
       Serial.print("&");
       Serial.print("readingInterval=");
-      Serial.print(soilMoistureSensorReadingInterval);
+      Serial.print(soilMoistureSensorReadingIntervalInSeconds);
       Serial.print("&");
       Serial.print("pumpBurstOnTime=");
       Serial.print(pumpBurstOnTime);
@@ -481,5 +465,26 @@ void serialPrintData()
 
     lastSerialOutputTime = millis();
   }
+/*  else
+  {
+    if (isDebugMode)
+    {    
+      Serial.println("Not ready to serial print data");
+
+      Serial.print("  Is time to serial print data: ");
+      Serial.println(isTimeToPrintData);
+      if (!isTimeToPrintData)
+      {
+        Serial.print("    Time remaining before printing data: ");
+        Serial.print(millisecondsToSecondsWithDecimal(lastSerialOutputTime + secondsToMilliseconds(serialOutputIntervalInSeconds) - millis()));
+        Serial.println(" seconds");
+      }
+      Serial.print("  Soil moisture sensor reading has been taken: ");
+      Serial.println(soilMoistureSensorReadingHasBeenTaken);
+      Serial.print("  Is ready to print data: ");
+      Serial.println(isReadyToPrintData);
+
+    }
+  }*/
 }
 
