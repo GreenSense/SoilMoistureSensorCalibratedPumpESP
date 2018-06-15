@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoilMoistureSensorCalibratedPump.Tests.Integration", "SoilMoistureSensorCalibratedPump.Tests.Integration\SoilMoistureSensorCalibratedPump.Tests.Integration.csproj", "{2ACA9D2F-CD6C-4D41-941E-A9A0496826AB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoilMoistureSensorCalibratedPumpESP.Tests.Integration", "SoilMoistureSensorCalibratedPumpESP.Tests.Integration\SoilMoistureSensorCalibratedPumpESP.Tests.Integration.csproj", "{2ACA9D2F-CD6C-4D41-941E-A9A0496826AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

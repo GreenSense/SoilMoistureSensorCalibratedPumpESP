@@ -10,30 +10,42 @@ using System.IO.Ports;
 
 namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 {
-	[TestFixture(Category="Integration")]
-	public class ThresholdCommandTestFixture : BaseTestFixture
+	[TestFixture(Category = "Integration")]
+	public class PumpCommandTestFixture : BaseTestFixture
 	{
 		[Test]
-		public void Test_SetThresholdToSpecifiedValueCommand()
+		public void Test_SetPumpToOn()
 		{
-			TestSetThresholdToSpecifiedValue (15, -1);
+			TestSetPump(1, -1, 1);
 		}
 
 		[Test]
-		public void Test_SetThresholdToCurrentValueCommand()
+		public void Test_SetPumpToOff()
 		{
-			TestSetThresholdToSpecifiedValue (0, 25);
+			TestSetPump(0, -1, 0);
 		}
 
-		public void TestSetThresholdToSpecifiedValue(int threshold, int simulatedSoilMoisturePercentage)
+		[Test]
+		public void Test_SetPumpToAuto_Low()
+		{
+			TestSetPump(2, 1, 1);
+		}
+
+		[Test]
+		public void Test_SetPumpToAuto_High()
+		{
+			TestSetPump(2, 99, 0);
+		}
+
+		public void TestSetPump(int pumpStatus, int simulatedSoilMoisturePercentage, int expectedPumpOutput)
 		{
 
-			Console.WriteLine ("");
-			Console.WriteLine ("==============================");
-			Console.WriteLine ("Starting set threshold command test");
-			Console.WriteLine ("");
-			Console.WriteLine ("Threshold: " + threshold);
-			Console.WriteLine ("Simulated soil moisture percentage: " + simulatedSoilMoisturePercentage);
+			Console.WriteLine("");
+			Console.WriteLine("==============================");
+			Console.WriteLine("Starting set pump status test");
+			Console.WriteLine("");
+			Console.WriteLine("Pump: " + pumpStatus);
+			Console.WriteLine("Simulated soil moisture percentage: " + simulatedSoilMoisturePercentage);
 
 			SerialClient irrigator = null;
 			ArduinoSerialDevice soilMoistureSimulator = null;
@@ -41,19 +53,16 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 			var irrigatorPortName = GetDevicePort();
 			var simulatorPortName = GetSimulatorPort();
 
-			try {
-				irrigator = new SerialClient (irrigatorPortName, GetDeviceSerialBaudRate());
-
-				if (simulatedSoilMoisturePercentage > -1)
-					soilMoistureSimulator = new ArduinoSerialDevice (simulatorPortName, GetSimulatorSerialBaudRate());
+			/*try {
+				irrigator = new SerialClient (irrigatorPortName, GetSerialBaudRate());
+				soilMoistureSimulator = new ArduinoSerialDevice (simulatorPortName, GetSerialBaudRate());
 
 				Console.WriteLine("");
 				Console.WriteLine("Connecting to serial devices...");
 				Console.WriteLine("");
 
 				irrigator.Open ();
-				if (simulatedSoilMoisturePercentage > -1)
-					soilMoistureSimulator.Connect ();
+				soilMoistureSimulator.Connect ();
 
 				Thread.Sleep (2000);
 
@@ -75,17 +84,22 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				irrigator.WriteLine ("X");
 
 				Thread.Sleep(1000);
-				
-				// Set output interval to 1
+
+				// Set read/output interval to 1 sec
 				irrigator.WriteLine ("V1");
 
 				Thread.Sleep(1000);
-				
+
+				// Set burst off time to 0 seconds
+				irrigator.WriteLine ("O0");
+
+				Thread.Sleep(1000);
+
 				if (CalibrationIsReversedByDefault)
 				{
-					// Reverse calibration to make it more readable
+					// Reverse calibration values
 					irrigator.WriteLine ("R");
-	
+
 					Thread.Sleep(1000);
 				}
 
@@ -111,7 +125,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 					// Set the simulated soil moisture
 					soilMoistureSimulator.AnalogWritePercentage (9, simulatedSoilMoisturePercentage);
 
-					Thread.Sleep(2000);
+					Thread.Sleep(5000);
 
 					Console.WriteLine("");
 					Console.WriteLine("Reading output from the device...");
@@ -124,10 +138,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 					Console.WriteLine ("");
 				}
 
-				var command = "T";
-
-				if (threshold > 0)
-					command = command + threshold;
+				var command = "P" + pumpStatus;
 
 				Console.WriteLine("");
 				Console.WriteLine("Sending command to device: " + command);
@@ -155,32 +166,34 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 				var data = ParseOutputLine(GetLastDataLine(output));
 
 				Console.WriteLine ("");
-				Console.WriteLine ("Checking threshold value");
+				Console.WriteLine ("Checking pump is on value");
 
-				var expectedThreshold = 0;
-				if (threshold > 0)
-					expectedThreshold = threshold;
-				else
+				Assert.IsTrue(data.ContainsKey("P"));
+
+				var newPumpStatus = Convert.ToInt32(data["P"]);
+
+				Console.WriteLine("Pump status: " + newPumpStatus);
+
+				Assert.AreEqual(pumpStatus, newPumpStatus, "Invalid pump status: " + newPumpStatus);
+
+				if (expectedPumpOutput > -1)
 				{
-					expectedThreshold = simulatedSoilMoisturePercentage;
+					Assert.IsTrue(data.ContainsKey("PO"));
+
+					var newPumpValue = Convert.ToInt32(data["PO"]);
+
+					Console.WriteLine("Pump: " + newPumpValue);
+
+					Assert.AreEqual(expectedPumpOutput, newPumpValue, "Invalid pump value: " + newPumpValue);
 				}
-				
-				Assert.IsTrue(data.ContainsKey("T"));
 
-				var newThresholdValue = data["T"];
+				Console.WriteLine ("");
+				Console.WriteLine ("Reading value of pump pin...");
+				var pumpPinValue = soilMoistureSimulator.DigitalRead (2);
+				Console.WriteLine ("Pump pin value: " + pumpPinValue);
 
-				Console.WriteLine("Threshold: " + newThresholdValue);
+				Assert.AreEqual(Convert.ToBoolean(expectedPumpOutput), pumpPinValue, "Invalid pump pin value");
 
-				// If the threshold was specified in the command then the output should be exact
-				if (threshold > 0)
-					Assert.AreEqual(expectedThreshold, newThresholdValue, "Invalid threshold: " + newThresholdValue);
-				else // Otherwise going by the simulated soil moisture sensor theres a small margin of error
-				{
-					var thresholdIsWithinRange = IsWithinRange (expectedThreshold, newThresholdValue, 3);
-
-					Assert.IsTrue (thresholdIsWithinRange, "Invalid threshold: " + newThresholdValue);
-
-				}
 
 			} catch (IOException ex) {
 				Console.WriteLine (ex.ToString ());
@@ -191,7 +204,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 				if (soilMoistureSimulator != null)
 					soilMoistureSimulator.Disconnect ();
-			}
+			}*/
 		}
 	}
 }

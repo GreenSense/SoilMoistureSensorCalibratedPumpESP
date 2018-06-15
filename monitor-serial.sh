@@ -2,7 +2,8 @@
 PORT_NAME=$1
 
 if [ ! $PORT_NAME ]; then
-  PORT_NAME="/dev/ttyUSB0"
+  echo "Provide a port name as an argument."
+  exit 1
 fi
 
 echo "Port: $PORT_NAME"
