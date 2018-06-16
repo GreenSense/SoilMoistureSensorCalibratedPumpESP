@@ -82,6 +82,10 @@
     <Compile Include="PumpMqttCommandTestHelper.cs" />
     <Compile Include="ThresholdMqttCommandTestFixture.cs" />
     <Compile Include="ThresholdMqttCommandTestHelper.cs" />
+    <Compile Include="MqttOutputTimeTestFixture.cs" />
+    <Compile Include="MqttOutputTimeTestHelper.cs" />
+    <Compile Include="SerialOutputTimeTestFixture.cs" />
+    <Compile Include="SerialOutputTimeTestHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -72,7 +72,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 			while (!wasMessageReceived)
 			{
-				output += DeviceClient.ReadLine();
+				output += ReadLineFromDevice();
 
 				var expectedText = "Received message: " + message;
 				if (output.Contains(expectedText))

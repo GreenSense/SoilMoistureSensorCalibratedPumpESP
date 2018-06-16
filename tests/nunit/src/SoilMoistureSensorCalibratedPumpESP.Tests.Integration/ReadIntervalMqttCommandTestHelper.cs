@@ -15,7 +15,6 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 			EnableMqtt();
 
-			// MQTT version
 			Mqtt.SendCommand("V", ReadInterval);
 
 			var dataEntry = WaitForDataEntry();
