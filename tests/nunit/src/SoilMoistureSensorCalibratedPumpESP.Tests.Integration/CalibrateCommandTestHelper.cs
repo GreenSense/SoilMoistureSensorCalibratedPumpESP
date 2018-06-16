@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace SoilMoistureSensorCalibratedPump.Tests.Integration
+namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
 	public class CalibrateCommandTestHelper : GreenSenseHardwareTestHelper
 	{

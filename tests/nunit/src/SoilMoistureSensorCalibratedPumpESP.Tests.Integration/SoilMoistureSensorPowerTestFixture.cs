@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 
-namespace SoilMoistureSensorCalibratedPump.Tests.Integration
+namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
 	[TestFixture(Category = "Integration")]
 	public class SoilMoistureSensorPowerTestFixture : BaseTestFixture

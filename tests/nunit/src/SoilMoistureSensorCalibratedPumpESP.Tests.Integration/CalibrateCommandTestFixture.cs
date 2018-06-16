@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace SoilMoistureSensorCalibratedPump.Tests.Integration
+namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
 	[TestFixture(Category = "Integration")]
 	public class CalibrateCommandTestFixture : BaseTestFixture

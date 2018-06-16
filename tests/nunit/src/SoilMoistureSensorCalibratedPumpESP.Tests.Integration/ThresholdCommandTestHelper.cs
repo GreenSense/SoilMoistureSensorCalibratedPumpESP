@@ -1,5 +1,5 @@
 ﻿using System;
-namespace SoilMoistureSensorCalibratedPump.Tests.Integration
+namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
 	public class ThresholdCommandTestHelper : GreenSenseIrrigatorHardwareTestHelper
 	{

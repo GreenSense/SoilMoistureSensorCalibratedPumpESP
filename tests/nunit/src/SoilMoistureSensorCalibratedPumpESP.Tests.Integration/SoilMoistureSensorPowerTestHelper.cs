@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using NUnit.Framework;
-namespace SoilMoistureSensorCalibratedPump.Tests.Integration
+namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
 	public class SoilMoistureSensorPowerTestHelper : GreenSenseHardwareTestHelper
 	{

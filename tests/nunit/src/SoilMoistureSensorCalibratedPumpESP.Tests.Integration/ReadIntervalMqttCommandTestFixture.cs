@@ -1,21 +1,14 @@
-﻿using System;
-using NUnit.Framework;
-using duinocom;
-using System.Threading;
-using ArduinoSerialControllerClient;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using NUnit.Framework;
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
 	[TestFixture(Category = "Integration")]
-	public class ReadIntervalCommandTestFixture : BaseTestFixture
+	public class ReadIntervalMqttCommandTestFixture : BaseTestFixture
 	{
 		[Test]
 		public void Test_SetReadIntervalCommand_1Second()
 		{
-			using (var helper = new ReadIntervalCommandTestHelper())
+			using (var helper = new ReadIntervalMqttCommandTestHelper())
 			{
 				helper.ReadInterval = 1;
 
@@ -32,7 +25,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		[Test]
 		public void Test_SetReadIntervalCommand_5Seconds()
 		{
-			using (var helper = new ReadIntervalCommandTestHelper())
+			using (var helper = new ReadIntervalMqttCommandTestHelper())
 			{
 				helper.ReadInterval = 5;
 

@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.IO.Ports;
 
-namespace SoilMoistureSensorCalibratedPump.Tests.Integration
+namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
 	[TestFixture(Category = "Integration")]
 	public class ThresholdCommandTestFixture : BaseTestFixture

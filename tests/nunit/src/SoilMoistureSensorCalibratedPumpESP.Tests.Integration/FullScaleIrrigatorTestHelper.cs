@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using System.Collections.Generic;
-namespace SoilMoistureSensorCalibratedPump.Tests.Integration
+namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
 	public class FullScaleIrrigatorTestHelper : GreenSenseIrrigatorHardwareTestHelper
 	{
@@ -34,7 +34,7 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 			WriteParagraphTitleText("Reading the value of the soil moisture sensor pump pin...");
 
-			var pumpPinValue = SimulatorDigitalRead(SoilMoistureSensorSimulatorPumpPin);
+			var pumpPinValue = SimulatorDigitalRead(SimulatorPumpPin);
 
 			Console.WriteLine("Pump pin value: " + GetOnOffString(pumpPinValue));
 

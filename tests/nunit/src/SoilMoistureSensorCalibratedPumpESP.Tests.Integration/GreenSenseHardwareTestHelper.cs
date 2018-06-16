@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using NUnit.Framework;
-namespace SoilMoistureSensorCalibratedPump.Tests.Integration
+namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
 	public class GreenSenseHardwareTestHelper : HardwareTestHelper
 	{
@@ -10,9 +10,11 @@ namespace SoilMoistureSensorCalibratedPump.Tests.Integration
 
 		public int DelayAfterTurningSoilMoistureSensorOn = 3;
 
+		// The margin of error is higher in the ESP8266 version of the test than the arduino version because of the
+		// conversion from 5v (of the soil moisture simulator) to 3.3v (of the ESP8266 board) in the test system
 		public int RawValueMarginOfError = 70;
 		public int CalibratedValueMarginOfError = 5;
-		public double TimeErrorMargin = 0.2;
+		public double TimeErrorMargin = 0.3;
 
 		public bool CalibrationIsReversedByDefault = true;
 
