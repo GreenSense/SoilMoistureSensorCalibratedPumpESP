@@ -1,12 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using duinocom;
-using System.Threading;
-using ArduinoSerialControllerClient;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.IO.Ports;
+﻿using NUnit.Framework;
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {

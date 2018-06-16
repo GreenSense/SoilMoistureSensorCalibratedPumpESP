@@ -3,12 +3,12 @@
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
 	[TestFixture(Category = "Integration")]
-	public class PumpBurstOnTimeCommandTestFixture : BaseTestFixture
+	public class PumpBurstOnTimeMqttCommandTestFixture : BaseTestFixture
 	{
 		[Test]
 		public void Test_SetPumpBurstOnTime_1Seconds()
 		{
-			using (var helper = new PumpBurstOnTimeCommandTestHelper())
+			using (var helper = new PumpBurstOnTimeMqttCommandTestHelper())
 			{
 				helper.PumpBurstOnTime = 1;
 
@@ -25,7 +25,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		[Test]
 		public void Test_SetPumpBurstOnTime_5Seconds()
 		{
-			using (var helper = new PumpBurstOnTimeCommandTestHelper())
+			using (var helper = new PumpBurstOnTimeMqttCommandTestHelper())
 			{
 				helper.PumpBurstOnTime = 5;
 

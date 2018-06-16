@@ -3,14 +3,14 @@
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
 	[TestFixture(Category = "Integration")]
-	public class PumpBurstOnTimeCommandTestFixture : BaseTestFixture
+	public class ThresholdMqttCommandTestFixture : BaseTestFixture
 	{
 		[Test]
-		public void Test_SetPumpBurstOnTime_1Seconds()
+		public void Test_SetThresholdToSpecifiedValueCommand_15Percent()
 		{
-			using (var helper = new PumpBurstOnTimeCommandTestHelper())
+			using (var helper = new ThresholdMqttCommandTestHelper())
 			{
-				helper.PumpBurstOnTime = 1;
+				helper.Threshold = 15;
 
 				helper.DevicePort = GetDevicePort();
 				helper.DeviceBaudRate = GetDeviceSerialBaudRate();
@@ -18,16 +18,16 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 				helper.SimulatorPort = GetSimulatorPort();
 				helper.SimulatorBaudRate = GetSimulatorSerialBaudRate();
 
-				helper.TestPumpBurstOnTimeCommand();
+				helper.TestThresholdCommand();
 			}
 		}
 
 		[Test]
-		public void Test_SetPumpBurstOnTime_5Seconds()
+		public void Test_SetThresholdToSpecifiedValueCommand_25Percent()
 		{
-			using (var helper = new PumpBurstOnTimeCommandTestHelper())
+			using (var helper = new ThresholdMqttCommandTestHelper())
 			{
-				helper.PumpBurstOnTime = 5;
+				helper.Threshold = 25;
 
 				helper.DevicePort = GetDevicePort();
 				helper.DeviceBaudRate = GetDeviceSerialBaudRate();
@@ -35,7 +35,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 				helper.SimulatorPort = GetSimulatorPort();
 				helper.SimulatorBaudRate = GetSimulatorSerialBaudRate();
 
-				helper.TestPumpBurstOnTimeCommand();
+				helper.TestThresholdCommand();
 			}
 		}
 	}

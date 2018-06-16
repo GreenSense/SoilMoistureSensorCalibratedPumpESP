@@ -2,7 +2,7 @@
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-	public class GreenSenseIrrigatorHardwareTestHelper : GreenSenseHardwareTestHelper
+	public class GreenSenseIrrigatorHardwareTestHelper : GreenSenseMqttHardwareTestHelper
 	{
 		public int SimulatorPumpPin = 2;
 

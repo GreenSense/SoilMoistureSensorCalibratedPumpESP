@@ -18,14 +18,14 @@
 
 int serialMode = SERIAL_MODE_CSV;
 
-#define WIFI_NAME "Telstra995578"
-#define WIFI_PASSWORD "3ym9j8hrwhcf"
+#define WIFI_NAME "accesspoint"
+#define WIFI_PASSWORD "password"
 
 #define MQTT_HOST "garden"
 #define MQTT_PORT 1883
-#define MQTT_USERNAME "j"
-#define MQTT_PASSWORD "ywgtpJ8gdnm!"
-#define MQTT_DEVICE_NAME "WiFiIrrigator1"
+#define MQTT_USERNAME "username"
+#define MQTT_PASSWORD "password"
+#define MQTT_DEVICE_NAME "monitor1"
 
 int totalSubscribeTopics = 7;
 String subscribeTopics[] = {"D", "W", "T", "V", "P", "B", "O"};
@@ -281,8 +281,6 @@ void checkCommand()
     Serial.println(msg);
 
     handleCommand(msg);
-
-    forceSerialOutput();
   }
   delay(1);
 }
@@ -344,6 +342,8 @@ void handleCommand(char* msg)
       reverseSoilMoistureCalibrationValues();
       break;
   }
+  
+  forceSerialOutput();
 }
 
 /* Settings */

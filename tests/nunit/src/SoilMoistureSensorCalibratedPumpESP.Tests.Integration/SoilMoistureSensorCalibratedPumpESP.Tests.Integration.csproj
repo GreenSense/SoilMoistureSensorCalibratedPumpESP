@@ -74,6 +74,14 @@
     <Compile Include="CalibrateMqttCommandTestHelper.cs" />
     <Compile Include="ReadIntervalMqttCommandTestHelper.cs" />
     <Compile Include="ReadIntervalMqttCommandTestFixture.cs" />
+    <Compile Include="PumpBurstOffTimeMqttCommandTestFixture.cs" />
+    <Compile Include="PumpBurstOffTimeMqttCommandTestHelper.cs" />
+    <Compile Include="PumpBurstOnTimeMqttCommandTestFixture.cs" />
+    <Compile Include="PumpBurstOnTimeMqttCommandTestHelper.cs" />
+    <Compile Include="PumpMqttCommandTestFixture.cs" />
+    <Compile Include="PumpMqttCommandTestHelper.cs" />
+    <Compile Include="ThresholdMqttCommandTestFixture.cs" />
+    <Compile Include="ThresholdMqttCommandTestHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

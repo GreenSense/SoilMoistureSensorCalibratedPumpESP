@@ -3,12 +3,12 @@
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
 	[TestFixture(Category = "Integration")]
-	public class PumpCommandTestFixture : BaseTestFixture
+	public class PumpMqttCommandTestFixture : BaseTestFixture
 	{
 		[Test]
 		public void Test_SetPumpToOn()
 		{
-			using (var helper = new PumpCommandTestHelper())
+			using (var helper = new PumpMqttCommandTestHelper())
 			{
 				helper.PumpCommand = PumpStatus.On;
 
@@ -25,7 +25,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		[Test]
 		public void Test_SetPumpToOff()
 		{
-			using (var helper = new PumpCommandTestHelper())
+			using (var helper = new PumpMqttCommandTestHelper())
 			{
 				helper.PumpCommand = PumpStatus.Off;
 
@@ -42,7 +42,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		[Test]
 		public void Test_SetPumpToAuto()
 		{
-			using (var helper = new PumpCommandTestHelper())
+			using (var helper = new PumpMqttCommandTestHelper())
 			{
 				helper.PumpCommand = PumpStatus.Auto;
 

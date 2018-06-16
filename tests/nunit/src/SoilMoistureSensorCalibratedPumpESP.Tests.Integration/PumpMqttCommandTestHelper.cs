@@ -1,7 +1,7 @@
 ﻿using System;
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-	public class PumpCommandTestHelper : GreenSenseIrrigatorHardwareTestHelper
+	public class PumpMqttCommandTestHelper : GreenSenseIrrigatorHardwareTestHelper
 	{
 		public PumpStatus PumpCommand = PumpStatus.Auto;
 
