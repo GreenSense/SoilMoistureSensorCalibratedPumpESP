@@ -89,6 +89,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 				{
 					// Wait for the pump to turn on for the first time
 					WaitUntilSimulatorPinIs("pump", SimulatorPumpPin, true);
+					WaitUntilSimulatorPinIs("pump", SimulatorPumpPin, false);
+					WaitUntilSimulatorPinIs("pump", SimulatorPumpPin, true);
 
 					// Check on time     
 					var timeOn = WaitWhileSimulatorPinIs("pump", SimulatorPumpPin, true);
