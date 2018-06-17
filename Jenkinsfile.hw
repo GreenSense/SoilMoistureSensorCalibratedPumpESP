@@ -31,12 +31,6 @@ pipeline {
                 sh 'sh inject-version.sh'
             }
         }
-        stage('Create Security Files') {
-            when { expression { !shouldSkipBuild() } }
-            steps {
-                sh 'sh create-security-files-from-environment-variables.sh'
-            }
-        }
         stage('Inject Security Settings') {
             when { expression { !shouldSkipBuild() } }
             steps {
