@@ -7,7 +7,7 @@
 #include "SoilMoistureSensor.h"
 
 #define soilMoistureSensorPin A0
-#define soilMoistureSensorPowerPin 12
+#define soilMoistureSensorPowerPin 12 // Mapped to physical pin 12 on Wemos D1
 
 bool soilMoistureSensorIsOn = true;
 long lastSensorOnTime = 0;

@@ -12,6 +12,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			WriteTitleText("Starting MQTT output test");
 
 			Console.WriteLine("Read interval: " + ReadInterval);
+			Console.WriteLine("Soil moisture sensor value: " + SimulatedSoilMoistureSensorValue);
 
 			EnableDevices(SimulatedSoilMoistureSensorValue > -1);
 
