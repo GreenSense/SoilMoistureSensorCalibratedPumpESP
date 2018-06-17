@@ -232,8 +232,8 @@ void mqttPublishData()
 
 void publishMqttValue(char* subTopic, int value)
 {
-  char valueString[8];
-  dtostrf(value,3,0,valueString);
+  char valueString[16];
+  itoa(value, valueString, 10);
 
   publishMqttValue(subTopic, valueString);
 
@@ -255,9 +255,9 @@ void publishMqttPush(int soilMoistureValue)
   String topic = "/push/";
   topic += MQTT_DEVICE_NAME;
 
-  char valueString[20];
-  dtostrf(soilMoistureValue,3,1,valueString);
-
+  char valueString[16];
+  itoa(soilMoistureValue, valueString, 10);
+  
   client.publish(topic.c_str(), valueString);
 
 }
@@ -279,7 +279,7 @@ void checkCommand()
     int length = strlen(msg);
 
 //    Serial.print("Received message: ");
-    Serial.println(msg);
+    //Serial.println(msg);
 
     handleCommand(msg);
   }
