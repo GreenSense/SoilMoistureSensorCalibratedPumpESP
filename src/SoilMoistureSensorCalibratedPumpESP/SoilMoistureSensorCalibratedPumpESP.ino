@@ -232,8 +232,8 @@ void mqttPublishData()
 
 void publishMqttValue(char* subTopic, int value)
 {
-  char valueString[20];
-  dtostrf(value,3,1,valueString);
+  char valueString[8];
+  dtostrf(value,3,0,valueString);
 
   publishMqttValue(subTopic, valueString);
 

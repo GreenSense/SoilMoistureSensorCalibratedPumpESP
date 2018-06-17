@@ -418,7 +418,6 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		#region Data Value Assert Functions
 		public void AssertDataValueEquals(Dictionary<string, string> dataEntry, string dataKey, int expectedValue)
 		{
-
 			var value = Convert.ToInt32(dataEntry[dataKey]);
 
 			Assert.AreEqual(expectedValue, value, "Data value for '" + dataKey + "' key is incorrect: " + value);
