@@ -92,19 +92,19 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 					// Check on time     
 					var timeOn = WaitWhileSimulatorPinIs("pump", SimulatorPumpPin, true);
-					AssertIsWithinRange("pump", BurstOnTime, timeOn, TimeErrorMargin);
+					AssertIsWithinRange("pump on time", BurstOnTime, timeOn, TimeErrorMargin);
 
 					// Check off time
 					var timeOff = WaitWhileSimulatorPinIs("pump", SimulatorPumpPin, false);
-					AssertIsWithinRange("pump", BurstOffTime, timeOff, TimeErrorMargin);
+					AssertIsWithinRange("pump off time", BurstOffTime, timeOff, TimeErrorMargin);
 
 					// Check on time
 					timeOn = WaitWhileSimulatorPinIs("pump", SimulatorPumpPin, true);
-					AssertIsWithinRange("pump", BurstOnTime, timeOn, TimeErrorMargin);
+					AssertIsWithinRange("pump on time", BurstOnTime, timeOn, TimeErrorMargin);
 
 					// Check off time
 					timeOff = WaitWhileSimulatorPinIs("pump", SimulatorPumpPin, false);
-					AssertIsWithinRange("pump", BurstOffTime, timeOff, TimeErrorMargin);
+					AssertIsWithinRange("pump off time", BurstOffTime, timeOff, TimeErrorMargin);
 				}
 			}
 			else

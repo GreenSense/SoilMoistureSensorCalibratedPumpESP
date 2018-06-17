@@ -118,7 +118,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 				}
 
 				Console.Write(".");
-				Thread.Sleep(500);
+				Thread.Sleep(10);
 			}
 		}
 
@@ -129,7 +129,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			while (Data.Count < numberOfEntries)
 			{
 				Console.Write(".");
-				Thread.Sleep(500);
+				Thread.Sleep(10);
 			}
 		}
 
@@ -141,7 +141,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			while (Data.Count < numberOfEntries)
 			{
 				Console.Write(".");
-				Thread.Sleep(500);
+				Thread.Sleep(10);
 			}
 			var totalTimeInSeconds = DateTime.Now.Subtract(startTime).TotalSeconds;
 			return totalTimeInSeconds;
@@ -246,7 +246,6 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			if (key == "Time" && !IsDuplicateEntry(DataEntry))
 			{
 				Data.Add(DataEntry);
-				PrintDataEntry(DataEntry);
 				DataEntry = new Dictionary<string, string>();
 			}
 		}
@@ -265,13 +264,13 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		public void PrintDataEntry(Dictionary<string, string> dataEntry)
 		{
 			Console.WriteLine("");
-			Console.WriteLine("===== Data");
+			Console.WriteLine("----- MQTT Data Start");
 			foreach (var key in dataEntry.Keys)
 			{
 				Console.Write(key + ":" + dataEntry[key] + ";");
 			}
 			Console.WriteLine(";");
-			Console.WriteLine("=====");
+			Console.WriteLine("----- MQTT Data End");
 			Console.WriteLine("");
 		}
 
