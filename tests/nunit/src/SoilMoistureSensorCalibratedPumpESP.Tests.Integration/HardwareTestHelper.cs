@@ -22,7 +22,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		public string SimulatorPort;
 		public int SimulatorBaudRate = 0;
 
-		public int DelayAfterConnectingToHardware = 2000;
+		public int DelayAfterConnectingToHardware = 3000;
 
 		public string DataPrefix = "D;";
 		public string DataPostFix = ";;";
@@ -418,6 +418,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		#region Data Value Assert Functions
 		public void AssertDataValueEquals(Dictionary<string, string> dataEntry, string dataKey, int expectedValue)
 		{
+
 			var value = Convert.ToInt32(dataEntry[dataKey]);
 
 			Assert.AreEqual(expectedValue, value, "Data value for '" + dataKey + "' key is incorrect: " + value);
