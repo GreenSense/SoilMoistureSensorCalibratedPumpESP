@@ -25,7 +25,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 			Console.WriteLine("Waiting for MQTT data...");
 
-			var numberOfEntriesToWaitFor = 10; // TODO: See if this can be reduced
+			var numberOfEntriesToWaitFor = 5; // TODO: See if this can be reduced
 
 			Mqtt.WaitForData(numberOfEntriesToWaitFor);
 
