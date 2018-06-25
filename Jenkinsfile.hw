@@ -86,7 +86,10 @@ pipeline {
             }
         }
         stage("Publish Test Report"){
-            nunit testResultsPattern: 'TestResult.xml'
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                nunit testResultsPattern: 'TestResult.xml'
+            }
         }
     }
     post {
