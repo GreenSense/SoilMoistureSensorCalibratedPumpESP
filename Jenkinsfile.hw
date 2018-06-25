@@ -61,12 +61,6 @@ pipeline {
                 sh 'sh test.sh'
             }
         }
-        stage("Publish Test Report"){
-            when { expression { !shouldSkipBuild() } }
-            steps {
-                nunit testResultsPattern: 'TestResult.xml'
-            }
-        }
         stage('Clean') {
             when { expression { !shouldSkipBuild() } }
             steps {
