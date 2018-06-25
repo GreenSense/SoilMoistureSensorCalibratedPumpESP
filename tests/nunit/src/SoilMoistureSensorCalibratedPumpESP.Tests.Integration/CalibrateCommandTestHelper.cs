@@ -34,7 +34,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			{
 				SimulateSoilMoisture(SimulatedSoilMoisturePercentage);
 
-				var values = WaitForData(3); // Wait for 3 data entries to give the simulator time to stabilise
+				var values = WaitForData(4); // Wait for 4 data entries to give the simulator time to stabilise
 
 				AssertDataValueIsWithinRange(values[values.Length - 1], "R", RawSoilMoistureValue, RawValueMarginOfError);
 			}

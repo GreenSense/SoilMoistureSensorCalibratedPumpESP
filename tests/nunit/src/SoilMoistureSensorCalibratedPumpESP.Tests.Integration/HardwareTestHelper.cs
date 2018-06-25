@@ -22,12 +22,12 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		public string SimulatorPort;
 		public int SimulatorBaudRate = 0;
 
-		public int DelayAfterConnectingToHardware = 8000;
+		public int DelayAfterConnectingToHardware = 1000;
 
 		public string DataPrefix = "D;";
 		public string DataPostFix = ";;";
 
-		public int TimeoutWaitingForResponse = 20;
+		public int TimeoutWaitingForResponse = 20 * 1000;
 
 		public int AnalogPinMaxValue = 1024;
 
@@ -35,6 +35,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		public bool Off = false;
 
 		public string FullDeviceOutput;
+
+		public TimeoutHelper Timeout = new TimeoutHelper();
 
 		public HardwareTestHelper()
 		{
@@ -135,6 +137,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			Thread.Sleep(DelayAfterConnectingToHardware);
 
 			WaitForText(DataPrefix);
+
+			ReadFromDeviceAndOutputToConsole();
 		}
 
 		public void HandleConnectionIOException(string deviceLabel, string devicePort, int deviceBaudRate, Exception exception)
@@ -233,7 +237,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			var output = String.Empty;
 			var containsText = false;
 
-			var startTime = DateTime.Now;
+			Timeout.Start();
 
 			while (!containsText)
 			{
@@ -245,14 +249,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 					containsText = true;
 				}
-
-				var hasTimedOut = DateTime.Now.Subtract(startTime).TotalSeconds > TimeoutWaitingForResponse;
-				if (hasTimedOut && !containsText)
-				{
-					ConsoleWriteSerialOutput(output);
-
-					Assert.Fail("Timed out waiting for text (" + TimeoutWaitingForResponse + " seconds)");
-				}
+				else
+					Timeout.Check(TimeoutWaitingForResponse, "Timed out waiting for text: " + text);
 			}
 
 			return output;
@@ -268,6 +266,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 			var startTime = DateTime.Now;
 
+			Timeout.Start();
+
 			while (!containsData)
 			{
 				output += ReadLineFromDevice();
@@ -282,13 +282,9 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 					containsData = true;
 					dataLine = lastLine;
 				}
-
-				var hasTimedOut = DateTime.Now.Subtract(startTime).TotalSeconds > TimeoutWaitingForResponse;
-				if (hasTimedOut && !containsData)
+				else
 				{
-					ConsoleWriteSerialOutput(output);
-
-					Assert.Fail("Timed out waiting for data (" + TimeoutWaitingForResponse + " seconds)");
+					Timeout.Check(TimeoutWaitingForResponse, "Timed out waiting for data");
 				}
 			}
 
