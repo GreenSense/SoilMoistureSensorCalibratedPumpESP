@@ -22,7 +22,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		public string SimulatorPort;
 		public int SimulatorBaudRate = 0;
 
-		public int DelayAfterConnectingToHardware = 8000;
+		public int DelayAfterConnectingToHardware = 10 * 1000;
 
 		public string DataPrefix = "D;";
 		public string DataPostFix = ";;";
@@ -162,9 +162,6 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		#region Read From Device Functions
 		public string ReadLineFromDevice()
 		{
-			Console.WriteLine("Reading a line of the output from the device...");
-
-			// Read the output
 			var output = DeviceClient.ReadLine();
 
 			FullDeviceOutput += output;
@@ -192,9 +189,12 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		#region Console Write Functions
 		public void ConsoleWriteSerialOutput(string output)
 		{
-			Console.WriteLine("---------- Serial Output From Device -----------");
-			Console.WriteLine(output);
-			Console.WriteLine("------------------------------------------------");
+			if (!String.IsNullOrEmpty(output))
+			{
+				Console.WriteLine("----- Serial Output From Device");
+				Console.WriteLine(output);
+				Console.WriteLine("-------------------------------");
+			}
 		}
 		#endregion
 
