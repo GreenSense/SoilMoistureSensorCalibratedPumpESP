@@ -145,8 +145,6 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			while (Data.Count < numberOfEntries)
 			{
 				Timeout.Check(TimeoutWaitingForMqttData, "Timed out waiting for MQTT data.");
-				Console.Write(".");
-				Thread.Sleep(10);
 			}
 			var totalTimeInSeconds = DateTime.Now.Subtract(startTime).TotalSeconds;
 			return totalTimeInSeconds;
