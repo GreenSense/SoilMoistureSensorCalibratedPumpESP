@@ -349,8 +349,11 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 			var startTime = DateTime.Now;
 
+			Timeout.Start();
+
 			while (powerPinValue != expectedValue)
 			{
+				Timeout.Check(TimeoutWaitingForResponse, "Timed out waiting for simulator pin to switch to " + GetOnOffString(expectedValue));
 				Console.Write(".");
 				powerPinValue = SimulatorDigitalRead(simulatorDigitalPin);
 			}
