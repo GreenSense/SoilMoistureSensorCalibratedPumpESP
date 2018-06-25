@@ -27,9 +27,15 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 			Mqtt.WaitForData(3);
 
+			Assert.AreEqual(3, Mqtt.Data.Count, "Incorrect number of entries returned.");
+
 			var latestEntry = Mqtt.Data[Mqtt.Data.Count - 1];
 
+			Assert.IsNotNull(latestEntry, "The latest MQTT entry is null.");
+
 			Mqtt.PrintDataEntry(latestEntry);
+
+			Assert.IsTrue(latestEntry.ContainsKey("C"), "The latest MQTT entry doesn't contain a 'C' key/value.");
 
 			var valueString = latestEntry["C"];
 
