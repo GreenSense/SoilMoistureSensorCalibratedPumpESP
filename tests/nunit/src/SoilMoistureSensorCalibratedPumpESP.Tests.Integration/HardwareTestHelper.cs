@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ArduinoSerialControllerClient;
 using duinocom;
 using System.IO;
@@ -22,7 +22,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		public string SimulatorPort;
 		public int SimulatorBaudRate = 0;
 
-		public int DelayAfterConnectingToHardware = 10 * 1000;
+		public int DelayAfterConnectingToHardware = 6 * 1000;
 		public int DelayAfterDisconnectingFromHardware = 3 * 1000;
 
 		public string DataPrefix = "D;";
