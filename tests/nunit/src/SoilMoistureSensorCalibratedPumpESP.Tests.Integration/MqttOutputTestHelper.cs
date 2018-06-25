@@ -25,9 +25,11 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 			Console.WriteLine("Waiting for MQTT data...");
 
-			Mqtt.WaitForData(3);
+			var numberOfEntriesToWaitFor = 10; // TODO: See if this can be reduced
 
-			Assert.AreEqual(3, Mqtt.Data.Count, "Incorrect number of entries returned.");
+			Mqtt.WaitForData(numberOfEntriesToWaitFor);
+
+			Assert.AreEqual(numberOfEntriesToWaitFor, Mqtt.Data.Count, "Incorrect number of entries returned.");
 
 			var latestEntry = Mqtt.Data[Mqtt.Data.Count - 1];
 
