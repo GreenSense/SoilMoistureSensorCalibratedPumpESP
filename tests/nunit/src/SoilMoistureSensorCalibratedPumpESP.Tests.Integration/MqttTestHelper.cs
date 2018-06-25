@@ -129,10 +129,10 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		{
 			Console.WriteLine("Waiting for data...");
 			ResetData();
+			Timeout.Start();
 			while (Data.Count < numberOfEntries)
 			{
-				Console.Write(".");
-				Thread.Sleep(10);
+				Timeout.Check(TimeoutWaitingForMqttData, "Timed out waiting for MQTT data.");
 			}
 		}
 
