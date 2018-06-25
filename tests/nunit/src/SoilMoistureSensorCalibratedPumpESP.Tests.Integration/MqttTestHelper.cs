@@ -268,15 +268,18 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 		public void PrintDataEntry(Dictionary<string, string> dataEntry)
 		{
-			Console.WriteLine("");
-			Console.WriteLine("----- MQTT Data Start");
-			foreach (var key in dataEntry.Keys)
+			if (dataEntry != null)
 			{
-				Console.Write(key + ":" + dataEntry[key] + ";");
+				Console.WriteLine("");
+				Console.WriteLine("----- MQTT Data Start");
+				foreach (var key in dataEntry.Keys)
+				{
+					Console.Write(key + ":" + dataEntry[key] + ";");
+				}
+				Console.WriteLine(";");
+				Console.WriteLine("----- MQTT Data End");
+				Console.WriteLine("");
 			}
-			Console.WriteLine(";");
-			Console.WriteLine("----- MQTT Data End");
-			Console.WriteLine("");
 		}
 
 		public string GetTopicKey(string topic)

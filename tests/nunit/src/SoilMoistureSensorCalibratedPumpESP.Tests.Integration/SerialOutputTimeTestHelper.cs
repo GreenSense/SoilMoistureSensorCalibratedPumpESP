@@ -17,8 +17,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 			ReadFromDeviceAndOutputToConsole();
 
-			// Wait for the first couple of data lines to come out before timing tem
-			WaitForData(4);
+			// Wait for the first bunch of data lines to come out before timing tem
+			WaitForData(5);
 
 			// Get the time until the next data line
 			var secondsBetweenDataLines = WaitUntilDataLine();
