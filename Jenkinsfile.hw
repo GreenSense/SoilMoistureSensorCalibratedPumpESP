@@ -84,7 +84,10 @@ pipeline {
             steps {
                 sh 'sh push-version.sh'
             }
-        } 
+        }
+        stage("Publish Test Report"){
+            nunit testResultsPattern: 'TestResult.xml'
+        }
     }
     post {
         always {
