@@ -5,11 +5,21 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
+#include <NTPClient.h>
+#include <WiFiUdp.h>
+
 #include <duinocom.h>
 
 #include "Common.h"
 #include "SoilMoistureSensor.h"
 #include "Irrigation.h"
+
+#define NTP_OFFSET   60 * 60      // In seconds
+#define NTP_INTERVAL 60 * 1000    // In miliseconds
+#define NTP_ADDRESS  "europe.pool.ntp.org"
+
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, NTP_ADDRESS, NTP_OFFSET, NTP_INTERVAL);
 
 #define SERIAL_MODE_CSV 1
 #define SERIAL_MODE_QUERYSTRING 2
@@ -18,13 +28,13 @@
 
 int serialMode = SERIAL_MODE_CSV;
 
-#define WIFI_NAME "accesspoint"
-#define WIFI_PASSWORD "password"
+#define WIFI_NAME "Telstra995578"
+#define WIFI_PASSWORD "3ym9j8hrwhcf"
 
-#define MQTT_HOST "garden"
+#define MQTT_HOST "10.0.0.93"
 #define MQTT_PORT 1883
-#define MQTT_USERNAME "username"
-#define MQTT_PASSWORD "password"
+#define MQTT_USERNAME "j"
+#define MQTT_PASSWORD "ywgtpJ8gdnm!"
 #define MQTT_DEVICE_NAME "WiFiIrrigator1"
 
 int totalSubscribeTopics = 7;
@@ -50,6 +60,7 @@ void setup()
 
   serialOutputIntervalInSeconds = soilMoistureSensorReadingIntervalInSeconds;
 
+  timeClient.begin();
 }
 
 void setupWiFi()
@@ -182,6 +193,8 @@ void loop()
   loopNumber++;
 
   serialPrintLoopHeader();
+  
+  timeClient.update();
 
   loopWiFi();
 
@@ -225,7 +238,7 @@ void mqttPublishData()
     publishMqttValue("D", drySoilMoistureCalibrationValue);
     publishMqttValue("W", wetSoilMoistureCalibrationValue);
     publishMqttValue("Z", VERSION);
-    publishMqttValue("Time", millis());
+    publishMqttValue("Time", timeClient.getFormattedTime());
     publishMqttPush(soilMoistureLevelCalibrated);
   }
 }
@@ -247,6 +260,20 @@ void publishMqttValue(char* subTopic, char* value)
   topic += subTopic;
 
   client.publish(topic.c_str(), value);
+
+}
+
+void publishMqttValue(char* subTopic, String value)
+{
+  String topic = "/";
+  topic += MQTT_DEVICE_NAME;
+  topic += "/";
+  topic += subTopic;
+  
+  char valueArray[16];
+  value.toCharArray(valueArray, 12);
+
+  client.publish(topic.c_str(), valueArray);
 
 }
 
