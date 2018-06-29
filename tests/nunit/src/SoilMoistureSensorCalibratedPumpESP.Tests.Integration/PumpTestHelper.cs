@@ -65,6 +65,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 		public void CheckPumpIsOff()
 		{
+			WaitUntilSimulatorPinIs("pump", SimulatorPumpPin, Off);
 			AssertSimulatorPinForDuration("pump", SimulatorPumpPin, false, DurationToCheckPump);
 		}
 

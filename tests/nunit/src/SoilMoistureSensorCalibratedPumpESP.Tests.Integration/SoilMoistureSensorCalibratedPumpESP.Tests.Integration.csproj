@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2ACA9D2F-CD6C-4D41-941E-A9A0496826AB}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SoilMoistureSensorCalibratedSerial.Tests.Integration</RootNamespace>
+    <RootNamespace>SoilMoistureSensorCalibratedPumpESP.Tests.Integration</RootNamespace>
     <AssemblyName>SoilMoistureSensorCalibratedSerial.Tests.Integration</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseMSBuildEngine>False</UseMSBuildEngine>
@@ -88,6 +88,7 @@
     <Compile Include="SerialOutputTimeTestHelper.cs" />
     <Compile Include="MqttOutputTestFixture.cs" />
     <Compile Include="MqttOutputTestHelper.cs" />
+    <Compile Include="TimeoutHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,12 +1,11 @@
 ﻿using System;
-using NUnit.Framework;
+using System.Collections.Generic;
 using System.IO;
-using System.Net.NetworkInformation;
-using uPLibrary.Networking.M2Mqtt;
-using uPLibrary.Networking.M2Mqtt.Messages;
 using System.Text;
 using System.Threading;
-using System.Collections.Generic;
+using NUnit.Framework;
+using uPLibrary.Networking.M2Mqtt;
+using uPLibrary.Networking.M2Mqtt.Messages;
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
@@ -20,6 +19,10 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		public MqttClient Client;
 
 		public string ExistingStatusMessage;
+
+		public int TimeoutWaitingForMqttData = 20 * 1000;
+
+		public TimeoutHelper Timeout = new TimeoutHelper();
 
 		public MqttTestHelper(string deviceName)
 		{
@@ -52,7 +55,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 			Client = new MqttClient(host);
 
-			var clientId = Guid.NewGuid().ToString();
+			var clientId = Guid.NewGuid().ToString().Substring(0, 10);
 
 			Client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
 			Client.Connect(clientId, user, pass);
@@ -126,10 +129,10 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		{
 			Console.WriteLine("Waiting for data...");
 			ResetData();
+			Timeout.Start();
 			while (Data.Count < numberOfEntries)
 			{
-				Console.Write(".");
-				Thread.Sleep(10);
+				Timeout.Check(TimeoutWaitingForMqttData, "Timed out waiting for MQTT data.");
 			}
 		}
 
@@ -138,10 +141,10 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			Console.WriteLine("Waiting for data...");
 			ResetData();
 			var startTime = DateTime.Now;
+			Timeout.Start();
 			while (Data.Count < numberOfEntries)
 			{
-				Console.Write(".");
-				Thread.Sleep(10);
+				Timeout.Check(TimeoutWaitingForMqttData, "Timed out waiting for MQTT data.");
 			}
 			var totalTimeInSeconds = DateTime.Now.Subtract(startTime).TotalSeconds;
 			return totalTimeInSeconds;
@@ -263,15 +266,18 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 		public void PrintDataEntry(Dictionary<string, string> dataEntry)
 		{
-			Console.WriteLine("");
-			Console.WriteLine("----- MQTT Data Start");
-			foreach (var key in dataEntry.Keys)
+			if (dataEntry != null)
 			{
-				Console.Write(key + ":" + dataEntry[key] + ";");
+				Console.WriteLine("");
+				Console.WriteLine("----- MQTT Data Start");
+				foreach (var key in dataEntry.Keys)
+				{
+					Console.Write(key + ":" + dataEntry[key] + ";");
+				}
+				Console.WriteLine(";");
+				Console.WriteLine("----- MQTT Data End");
+				Console.WriteLine("");
 			}
-			Console.WriteLine(";");
-			Console.WriteLine("----- MQTT Data End");
-			Console.WriteLine("");
 		}
 
 		public string GetTopicKey(string topic)

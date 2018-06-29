@@ -415,46 +415,6 @@ void serialPrintData()
       Serial.print(";;");
       Serial.println();
     }
-    /*else
-    {
-      Serial.print("raw=");
-      Serial.print(soilMoistureLevelRaw);
-      Serial.print("&");
-      Serial.print("calibrated=");
-      Serial.print(soilMoistureLevelCalibrated);
-      Serial.print("&");
-      Serial.print("threshold=");
-      Serial.print(threshold);
-      Serial.print("&");
-      Serial.print("waterNeeded=");
-      Serial.print(soilMoistureLevelCalibrated < threshold);
-      Serial.print("&");
-      Serial.print("pumpStatus=");
-      Serial.print(pumpStatus);
-      Serial.print("&");
-      Serial.print("readingInterval=");
-      Serial.print(soilMoistureSensorReadingIntervalInSeconds);
-      Serial.print("&");
-      Serial.print("pumpBurstOnTime=");
-      Serial.print(pumpBurstOnTime);
-      Serial.print("&");
-      Serial.print("pumpBurstOffTime=");
-      Serial.print(pumpBurstOffTime);
-      Serial.print("&");
-      Serial.print("pumpOn=");
-      Serial.print(pumpIsOn);
-      Serial.print("&");
-      Serial.print("secondsSincePumpOn=");
-      Serial.print((millis() - lastPumpFinishTime) / 1000);
-      Serial.print("&");
-      Serial.print("dry=");
-      Serial.print(drySoilMoistureCalibrationValue);
-      Serial.print("&");
-      Serial.print("wet=");
-      Serial.print(wetSoilMoistureCalibrationValue);
-      Serial.print(";;");
-      Serial.println();
-    }*/
 
     if (isDebugMode)
     {
@@ -466,26 +426,5 @@ void serialPrintData()
 
     lastSerialOutputTime = millis();
   }
-/*  else
-  {
-    if (isDebugMode)
-    {    
-      Serial.println("Not ready to serial print data");
-
-      Serial.print("  Is time to serial print data: ");
-      Serial.println(isTimeToPrintData);
-      if (!isTimeToPrintData)
-      {
-        Serial.print("    Time remaining before printing data: ");
-        Serial.print(millisecondsToSecondsWithDecimal(lastSerialOutputTime + secondsToMilliseconds(serialOutputIntervalInSeconds) - millis()));
-        Serial.println(" seconds");
-      }
-      Serial.print("  Soil moisture sensor reading has been taken: ");
-      Serial.println(soilMoistureSensorReadingHasBeenTaken);
-      Serial.print("  Is ready to print data: ");
-      Serial.println(isReadyToPrintData);
-
-    }
-  }*/
 }
 
