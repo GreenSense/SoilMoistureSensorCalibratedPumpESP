@@ -12,6 +12,7 @@ pipeline {
                 sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
                 sh "git fetch --no-tags"
                 sh 'git checkout $BRANCH_NAME'
+                sh 'git pull origin $BRANCH_NAME'
                 shHide( 'sh set-wifi-credentials.sh ${WIFI_NAME} ${WIFI_PASSWORD}' )
                 sh 'sh set-mqtt-device-name.sh ${IRRIGATOR_ESP_DEVICE_NAME}'
                 shHide( 'sh set-mqtt-credentials.sh ${MQTT_HOST} ${MQTT_USERNAME} ${MQTT_PASSWORD}' )
@@ -94,7 +95,6 @@ pipeline {
                 <p>Check console output at "<a href="${env.BUILD_URL}">${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>"</p>""",
               recipientProviders: [[$class: 'DevelopersRecipientProvider']]
             )
-          cleanWs()
         }
         failure() {
           sh 'sh rollback.sh'
@@ -104,7 +104,6 @@ pipeline {
                 <p>Check console output at "<a href="${env.BUILD_URL}">${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>"</p>""",
               recipientProviders: [[$class: 'DevelopersRecipientProvider']]
             )
-          cleanWs()
         }
     }
 }
