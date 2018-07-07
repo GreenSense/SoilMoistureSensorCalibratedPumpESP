@@ -27,6 +27,10 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 			AssertIsWithinRange("mqtt response time", expectedMqttResponseTime, secondsUntilResponse, TimeErrorMargin);
 
+			Console.WriteLine("Skipping next data entries...");
+
+			Mqtt.WaitUntilData(3); // TODO: See if this can be reduced or removed
+
 			Console.WriteLine("Waiting for the next data entry...");
 
 			var secondsBetweenData = Mqtt.WaitUntilData(1);
