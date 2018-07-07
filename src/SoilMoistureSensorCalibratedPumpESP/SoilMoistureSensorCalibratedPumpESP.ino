@@ -373,6 +373,7 @@ void handleCommand(char* msg)
   }
   
   forceSerialOutput();
+  forceMqttOutput();
 }
 
 /* Settings */
@@ -456,3 +457,8 @@ void serialPrintData()
   }
 }
 
+
+void forceMqttOutput()
+{
+  soilMoistureSensorReadingHasBeenTaken = true;
+}
