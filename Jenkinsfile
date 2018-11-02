@@ -9,10 +9,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-
-                checkout scm
-                
-                shHide( 'git remote set-url origin https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedSerialPumpESP.git' )
+				deleteDir();
+                shHide( 'git clone https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedSerialPumpESP.git -b $BRANCH_NAME .' )
                 sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
                 sh "git fetch --no-tags"
                 sh 'git checkout $BRANCH_NAME'
