@@ -11,10 +11,6 @@ pipeline {
             steps {
 				deleteDir();
                 shHide( 'git clone https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedSerialPumpESP.git -b $BRANCH_NAME .' )
-                sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
-                sh "git fetch --no-tags"
-                sh 'git checkout $BRANCH_NAME'
-                sh 'git pull origin $BRANCH_NAME'
             }
         }
         stage('Init') {
