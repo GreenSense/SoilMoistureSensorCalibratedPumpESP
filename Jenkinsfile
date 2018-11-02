@@ -9,20 +9,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-				deleteDir();
-                shHide( 'git clone --recursive https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedPumpESP.git -b $BRANCH_NAME _tmpclone' )
-                sh "mv _tmpclone/* ."
-                sh "mv _tmpclone/.git ./.git"
+
+                checkout scm
+                
+                shHide( 'git remote set-url origin https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedSerialPumpESP.git' )
                 sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
                 sh "git fetch --no-tags"
                 sh 'git checkout $BRANCH_NAME'
                 sh 'git pull origin $BRANCH_NAME'
-            }
-        }
-        stage('Prepare') {
-            when { expression { !shouldSkipBuild() } }
-            steps {
-                sh 'sh prepare.sh'
             }
         }
         stage('Init') {
