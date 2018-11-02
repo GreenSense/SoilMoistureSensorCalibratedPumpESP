@@ -1,24 +1,49 @@
 pipeline {
     agent any
     triggers {
-        pollSCM 'H/2 * * * *'
+       pollSCM('*/10 * * * *')
+    }
+    options {
+        disableConcurrentBuilds();
     }
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                
+                shHide( 'git remote set-url origin https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedSerialESP.git' )
+                sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
+                sh "git fetch --no-tags"
+                sh 'git checkout $BRANCH_NAME'
+                sh 'git pull origin $BRANCH_NAME'
+            }
+        }
+        stage('Prepare') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                sh 'sh prepare.sh'
+            }
+        }
         stage('Init') {
+            when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'sh init.sh'
             }
         }
-        stage('Build') {
+        stage('Inject Version') {
+            when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'sh build.sh'
+                sh 'sh inject-version.sh'
+            }
+        }
+        stage('Build') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                sh 'sh build-all.sh'
             }
         }
     }
     post {
-        always {
-            cleanWs()
-        }
         success() {
           emailext (
               subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
@@ -37,3 +62,17 @@ pipeline {
         }
     }
 }
+Boolean shouldSkipBuild() {
+    return sh( script: 'sh check-ci-skip.sh', returnStatus: true )
+}
+def shHide(cmd) {
+    sh('#!/bin/sh -e\n' + cmd)
+}
+
+
+ 
+ 
+ 
+ 
+ 
+ 
