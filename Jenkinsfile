@@ -9,6 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+				deleteDir();
                 shHide( 'git clone --recursive https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedPumpESP.git -b $BRANCH_NAME _tmpclone' )
                 sh "mv _tmpclone/* ."
                 sh "mv _tmpclone/.git ./.git"
