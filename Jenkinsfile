@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
 				deleteDir();
-                shHide( 'git clone https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedSerialPumpESP.git -b $BRANCH_NAME .' )
+                shHide( 'git clone https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedPumpESP.git -b $BRANCH_NAME .' )
             }
         }
         stage('Init') {
