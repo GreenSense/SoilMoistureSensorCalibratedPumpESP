@@ -65,7 +65,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			var devicePort = Environment.GetEnvironmentVariable("IRRIGATOR_ESP_PORT");
 
 			if (String.IsNullOrEmpty(devicePort))
-				devicePort = "/dev/ttyUSB2";
+				devicePort = "/dev/ttyUSB0";
 
 			Console.WriteLine("Device port: " + devicePort);
 
@@ -77,7 +77,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			var simulatorPort = Environment.GetEnvironmentVariable("IRRIGATOR_ESP_SIMULATOR_PORT");
 
 			if (String.IsNullOrEmpty(simulatorPort))
-				simulatorPort = "/dev/ttyUSB3";
+				simulatorPort = "/dev/ttyUSB1";
 
 			Console.WriteLine("Simulator port: " + simulatorPort);
 

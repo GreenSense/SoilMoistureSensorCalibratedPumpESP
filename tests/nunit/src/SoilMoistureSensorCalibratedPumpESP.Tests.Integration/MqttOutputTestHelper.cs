@@ -14,7 +14,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			Console.WriteLine("Read interval: " + ReadInterval);
 			Console.WriteLine("Soil moisture sensor value: " + SimulatedSoilMoistureSensorValue);
 
-			EnableDevices(SimulatedSoilMoistureSensorValue > -1);
+			ConnectDevices(SimulatedSoilMoistureSensorValue > -1);
 
 			EnableMqtt();
 

@@ -38,7 +38,7 @@ int serialMode = SERIAL_MODE_CSV;
 #define MQTT_DEVICE_NAME "WiFiIrrigator1"
 
 int totalSubscribeTopics = 8;
-String subscribeTopics[] = {"D", "W", "T", "V", "P", "B", "O", "F"};
+String subscribeTopics[] = {"D", "W", "T", "I", "P", "B", "O", "F"};
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -47,10 +47,9 @@ void setup()
 {
   Serial.begin(115200);
 
-  if (isDebugMode)
-  {
-    Serial.println("Starting WiFi irrigator");
-  }
+  Serial.println("Starting WiFi irrigator");
+  
+  EEPROM.begin(512);
 
   setupWiFi();
 
@@ -100,7 +99,7 @@ void setupMqtt()
     } else {
  
       Serial.print("failed with state ");
-      Serial.print(client.state());
+      Serial.println(client.state());
       delay(2000);
  
     }
@@ -212,6 +211,8 @@ void loop()
   soilMoistureSensorReadingHasBeenTaken = false;
 
   serialPrintLoopFooter();
+  
+  delay(1);
 }
 
 void loopWiFi()
@@ -232,7 +233,7 @@ void mqttPublishData()
     publishMqttValue("P", pumpStatus);
     publishMqttValue("B", pumpBurstOnTime);
     publishMqttValue("O", pumpBurstOffTime);
-    publishMqttValue("V", soilMoistureSensorReadingIntervalInSeconds);
+    publishMqttValue("I", soilMoistureSensorReadingIntervalInSeconds);
     publishMqttValue("WN", soilMoistureLevelCalibrated < threshold);
     publishMqttValue("PO", pumpIsOn);
     publishMqttValue("D", drySoilMoistureCalibrationValue);
@@ -336,7 +337,7 @@ void handleCommand(char* msg)
     case 'W':
       setWetSoilMoistureCalibrationValue(msg);
       break;
-    case 'V':
+    case 'I':
       setSoilMoistureSensorReadingInterval(msg);
       break;
     case 'B':
@@ -415,7 +416,7 @@ void serialPrintData()
       Serial.print("P:");
       Serial.print(pumpStatus);
       Serial.print(";");
-      Serial.print("V:");
+      Serial.print("I:");
       Serial.print(soilMoistureSensorReadingIntervalInSeconds);
       Serial.print(";");
       Serial.print("B:");

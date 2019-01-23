@@ -5,7 +5,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
 	public class FullScaleIrrigatorTestHelper : GreenSenseIrrigatorHardwareTestHelper
 	{
-		public int PumpOnIncreaseValue = 10;
+		public int PumpOnIncreaseValue = 8;
 		public int PumpOffDecreaseValue = 5;
 
 		public int SoilMoisturePercentageMaximum = 55;
@@ -15,7 +15,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		{
 			WriteTitleText("Starting full scale test");
 
-			EnableDevices();
+			ConnectDevices();
 
 			int soilMoisturePercentage = 30;
 
@@ -63,13 +63,13 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		{
 			WriteParagraphTitleText("Checking calibrated value...");
 
-			AssertDataValueIsWithinRange(dataEntry, "C", soilMoisturePercentage, CalibratedValueMarginOfError);
+			AssertDataValueIsWithinRange(dataEntry, "C", soilMoisturePercentage, CalibratedValueMarginOfError+5); // TODO: Should the +5 be moved to a property?
 
 			WriteParagraphTitleText("Checking raw value...");
 
 			var expectedRawValue = soilMoisturePercentage * AnalogPinMaxValue / 100;
 
-			AssertDataValueIsWithinRange(dataEntry, "R", expectedRawValue, RawValueMarginOfError);
+			AssertDataValueIsWithinRange(dataEntry, "R", expectedRawValue, RawValueMarginOfError+10); // TODO: Should the +10 be moved to a property?
 
 		}
 

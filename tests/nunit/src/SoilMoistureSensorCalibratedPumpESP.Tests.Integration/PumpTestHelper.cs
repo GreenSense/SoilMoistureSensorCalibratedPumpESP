@@ -21,7 +21,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			Console.WriteLine("Simulated soil moisture: " + SimulatedSoilMoisturePercentage + "%");
 			Console.WriteLine("");
 
-			EnableDevices();
+			ConnectDevices();
 
 			var cmd = "P" + (int)PumpCommand;
 

@@ -11,15 +11,17 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 			Console.WriteLine("Read interval: " + ReadInterval);
 
-			EnableDevices(false);
+			ConnectDevices(false);
 
 			EnableMqtt();
 
-			Mqtt.SendCommand("V", ReadInterval);
+			Mqtt.SendCommand("I", ReadInterval);
 
-			var dataEntry = WaitForDataEntry();
+			var entries = WaitForData(2);
 
-			AssertDataValueEquals(dataEntry, "V", ReadInterval);
+			var dataEntry = entries[entries.Length-1];
+
+			AssertDataValueEquals(dataEntry, "I", ReadInterval);
 		}
 	}
 }

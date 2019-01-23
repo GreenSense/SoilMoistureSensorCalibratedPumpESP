@@ -1,29 +1,40 @@
 ﻿using System;
+
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-	public class ThresholdMqttCommandTestHelper : GreenSenseIrrigatorHardwareTestHelper
+	public class ThresholdEEPROMTestHelper : GreenSenseIrrigatorHardwareTestHelper
 	{
 		public int Threshold = 30;
 
-		public void TestThresholdCommand()
+		public void TestThresholdEEPROM()
 		{
-			WriteTitleText("Starting threshold command test");
+			WriteTitleText("Starting threshold EEPROM test");
 
 			Console.WriteLine("Threshold: " + Threshold + "%");
 			Console.WriteLine("");
 
-			ConnectDevices(false);
+			ConnectDevices();
 
-			EnableMqtt();
+			ResetDeviceSettings ();
 
 			SendThresholdCommand();
+
+			ResetDeviceViaPin ();
+
+			var data = WaitForData(3);
+
+			var dataEntry = data [data.Length - 1];
+
+			AssertDataValueEquals(dataEntry, "T", Threshold);
 		}
 
 		public void SendThresholdCommand()
 		{
+			var command = "T" + Threshold;
+
 			WriteParagraphTitleText("Sending threshold command...");
 
-			Mqtt.SendCommand("T", Threshold);
+			SendDeviceCommand(command);
 
 			var dataEntry = WaitForDataEntry();
 

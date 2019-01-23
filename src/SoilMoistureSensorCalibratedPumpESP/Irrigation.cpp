@@ -46,14 +46,20 @@ void setupThreshold()
   if (eepromIsSet)
   {
     if (isDebugMode)
-    	Serial.println("EEPROM read interval value has been set. Loading.");
+    {
+    	Serial.print("Loading threshold from EEPROM: ");
+      Serial.println(threshold);
+    }
 
     threshold = getThreshold();
   }
   else
   {
     if (isDebugMode)
-      Serial.println("EEPROM read interval value has not been set. Using defaults.");
+    {
+      Serial.print("Using default threshold: ");
+      Serial.println(threshold);
+    }
     
     //setThreshold(threshold);
   }
@@ -185,6 +191,11 @@ void setPumpStatus(int newStatus)
 
 void setThreshold(char* msg)
 {
+  if (isDebugMode)
+  {
+    Serial.println("Setting threshold");
+  }
+  
   int length = strlen(msg);
 
   if (length == 1)
@@ -193,8 +204,11 @@ void setThreshold(char* msg)
   {
     int value = readInt(msg, 1, length-1);
 
-//    Serial.println("Value:");
-//    Serial.println(value);
+    if (isDebugMode)
+    {
+      Serial.println("Threshold:");
+      Serial.println(value);
+    }
 
     setThreshold(value);
   }
@@ -210,8 +224,10 @@ void setThreshold(int newThreshold)
     Serial.println(threshold);
   }
 
-  EEPROM.write(thresholdEEPROMAddress, newThreshold); // Must divide by 4 to make it fit in eeprom
-
+  EEPROM.write(thresholdEEPROMAddress, newThreshold);
+  
+  EEPROM.commit();
+  
   setThresholdIsSetEEPROMFlag();
 }
 
@@ -226,12 +242,12 @@ int getThreshold()
 {
   int value = EEPROM.read(thresholdEEPROMAddress);
 
-  if (value >= 0
+  if (value <= 0
       || value >= 100)
     return threshold;
   else
   {
-    int threshold = value; // Must multiply by 4 to get the original value
+    int threshold = value;
 
     if (isDebugMode)
     {
@@ -245,8 +261,15 @@ int getThreshold()
 
 void setThresholdIsSetEEPROMFlag()
 {
+  if (isDebugMode)
+  {
+    Serial.println("Setting EEPROM 'threshold is set' flag");
+  }
+
   if (EEPROM.read(thresholdIsSetEEPROMFlagAddress) != 99)
     EEPROM.write(thresholdIsSetEEPROMFlagAddress, 99);
+    
+  EEPROM.commit();
 }
 
 
@@ -277,6 +300,8 @@ void setPumpBurstOnTime(long newPumpBurstOnTime)
 
   EEPROMWriteLong(pumpBurstOnTimeEEPROMAddress, pumpBurstOnTime);
 
+  EEPROM.commit();
+  
   setPumpBurstOnTimeIsSetEEPROMFlag();
 }
 
@@ -284,8 +309,8 @@ long getPumpBurstOnTime()
 {
   long value = EEPROMReadLong(pumpBurstOnTimeEEPROMAddress);
 
-  if (value == 0
-      || value == 255)
+  if (value <= 0
+      || value >= 255)
     return pumpBurstOnTime;
   else
   {
@@ -305,6 +330,8 @@ void setPumpBurstOnTimeIsSetEEPROMFlag()
 {
   if (EEPROM.read(pumpBurstOnTimeIsSetEEPROMFlagAddress) != 99)
     EEPROM.write(pumpBurstOnTimeIsSetEEPROMFlagAddress, 99);
+    
+  EEPROM.commit();
 }
 
 
@@ -333,6 +360,8 @@ void setPumpBurstOffTime(long newPumpBurstOffTime)
 
   EEPROMWriteLong(pumpBurstOffTimeEEPROMAddress, newPumpBurstOffTime);
 
+  EEPROM.commit();
+    
   setPumpBurstOffTimeIsSetEEPROMFlag();
 
   pumpBurstOffTime = newPumpBurstOffTime;
@@ -350,8 +379,8 @@ long getPumpBurstOffTime()
       value = pumpBurstOffTime;
     }
 
-    Serial.println("Value:");
-    Serial.println(value);
+//    Serial.println("Value:");
+//    Serial.println(value);
 
     return value;
   }
@@ -363,12 +392,14 @@ void setPumpBurstOffTimeIsSetEEPROMFlag()
 {
   if (EEPROM.read(pumpBurstOffTimeIsSetEEPROMFlagAddress) != 99)
     EEPROM.write(pumpBurstOffTimeIsSetEEPROMFlagAddress, 99);
+    
+  EEPROM.commit();
 }
 
 /* Restore defaults */
 void restoreDefaultIrrigationSettings()
 {
-  Serial.println("Resetting default irrigation settings");
+  Serial.println("Reset default settings");
 
   restoreDefaultThreshold();
   restoreDefaultPumpBurstOnTime();
@@ -376,7 +407,7 @@ void restoreDefaultIrrigationSettings()
 
 void restoreDefaultThreshold()
 {
-  Serial.println("Resetting default threshold");
+  Serial.println("Reset threshold");
 
   removeThresholdEEPROMIsSetFlag();
 
@@ -387,7 +418,7 @@ void restoreDefaultThreshold()
 
 void restoreDefaultPumpBurstOnTime()
 {
-  Serial.println("Resetting default pump burst on time");
+  Serial.println("Reset pump burst on time");
 
   removePumpBurstOnTimeEEPROMIsSetFlag();
 
@@ -398,7 +429,7 @@ void restoreDefaultPumpBurstOnTime()
 
 void restoreDefaultPumpBurstOffTime()
 {
-  Serial.println("Resetting default pump burst off time");
+  Serial.println("Reset pump burst off time");
 
   removePumpBurstOffTimeEEPROMIsSetFlag();
 

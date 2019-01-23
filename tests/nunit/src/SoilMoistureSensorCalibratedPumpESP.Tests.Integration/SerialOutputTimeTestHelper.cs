@@ -11,13 +11,13 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 			Console.WriteLine("Read interval: " + ReadInterval);
 
-			EnableDevices(false);
+			ConnectDevices(false);
 
 			SetDeviceReadInterval(ReadInterval);
 
 			ReadFromDeviceAndOutputToConsole();
 
-			// Wait for the first bunch of data lines to come out before timing tem
+			// Wait for the first bunch of data lines to come out before timing them
 			WaitForData(8); // TODO: See if this can be reduced
 
 			// Get the time until the next data line
