@@ -166,9 +166,11 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 		public void HandleConnectionIOException(string deviceLabel, string devicePort, int deviceBaudRate, Exception exception)
 		{
 			if (exception.Message == "No such file or directory")
-				throw new Exception("The " + deviceLabel + " device not found on port: " + devicePort + ". Please ensure it's connected via USB and that the port name is set correctly.", exception);
+				throw new Exception ("The " + deviceLabel + " device not found on port: " + devicePort + ". Please ensure it's connected via USB and that the port name is set correctly.", exception);
 			else if (exception.Message == "Inappropriate ioctl for device")
-				throw new Exception("The device serial baud rate appears to be incorrect: " + deviceBaudRate, exception);
+				throw new Exception ("The device serial baud rate appears to be incorrect: " + deviceBaudRate, exception);
+			else if (exception.Message == "No such device or address")
+				throw new Exception ("The " + deviceLabel + " device not found on port: " + devicePort + ". Please ensure it's connected via USB and that the port name is set correctly.", exception);
 			else
 				throw exception;
 		}
