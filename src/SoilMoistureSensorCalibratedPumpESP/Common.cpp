@@ -8,7 +8,7 @@ const int ANALOG_MAX = 1024;
 long lastSerialOutputTime = 0;
 long serialOutputIntervalInSeconds = 1;
 
-bool isDebugMode = false;
+bool isDebugMode = true;
 
 int loopNumber = 0;
 
@@ -78,6 +78,6 @@ float millisecondsToSecondsWithDecimal(int milliseconds)
 void forceSerialOutput()
 {
     // Reset the last serial output time 
-    lastSerialOutputTime = millis()-secondsToMilliseconds(serialOutputIntervalInSeconds);
+    lastSerialOutputTime = 0;//millis()-secondsToMilliseconds(serialOutputIntervalInSeconds);
 }
 
