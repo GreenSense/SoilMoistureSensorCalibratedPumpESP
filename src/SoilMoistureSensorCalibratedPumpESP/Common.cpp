@@ -8,7 +8,7 @@ const int ANALOG_MAX = 1024;
 long lastSerialOutputTime = 0;
 long serialOutputIntervalInSeconds = 1;
 
-bool isDebugMode = true;
+bool isDebugMode = false;
 
 int loopNumber = 0;
 
