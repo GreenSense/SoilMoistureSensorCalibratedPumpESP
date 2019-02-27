@@ -53,7 +53,7 @@ pipeline {
         stage('Upload') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'sh upload-uno.sh ${IRRIGATOR_ESP_PORT}'
+                sh 'sh upload.sh ${IRRIGATOR_ESP_PORT}'
             }
         }
         stage('Upload simulator') {
