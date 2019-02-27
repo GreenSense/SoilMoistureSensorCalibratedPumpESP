@@ -16,8 +16,8 @@ pipeline {
                 shHide( 'sh set-wifi-credentials.sh ${WIFI_NAME} ${WIFI_PASSWORD}' )
                 sh 'sh set-mqtt-device-name.sh ${IRRIGATOR_ESP_DEVICE_NAME}'
                 shHide( 'sh set-mqtt-credentials.sh ${MQTT_HOST} ${MQTT_USERNAME} ${MQTT_PASSWORD}' )
-                sh 'git config --global user.email "compulsivecoder@gmail.com"'
-                sh 'git config --global user.name "CompulsiveCoder CI"'
+                sh 'echo "Irrigator ESP port: ${IRRIGATOR_ESP_PORT}"'
+                sh 'echo "Irrigator ESP simulator port: ${IRRIGATOR_ESP_SIMULATOR_PORT}"'
             }
         }
         stage('Prepare') {
@@ -47,19 +47,19 @@ pipeline {
         stage('Build') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'sh build-all.sh'
+                sh 'sh build-tests.sh'
             }
         }
         stage('Upload') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'sh upload.sh'
+                sh 'sh upload-uno.sh ${IRRIGATOR_ESP_PORT}'
             }
         }
         stage('Upload simulator') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'echo "Skipping simulator upload to speed up test." #sh upload-simulator.sh'
+                sh 'sh upload-simulator.sh ${IRRIGATOR_ESP_SIMULATOR_PORT}'
             }
         }
         stage('Test') {
