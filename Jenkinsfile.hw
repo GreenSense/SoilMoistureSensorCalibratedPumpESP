@@ -28,7 +28,7 @@ pipeline {
         stage('Prepare') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'sudo sh prepare.sh'
+                sh 'echo "Prepare script skipped" #sudo sh prepare.sh'
             }
         }
         stage('Init') {
@@ -64,7 +64,7 @@ pipeline {
         stage('Upload simulator') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'sh upload-simulator.sh ${IRRIGATOR_ESP_SIMULATOR_PORT}'
+                sh 'echo "Upload simulator script skipped" # sh upload-simulator.sh ${IRRIGATOR_ESP_SIMULATOR_PORT}'
             }
         }
         stage('Test') {
@@ -76,6 +76,7 @@ pipeline {
         stage('Clean') {
             when { expression { !shouldSkipBuild() } }
             steps {
+                sh 'sh clean.sh'
                 sh 'git checkout src/SoilMoistureSensorCalibratedPumpESP/SoilMoistureSensorCalibratedPumpESP.ino'
             }
         }
