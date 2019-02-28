@@ -4,10 +4,23 @@ pipeline {
         disableConcurrentBuilds();
     }
     stages {
+        stage('CleanWS') {
+            steps {
+                deleteDir()
+            }
+        }
         stage('Checkout') {
             steps {
-				deleteDir();
-                shHide( 'git clone https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedPumpESP.git -b $BRANCH_NAME .' )
+                checkout scm
+
+                shHide( 'git remote set-url origin https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedPumpESP.git' )
+                sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
+                sh "git fetch --no-tags"
+                sh 'git checkout $BRANCH_NAME'
+                sh 'git pull origin $BRANCH_NAME'
+                shHide( 'sh set-wifi-credentials.sh ${WIFI_NAME} ${WIFI_PASSWORD}' )
+                sh 'sh set-mqtt-device-name.sh ${IRRIGATOR_ESP_DEVICE_NAME}'
+                shHide( 'sh set-mqtt-credentials.sh ${MQTT_HOST} ${MQTT_USERNAME} ${MQTT_PASSWORD}' )
             }
         }
         stage('Init') {
