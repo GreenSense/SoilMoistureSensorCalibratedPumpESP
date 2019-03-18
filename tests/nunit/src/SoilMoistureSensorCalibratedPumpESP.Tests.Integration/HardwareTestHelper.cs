@@ -276,7 +276,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             if (!String.IsNullOrEmpty (output)) {
                 foreach (var line in output.Trim().Split('\r')) {
                     if (!String.IsNullOrEmpty (line)) {
-                        Console.WriteLine ("> " + line);
+                        Console.WriteLine ("> " + line.Trim ());
                     }
                 }
             }
@@ -373,7 +373,6 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         {
             Console.WriteLine ("Waiting for data line");
 
-            var dataLine = String.Empty;
             var output = String.Empty;
             var containsData = false;
 
