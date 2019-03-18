@@ -91,7 +91,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			var baudRate = 0;
 
 			if (String.IsNullOrEmpty(baudRateString))
-				baudRate = 115200;
+				baudRate = 9600;
 			else
 				baudRate = Convert.ToInt32(baudRateString);
 
