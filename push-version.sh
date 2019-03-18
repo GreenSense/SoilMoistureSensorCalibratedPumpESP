@@ -9,4 +9,3 @@ if [ "$BRANCH" = "dev" ];  then
 else
   echo "Skipping push version. Only pushed for 'dev' branch not '$BRANCH'"
 fi
-

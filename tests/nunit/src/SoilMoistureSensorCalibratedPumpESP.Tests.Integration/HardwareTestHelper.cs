@@ -51,14 +51,14 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public void WriteTitleText (string titleText)
         {
-            Console.WriteLine ("========================================");
+            Console.WriteLine ("==========");
             Console.WriteLine (titleText);
             Console.WriteLine ("");
         }
 
         public void WriteSubTitleText (string subTitleText)
         {
-            Console.WriteLine ("----------------------------------------");
+            Console.WriteLine ("----------");
             Console.WriteLine (subTitleText);
             Console.WriteLine ("");
         }
@@ -195,7 +195,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             // Give the pin some time at LOW to ensure reset
             Thread.Sleep (10);
 
-            // Change the reset trigger pin to an INPUT_PULLUP to let the device go back to normal
+            // Change the reset trigger pin to an INPUT_PULLUP to cancel the reset
             SimulatorClient.PinMode (ResetTriggerPin, PinMode.INPUT_PULLUP);
 
             // Re-open the connection to the device
@@ -216,11 +216,20 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         #endregion
 
+        #region Write to Simulator Functions
+
+        public virtual void WriteToSimulator (string text)
+        {
+            SimulatorClient.Client.WriteLine (text);
+        }
+
+        #endregion
+
         #region Read From Device Functions
 
         public string ReadLineFromDevice ()
         {
-            Console.WriteLine ("Reading a line of the output from the device...");
+            //Console.WriteLine ("Reading a line of the output from the device...");
 
             // Read the output
             var output = DeviceClient.ReadLine ();
@@ -233,9 +242,9 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public void ReadFromDeviceAndOutputToConsole ()
         {
-            Console.WriteLine ("");
-            Console.WriteLine ("Reading the output from the device...");
-            Console.WriteLine ("");
+            //Console.WriteLine ("");
+            //Console.WriteLine ("Reading the output from the device...");
+            //Console.WriteLine ("");
 
             // Read the output
             var output = DeviceClient.Read ();
@@ -246,6 +255,18 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             Console.WriteLine ("");
         }
 
+        public string ReadLineFromSimulator ()
+        {
+            //Console.WriteLine ("Reading a line of the output from the simulator...");
+
+            // Read the output
+            var output = SimulatorClient.Client.ReadLine ();
+
+            ConsoleWriteSerialOutput (output);
+
+            return output;
+        }
+
         #endregion
 
         #region Console Write Functions
@@ -253,9 +274,11 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         public void ConsoleWriteSerialOutput (string output)
         {
             if (!String.IsNullOrEmpty (output)) {
-                Console.WriteLine ("----- Serial Output From Device");
-                Console.WriteLine (output);
-                Console.WriteLine ("-------------------------------");
+                foreach (var line in output.Trim().Split('\r')) {
+                    if (!String.IsNullOrEmpty (line)) {
+                        Console.WriteLine ("> " + line);
+                    }
+                }
             }
         }
 
@@ -308,7 +331,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
                 output += ReadLineFromDevice ();
 
                 if (output.Contains (text)) {
-                    Console.WriteLine ("  Found text: " + text);
+                    //Console.WriteLine ("  Found text: " + text);
 
                     containsText = true;
                 } else
@@ -320,7 +343,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public string WaitForDataLine ()
         {
-            Console.WriteLine ("Waiting for data line");
+            Console.WriteLine ("Waiting for a line of data");
 
             var dataLine = String.Empty;
             var output = String.Empty;
@@ -336,9 +359,6 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
                 var lastLine = GetLastLine (output);
 
                 if (IsValidDataLine (lastLine)) {
-                    Console.WriteLine ("  Found valid data line");
-                    Console.WriteLine ("    " + lastLine);
-
                     containsData = true;
                     dataLine = lastLine;
                 } else {
@@ -524,7 +544,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             Console.WriteLine ("  Min allowable value: " + minAllowableValue);
 
             var isWithinRange = actualValue <= maxAllowableValue &&
-                       actualValue >= minAllowableValue;
+                                actualValue >= minAllowableValue;
 
             Console.WriteLine ("Is within range: " + isWithinRange);
 
@@ -554,7 +574,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public void AssertSimulatorPinForDuration (string label, int simulatorDigitalPin, bool expectedValue, int durationInSeconds)
         {
-            Console.WriteLine ("Checking soil " + label + " pin for specified duration...");
+            Console.WriteLine ("Checking " + label + " pin for specified duration...");
             Console.WriteLine ("  Expected value: " + expectedValue);
             Console.WriteLine ("  Duration: " + durationInSeconds);
 
@@ -619,7 +639,11 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         {
             if (!disposedValue) {
                 if (disposing) {
-                    ConsoleWriteSerialOutput (FullDeviceOutput);
+                    if (TestContext.CurrentContext.Result.State == TestState.Error
+                        || TestContext.CurrentContext.Result.State == TestState.Failure) {
+                        Console.WriteLine ("Complete device serial output...");
+                        ConsoleWriteSerialOutput (FullDeviceOutput);
+                    }
 
                     if (DeviceClient != null)
                         DeviceClient.Close ();
@@ -629,9 +653,6 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
                     Thread.Sleep (DelayAfterDisconnectingFromHardware);
                 }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
 
                 disposedValue = true;
             }

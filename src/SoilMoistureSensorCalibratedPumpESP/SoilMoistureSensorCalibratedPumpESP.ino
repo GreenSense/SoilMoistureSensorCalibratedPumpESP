@@ -25,6 +25,7 @@ NTPClient timeClient(ntpUDP, NTP_ADDRESS, NTP_OFFSET, NTP_INTERVAL);
 #define SERIAL_MODE_QUERYSTRING 2
 
 #define VERSION "1-0-0-0"
+#define BOARD_TYPE "esp"
 
 int serialMode = SERIAL_MODE_CSV;
 
@@ -45,9 +46,17 @@ PubSubClient client(espClient);
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   Serial.println("Starting WiFi irrigator");
+  Serial.println("");
+  Serial.println("Family: GreenSense");
+  Serial.println("Group: irrigator");
+  Serial.println("Project: SoilMoistureSensorCalibratedPumpESP");
+  Serial.print("Board: ");
+  Serial.println(BOARD_TYPE);
+  Serial.print("Version: ");
+  Serial.println(VERSION);
   
   EEPROM.begin(512);
 

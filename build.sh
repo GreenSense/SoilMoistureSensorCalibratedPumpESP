@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pio run
+sh build-all.sh
