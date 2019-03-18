@@ -373,6 +373,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         {
             Console.WriteLine ("Waiting for data line");
 
+            var dataLine = String.Empty;
             var output = String.Empty;
             var containsData = false;
 
