@@ -39,17 +39,14 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             Console.WriteLine ("Starting MQTT test");
             Console.WriteLine ("");
 
-            DeviceName = GetSecurityValue ("mqtt-device-name", "IRRIGATOR_ESP_DEVICE_NAME");
             var host = GetSecurityValue ("mqtt-host", "MQTT_HOST");
             var user = GetSecurityValue ("mqtt-username", "MQTT_USERNAME");
             var pass = GetSecurityValue ("mqtt-password", "MQTT_PASSWORD");
 
-            Assert.IsNotNullOrEmpty (DeviceName, "IRRIGATOR_ESP_DEVICE_NAME environment variable is not set.");
             Assert.IsNotNullOrEmpty (host, "MQTT_HOST environment variable is not set.");
             Assert.IsNotNullOrEmpty (user, "MQTT_USERNAME environment variable is not set.");
             Assert.IsNotNullOrEmpty (pass, "MQTT_PASSWORD environment variable is not set.");
 
-            Console.WriteLine ("Device name: " + DeviceName);
             Console.WriteLine ("Host: " + host);
             Console.WriteLine ("Username: " + user);
 
