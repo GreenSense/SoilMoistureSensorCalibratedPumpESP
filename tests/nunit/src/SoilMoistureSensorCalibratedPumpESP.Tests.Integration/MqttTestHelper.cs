@@ -39,14 +39,17 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             Console.WriteLine ("Starting MQTT test");
             Console.WriteLine ("");
 
+            DeviceName = GetSecurityValue ("mqtt-device-name", "");
             var host = GetSecurityValue ("mqtt-host", "MQTT_HOST");
             var user = GetSecurityValue ("mqtt-username", "MQTT_USERNAME");
             var pass = GetSecurityValue ("mqtt-password", "MQTT_PASSWORD");
 
+            Assert.IsNotNullOrEmpty (DeviceName, "Device name is not set.");
             Assert.IsNotNullOrEmpty (host, "MQTT_HOST environment variable is not set.");
             Assert.IsNotNullOrEmpty (user, "MQTT_USERNAME environment variable is not set.");
             Assert.IsNotNullOrEmpty (pass, "MQTT_PASSWORD environment variable is not set.");
 
+            Console.WriteLine ("Device name: " + DeviceName);
             Console.WriteLine ("Host: " + host);
             Console.WriteLine ("Username: " + user);
 
@@ -64,7 +67,10 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         {
             Console.WriteLine ("Retrieving security value: " + key);
 
-            var value = Environment.GetEnvironmentVariable (environmentVariable);
+            var value = String.Empty;
+
+            if (!String.IsNullOrEmpty (environmentVariable))
+                value = Environment.GetEnvironmentVariable (environmentVariable);
 
             if (String.IsNullOrEmpty (value)) {
                 var projectDirectory = Path.GetFullPath ("../../../..");
