@@ -4,7 +4,6 @@ MQTT_HOST=$(cat mqtt-host.security)
 MQTT_USERNAME=$(cat mqtt-username.security)
 MQTT_PASSWORD=$(cat mqtt-password.security)
 MQTT_PORT=$(cat mqtt-port.security)
-MQTT_DEVICE_NAME=$(cat mqtt-device-name.security)
 
 
 echo "Injecting security settings..."
@@ -13,7 +12,6 @@ echo "WiFi Name: $WIFI_NAME"
 echo "MQTT Host: $MQTT_HOST"
 echo "MQTT Username: $MQTT_USERNAME"
 echo "MQTT Port: $MQTT_PORT"
-echo "MQTT Device Name: $MQTT_DEVICE_NAME"
 
 SOURCE_FILE="src/SoilMoistureSensorCalibratedPumpESP/SoilMoistureSensorCalibratedPumpESP.ino"
 
@@ -22,4 +20,3 @@ sed -i "s/#define WIFI_PASSWORD .*/#define WIFI_PASSWORD \"$WIFI_PASSWORD\"/" $S
 sed -i "s/#define MQTT_HOST .*/#define MQTT_HOST \"$MQTT_HOST\"/" $SOURCE_FILE
 sed -i "s/#define MQTT_USERNAME .*/#define MQTT_USERNAME \"$MQTT_USERNAME\"/" $SOURCE_FILE
 sed -i "s/#define MQTT_PASSWORD .*/#define MQTT_PASSWORD \"$MQTT_PASSWORD\"/" $SOURCE_FILE
-sed -i "s/#define MQTT_DEVICE_NAME .*/#define MQTT_DEVICE_NAME \"$MQTT_DEVICE_NAME\"/" $SOURCE_FILE
