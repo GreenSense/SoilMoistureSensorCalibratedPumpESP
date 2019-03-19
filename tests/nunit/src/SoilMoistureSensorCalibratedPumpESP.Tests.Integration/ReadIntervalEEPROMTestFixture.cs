@@ -10,42 +10,40 @@ using System.IO.Ports;
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-	[TestFixture(Category = "Integration")]
-	public class ReadIntervalEEPROMTestFixture : BaseTestFixture
-	{
-		[Test]
-		public void Test_SetReadInterval_1sec()
-		{
-			using (var helper = new ReadIntervalEEPROMTestHelper())
-			{
-				helper.ReadInterval = 1;
+    [TestFixture (Category = "Integration")]
+    public class ReadIntervalEEPROMTestFixture : BaseTestFixture
+    {
+        [Test]
+        public void Test_SetReadInterval_1sec ()
+        {
+            using (var helper = new ReadIntervalEEPROMTestHelper ()) {
+                helper.ReadInterval = 1;
 
-				helper.DevicePort = GetDevicePort();
-				helper.DeviceBaudRate = GetDeviceSerialBaudRate();
+                helper.DevicePort = GetDevicePort ();
+                helper.DeviceBaudRate = GetDeviceSerialBaudRate ();
 
-				helper.SimulatorPort = GetSimulatorPort();
-				helper.SimulatorBaudRate = GetSimulatorSerialBaudRate();
+                helper.SimulatorPort = GetSimulatorPort ();
+                helper.SimulatorBaudRate = GetSimulatorSerialBaudRate ();
 
-				helper.TestReadIntervalEEPROM();
-			}
-		}
+                helper.TestReadIntervalEEPROM ();
+            }
+        }
 
-		[Test]
-		public void Test_SetReadInterval_5sec()
-		{
-			using (var helper = new ReadIntervalEEPROMTestHelper())
-			{
-				helper.ReadInterval = 5;
+        [Test]
+        public void Test_SetReadInterval_3sec ()
+        {
+            using (var helper = new ReadIntervalEEPROMTestHelper ()) {
+                helper.ReadInterval = 3;
 
-				helper.DevicePort = GetDevicePort();
-				helper.DeviceBaudRate = GetDeviceSerialBaudRate();
+                helper.DevicePort = GetDevicePort ();
+                helper.DeviceBaudRate = GetDeviceSerialBaudRate ();
 
-				helper.SimulatorPort = GetSimulatorPort();
-				helper.SimulatorBaudRate = GetSimulatorSerialBaudRate();
+                helper.SimulatorPort = GetSimulatorPort ();
+                helper.SimulatorBaudRate = GetSimulatorSerialBaudRate ();
 
-				helper.TestReadIntervalEEPROM();
-			}
-		}
+                helper.TestReadIntervalEEPROM ();
+            }
+        }
 
-	}
+    }
 }
