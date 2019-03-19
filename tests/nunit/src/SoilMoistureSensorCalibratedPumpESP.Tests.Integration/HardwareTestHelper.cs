@@ -388,9 +388,6 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
                 var lastLine = GetLastLine (output);
 
                 if (IsValidDataLine (lastLine)) {
-                    Console.WriteLine ("  Found valid data line");
-                    Console.WriteLine ("    " + lastLine);
-
                     containsData = true;
                     dataLine = lastLine;
                     timeInSeconds = DateTime.Now.Subtract (startTime).TotalSeconds;
@@ -530,23 +527,18 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public bool IsWithinRange (double expectedValue, double actualValue, double allowableMarginOfError)
         {
-            Console.WriteLine ("Checking value is within range...");
-            Console.WriteLine ("  Expected value: " + expectedValue);
-            Console.WriteLine ("  Actual value: " + actualValue);
-            Console.WriteLine ("  Allowable margin of error: " + allowableMarginOfError);
-
             var minAllowableValue = expectedValue - allowableMarginOfError;
             if (minAllowableValue < 0)
                 minAllowableValue = 0;
             var maxAllowableValue = expectedValue + allowableMarginOfError;
 
-            Console.WriteLine ("  Max allowable value: " + maxAllowableValue);
-            Console.WriteLine ("  Min allowable value: " + minAllowableValue);
+            Console.WriteLine ("Checking value '" + actualValue + "' is within range of '" + expectedValue + "'");
+            Console.WriteLine ("  Minimum of '" + minAllowableValue + "' and maximum of '" + maxAllowableValue + "', with '" + allowableMarginOfError + "' as the allowable margin of error");
 
             var isWithinRange = actualValue <= maxAllowableValue &&
                                 actualValue >= minAllowableValue;
 
-            Console.WriteLine ("Is within range: " + isWithinRange);
+            Console.WriteLine ("  Is within range: " + isWithinRange);
 
             return isWithinRange;
         }
