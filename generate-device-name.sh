@@ -8,7 +8,7 @@ if [ ! $DEVICE_NUMBER ]; then
   exit 1
 fi
 
-DEVICE_NAME="WiFiIrrigator$DEVICE_NUMBER"
+DEVICE_NAME="ESPIrrigator$DEVICE_NUMBER"
 
 echo "Generating new device name: $DEVICE_NAME"
 

@@ -51,14 +51,14 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public void WriteTitleText (string titleText)
         {
-            Console.WriteLine ("==========");
+            Console.WriteLine ("===");
             Console.WriteLine (titleText);
             Console.WriteLine ("");
         }
 
         public void WriteSubTitleText (string subTitleText)
         {
-            Console.WriteLine ("----------");
+            Console.WriteLine ("---");
             Console.WriteLine (subTitleText);
             Console.WriteLine ("");
         }

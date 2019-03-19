@@ -127,7 +127,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public void WaitForData (int numberOfEntries)
         {
-            Console.WriteLine ("Waiting for data...");
+            Console.WriteLine ("Waiting for " + numberOfEntries + " of data entries...");
             ResetData ();
             Timeout.Start ();
             while (Data.Count < numberOfEntries) {
@@ -137,7 +137,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public double WaitUntilData (int numberOfEntries)
         {
-            Console.WriteLine ("Waiting for data...");
+            Console.WriteLine ("Waiting until data is detected...");
             ResetData ();
             var startTime = DateTime.Now;
             Timeout.Start ();
@@ -260,17 +260,13 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             return false;
         }
 
-        public void PrintDataEntry (Dictionary<string, string> dataEntry)
+        public void ConsoleWriteDataEntry (Dictionary<string, string> dataEntry)
         {
             if (dataEntry != null) {
-                Console.WriteLine ("");
-                Console.WriteLine ("----- MQTT Data Start");
                 foreach (var key in dataEntry.Keys) {
-                    Console.Write (key + ":" + dataEntry [key] + ";");
+                    Console.Write ("$ " + key + ":" + dataEntry [key] + ";");
                 }
                 Console.WriteLine (";");
-                Console.WriteLine ("----- MQTT Data End");
-                Console.WriteLine ("");
             }
         }
 

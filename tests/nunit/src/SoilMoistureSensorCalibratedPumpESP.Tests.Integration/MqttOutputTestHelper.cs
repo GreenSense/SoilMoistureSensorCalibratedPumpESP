@@ -35,7 +35,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
 			Assert.IsNotNull(latestEntry, "The latest MQTT entry is null.");
 
-			Mqtt.PrintDataEntry(latestEntry);
+			Mqtt.ConsoleWriteDataEntry(latestEntry);
 
 			Assert.IsTrue(latestEntry.ContainsKey("C"), "The latest MQTT entry doesn't contain a 'C' key/value.");
 
