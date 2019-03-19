@@ -262,9 +262,10 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public void ConsoleWriteDataEntry (Dictionary<string, string> dataEntry)
         {
+            Console.Write ("$ ");
             if (dataEntry != null) {
                 foreach (var key in dataEntry.Keys) {
-                    Console.Write ("$ " + key + ":" + dataEntry [key] + ";");
+                    Console.Write (key + ":" + dataEntry [key] + ";");
                 }
                 Console.WriteLine (";");
             }
