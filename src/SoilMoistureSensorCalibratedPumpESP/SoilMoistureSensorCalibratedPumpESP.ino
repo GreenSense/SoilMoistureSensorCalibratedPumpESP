@@ -36,7 +36,7 @@ int serialMode = SERIAL_MODE_CSV;
 #define MQTT_PORT 1883
 #define MQTT_USERNAME "username"
 #define MQTT_PASSWORD "password"
-#define MQTT_DEVICE_NAME "WiFiIrrigator1"
+#define MQTT_DEVICE_NAME "WiFiIrrigator17767"
 
 int totalSubscribeTopics = 8;
 String subscribeTopics[] = {"D", "W", "T", "I", "P", "B", "O", "F"};
@@ -96,7 +96,11 @@ void setupMqtt()
 
   while (!client.connected()) {
     Serial.println("Connecting to MQTT...");
-    Serial.print("Device name: ");
+    Serial.print("MQTT Host: ");
+    Serial.println(MQTT_HOST);
+    Serial.print("MQTT Port: ");
+    Serial.println(MQTT_PORT);
+    Serial.print("Device Name: ");
     Serial.println(MQTT_DEVICE_NAME);
     Serial.print("MQTT Username: ");
     Serial.println(MQTT_USERNAME);

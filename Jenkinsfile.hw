@@ -49,6 +49,13 @@ pipeline {
                 sh 'sh inject-security-settings.sh'
             }
         }
+        stage('Generate Device Name') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                sh 'bash generate-device-Name.sh'
+                sh 'sh inject-device-Name.sh'
+            }
+        }
         stage('Build') {
             when { expression { !shouldSkipBuild() } }
             steps {
@@ -64,7 +71,7 @@ pipeline {
         stage('Upload simulator') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'sh upload-simulator.sh ${IRRIGATOR_ESP_SIMULATOR_PORT}'
+                sh 'echo "Upload simulator script skipped" #sh upload-simulator.sh ${IRRIGATOR_ESP_SIMULATOR_PORT}'
             }
         }
         stage('Test') {
