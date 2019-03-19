@@ -52,8 +52,8 @@ pipeline {
         stage('Generate Device Name') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'bash generate-device-Name.sh'
-                sh 'sh inject-device-Name.sh'
+                sh 'bash generate-device-name.sh'
+                sh 'sh inject-device-name.sh'
             }
         }
         stage('Build') {
