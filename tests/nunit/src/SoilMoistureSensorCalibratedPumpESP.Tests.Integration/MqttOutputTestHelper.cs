@@ -28,7 +28,6 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             var numberOfEntriesToWaitFor = 2; // TODO: See if this can be reduced
 
-            // Skip a few entries
             Mqtt.WaitForData (numberOfEntriesToWaitFor);
 
             Assert.AreEqual (numberOfEntriesToWaitFor, Mqtt.Data.Count, "Incorrect number of entries returned.");
