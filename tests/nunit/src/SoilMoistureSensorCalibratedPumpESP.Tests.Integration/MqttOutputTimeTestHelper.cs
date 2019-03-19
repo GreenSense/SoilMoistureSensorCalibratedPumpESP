@@ -31,7 +31,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             Console.WriteLine ("Skipping next data entries...");
 
             // Skip some data in case its not up to date
-            Mqtt.WaitUntilData (1);
+            Mqtt.WaitUntilData (2);
 
             Console.WriteLine ("Waiting for the next data entry...");
 
