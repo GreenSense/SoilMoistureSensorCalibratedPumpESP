@@ -1,61 +1,61 @@
 ﻿using System;
+
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-	public class ThresholdCommandTestHelper : GreenSenseIrrigatorHardwareTestHelper
-	{
-		public int Threshold = 30;
-		public int SimulatedSoilMoisturePercentage = -1;
+    public class ThresholdCommandTestHelper : GreenSenseIrrigatorHardwareTestHelper
+    {
+        public int Threshold = 30;
+        public int SimulatedSoilMoisturePercentage = -1;
 
-		public void TestThresholdCommand()
-		{
-			WriteTitleText("Starting threshold command test");
+        public void TestThresholdCommand ()
+        {
+            WriteTitleText ("Starting threshold command test");
 
-			Console.WriteLine("Simulated soil moisture: " + SimulatedSoilMoisturePercentage + "%");
-			Console.WriteLine("Threshold: " + Threshold + "%");
-			Console.WriteLine("");
+            Console.WriteLine ("Simulated soil moisture: " + SimulatedSoilMoisturePercentage + "%");
+            Console.WriteLine ("Threshold: " + Threshold + "%");
+            Console.WriteLine ("");
 
-			var simulatorIsNeeded = SimulatedSoilMoisturePercentage > -1;
+            var simulatorIsNeeded = SimulatedSoilMoisturePercentage > -1;
 
-			ConnectDevices(simulatorIsNeeded);
+            ConnectDevices (simulatorIsNeeded);
 
-			if (simulatorIsNeeded)
-			{
-				SimulateSoilMoisture(SimulatedSoilMoisturePercentage);
+            if (simulatorIsNeeded) {
+                SimulateSoilMoisture (SimulatedSoilMoisturePercentage);
 
-				var values = WaitForData(3); // Wait for 3 data entries to give the simulator time to stabilise
+                // Skip some data
+                var values = WaitForData (1);
 
-				AssertDataValueIsWithinRange(values[values.Length - 1], "C", SimulatedSoilMoisturePercentage, CalibratedValueMarginOfError);
-			}
+                var dataEntry = WaitForDataEntry ();
 
-			SendThresholdCommand();
-		}
+                AssertDataValueIsWithinRange (dataEntry, "C", SimulatedSoilMoisturePercentage, CalibratedValueMarginOfError);
+            }
 
-		public void SendThresholdCommand()
-		{
-			var simulatorIsNeeded = SimulatedSoilMoisturePercentage > -1;
+            SendThresholdCommand ();
+        }
 
-			var command = "T";
-			// If the simulator isn't enabled then the raw value is passed as part of the command to specify it directly
-			if (!simulatorIsNeeded)
-				command = command + Threshold;
+        public void SendThresholdCommand ()
+        {
+            var simulatorIsNeeded = SimulatedSoilMoisturePercentage > -1;
 
-			WriteParagraphTitleText("Sending threshold command...");
+            var command = "T";
+            // If the simulator isn't enabled then the raw value is passed as part of the command to specify it directly
+            if (!simulatorIsNeeded)
+                command = command + Threshold;
 
-			SendDeviceCommand(command);
+            WriteParagraphTitleText ("Sending threshold command...");
 
-			var dataEntry = WaitForDataEntry();
+            SendDeviceCommand (command);
 
-			WriteParagraphTitleText("Checking threshold value...");
+            var dataEntry = WaitForDataEntry ();
 
-			// If using the soil moisture simulator then the value needs to be within a specified range
-			if (simulatorIsNeeded)
-			{
-				AssertDataValueIsWithinRange(dataEntry, "T", Threshold, CalibratedValueMarginOfError);
-			}
-			else // Otherwise it needs to be exact
-			{
-				AssertDataValueEquals(dataEntry, "T", Threshold);
-			}
-		}
-	}
+            WriteParagraphTitleText ("Checking threshold value...");
+
+            // If using the soil moisture simulator then the value needs to be within a specified range
+            if (simulatorIsNeeded) {
+                AssertDataValueIsWithinRange (dataEntry, "T", Threshold, CalibratedValueMarginOfError);
+            } else { // Otherwise it needs to be exact
+                AssertDataValueEquals (dataEntry, "T", Threshold);
+            }
+        }
+    }
 }
