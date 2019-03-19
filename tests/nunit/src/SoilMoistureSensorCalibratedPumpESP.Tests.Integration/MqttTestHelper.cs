@@ -65,7 +65,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public string GetSecurityValue (string key, string environmentVariable)
         {
-            Console.WriteLine ("Retrieving security value: " + key);
+            //Console.WriteLine ("Retrieving security value: " + key);
 
             var value = String.Empty;
 
