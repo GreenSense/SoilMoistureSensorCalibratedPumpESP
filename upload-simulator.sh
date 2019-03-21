@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#. ./common.sh
+DIR=$PWD
 
 SIMULATOR_PORT=$1
 
@@ -21,6 +21,8 @@ rm -rf $SIMULATOR_TMP_DIR
 mkdir -p $SIMULATOR_TMP_DIR
 cd $SIMULATOR_TMP_DIR
 
+echo "Cloning ArduinoSerialController"
+
 # Clone the latest version
 git clone https://github.com/CompulsiveCoder/ArduinoSerialController.git && \
 
@@ -28,6 +30,8 @@ cd ArduinoSerialController && \
 
 # Upload
 sh upload-to-port.sh "$SIMULATOR_PORT" && \
+
+cd $DIR
 
 # Remove the temporary directory
 rm -rf $SIMULATOR_TMP_DIR

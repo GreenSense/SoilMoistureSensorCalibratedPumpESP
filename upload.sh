@@ -5,7 +5,7 @@ if [ ! $PORT_NAME ]; then
 fi
 
 if [ ! $PORT_NAME ]; then
-  echo "Provide a port name as an argument."
+  echo "Provide an upload port as an argument."
   exit 1
 fi
 

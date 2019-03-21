@@ -5,7 +5,6 @@ MQTT_USERNAME=$(cat mqtt-username.security)
 MQTT_PASSWORD=$(cat mqtt-password.security)
 MQTT_PORT=$(cat mqtt-port.security)
 
-
 echo "Injecting security settings..."
 
 echo "WiFi Name: $WIFI_NAME"

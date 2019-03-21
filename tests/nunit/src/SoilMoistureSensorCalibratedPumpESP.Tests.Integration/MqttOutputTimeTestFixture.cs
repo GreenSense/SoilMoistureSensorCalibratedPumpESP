@@ -38,22 +38,5 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 				helper.TestMqttOutputTime();
 			}
 		}
-
-		[Test]
-		public void Test_MqttOutputTime_6Seconds()
-		{
-			using (var helper = new MqttOutputTimeTestHelper())
-			{
-				helper.ReadInterval = 6;
-
-				helper.DevicePort = GetDevicePort();
-				helper.DeviceBaudRate = GetDeviceSerialBaudRate();
-
-				helper.SimulatorPort = GetSimulatorPort();
-				helper.SimulatorBaudRate = GetSimulatorSerialBaudRate();
-
-				helper.TestMqttOutputTime();
-			}
-		}
 	}
 }
