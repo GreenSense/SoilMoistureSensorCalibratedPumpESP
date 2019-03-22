@@ -24,7 +24,7 @@ NTPClient timeClient(ntpUDP, NTP_ADDRESS, NTP_OFFSET, NTP_INTERVAL);
 #define SERIAL_MODE_CSV 1
 #define SERIAL_MODE_QUERYSTRING 2
 
-#define VERSION "1-0-0-0"
+#define VERSION "1-0-0-1"
 #define BOARD_TYPE "esp"
 
 int serialMode = SERIAL_MODE_CSV;
@@ -36,7 +36,7 @@ int serialMode = SERIAL_MODE_CSV;
 #define MQTT_PORT 1883
 #define MQTT_USERNAME "username"
 #define MQTT_PASSWORD "password"
-#define MQTT_DEVICE_NAME "WiFiIrrigator1"
+#define MQTT_DEVICE_NAME "ESPIrrigator"
 
 int totalSubscribeTopics = 8;
 String subscribeTopics[] = {"D", "W", "T", "I", "P", "B", "O", "F"};
