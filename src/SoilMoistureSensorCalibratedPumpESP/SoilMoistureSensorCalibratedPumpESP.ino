@@ -49,14 +49,8 @@ void setup()
   Serial.begin(9600);
 
   Serial.println("Starting WiFi irrigator");
-  Serial.println("");
-  Serial.println("Family: GreenSense");
-  Serial.println("Group: irrigator");
-  Serial.println("Project: SoilMoistureSensorCalibratedPumpESP");
-  Serial.print("Board: ");
-  Serial.println(BOARD_TYPE);
-  Serial.print("Version: ");
-  Serial.println(VERSION);
+  
+  serialPrintDeviceInfo();
   
   EEPROM.begin(512);
 
@@ -233,6 +227,19 @@ void loopWiFi()
   client.loop();
 }
 
+void serialPrintDeviceInfo()
+{
+  Serial.println("");
+  Serial.println("Family: GreenSense");
+  Serial.println("Group: irrigator");
+  Serial.println("Project: SoilMoistureSensorCalibratedPumpESP");
+  Serial.print("Board: ");
+  Serial.println(BOARD_TYPE);
+  Serial.print("Version: ");
+  Serial.println(VERSION);
+  Serial.println("");
+}
+
 /* MQTT Publish */
 void mqttPublishData()
 {
@@ -338,6 +345,9 @@ void handleCommand(char* msg)
 
   switch (letter)
   {
+    case '#':
+      serialPrintDeviceInfo();
+      break;
     case 'P':
       setPumpStatus(msg);
       break;
