@@ -9,6 +9,11 @@
 #define soilMoistureSensorPin A0
 #define soilMoistureSensorPowerPin 12 // Mapped to physical pin 12 on Wemos D1
 
+#define SOIL_MOISTURE_SENSOR_TYPE_RESISTIVE 0
+#define SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE 1
+
+int soilMoistureSensorType = SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE;
+
 bool soilMoistureSensorIsOn = true;
 long lastSensorOnTime = 0;
 int delayAfterTurningSoilMoistureSensorOn = 3 * 1000;
@@ -20,7 +25,7 @@ long lastSoilMoistureSensorReadingTime = 0; // Milliseconds
 int soilMoistureLevelCalibrated = 0;
 int soilMoistureLevelRaw = 0;
 
-bool reverseSoilMoistureSensor = false;
+bool reverseSoilMoistureSensor = true;
 //int drySoilMoistureCalibrationValue = ANALOG_MAX;
 int drySoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 0 : ANALOG_MAX);
 //int wetSoilMoistureCalibrationValue = 0;
@@ -311,6 +316,14 @@ void setupCalibrationValues()
   {
     if (isDebugMode)
       Serial.println("EEPROM calibration values have not been set. Using defaults.");
+      
+    if (soilMoistureSensorType == SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE)
+    {
+      Serial.println("Adjusting calibration values for capacitive sensor");
+      drySoilMoistureCalibrationValue = 700;
+      wetSoilMoistureCalibrationValue = 380;
+    }
+    
     
     //setDrySoilMoistureCalibrationValue(drySoilMoistureCalibrationValue);
     //setWetSoilMoistureCalibrationValue(wetSoilMoistureCalibrationValue);
@@ -494,6 +507,14 @@ void restoreDefaultCalibrationSettings()
 
   drySoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 0 : ANALOG_MAX);
   wetSoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? ANALOG_MAX : 0);
+  
+  // TODO: Remove or reimplement. Disabled so it doesn't mess with tests.
+  /*if (soilMoistureSensorType == SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE)
+  {
+    Serial.println("Adjusting calibration values for capacitive sensor");
+    drySoilMoistureCalibrationValue = 700;
+    wetSoilMoistureCalibrationValue = 380;
+  }*/
 
   setDrySoilMoistureCalibrationValue(drySoilMoistureCalibrationValue);
   setWetSoilMoistureCalibrationValue(wetSoilMoistureCalibrationValue);

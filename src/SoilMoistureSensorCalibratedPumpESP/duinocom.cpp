@@ -12,10 +12,10 @@ int msgLength = 0;
 bool checkMsgReady()
 {
   if (Serial.available() > 0) {
-    if (verboseCom)
-    {
-      Serial.println("Reading serial...");
-    }
+    //if (verboseCom)
+    //{
+    //  Serial.println("Reading serial...");
+    //}
     byte b = Serial.read();
 
     // The end of a message
@@ -25,7 +25,7 @@ bool checkMsgReady()
       && msgPosition > 0
       )
     {
-      if (verboseCom)
+      /*if (verboseCom)
       {
         Serial.print("In:");
         if (b == '\n'
@@ -33,25 +33,25 @@ bool checkMsgReady()
           Serial.println("[newline]");
         else
           Serial.println(char(b));
-      }
+      }*/
 
       msgBuffer[msgPosition] = '\0';
       isMsgReady = true;
       msgPosition = 0;
 
-      if (verboseCom)
+      /*if (verboseCom)
       {
         Serial.println("Message ready");
 
         Serial.print("Length:");
         Serial.println(msgLength);
-      }
+      }*/
     }
     else if (byte(b) == '\n' // New line
       || byte(b) == '\r') // Carriage return
     {
-      if (verboseCom)
-        Serial.println("[newline]");
+      //if (verboseCom)
+      //  Serial.println("[newline]");
     }
     else // Message bytes
     {
@@ -63,11 +63,11 @@ bool checkMsgReady()
       msgPosition++;
       isMsgReady = false;
 
-      if (verboseCom)
+      /*if (verboseCom)
       {
         Serial.print("In:");
         Serial.println(char(b));
-      }
+      }*/
     }
 
     delay(15);
