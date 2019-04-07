@@ -19,7 +19,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             ReadFromDeviceAndOutputToConsole ();
 
             // Skip some data
-            WaitForData (5); // TODO: See if this can be reduced
+            WaitForData (6); // TODO: See if this can be reduced
 
             // Get the time until the next data line
             var secondsBetweenDataLines = WaitUntilDataLine ();
