@@ -260,7 +260,7 @@ void mqttPublishData()
     publishMqttValue("PO", pumpIsOn);
     publishMqttValue("D", drySoilMoistureCalibrationValue);
     publishMqttValue("W", wetSoilMoistureCalibrationValue);
-    publishMqttValue("Z", VERSION);
+    publishMqttValue("V", VERSION);
     publishMqttValue("Time", timeClient.getFormattedTime());
     publishMqttPush(soilMoistureLevelCalibrated);
   }
@@ -465,7 +465,7 @@ void serialPrintData()
       Serial.print("W:"); // Wet calibration value
       Serial.print(wetSoilMoistureCalibrationValue);
       Serial.print(";");
-      Serial.print("Z:");
+      Serial.print("V:");
       Serial.print(VERSION);
       Serial.print(";;");
       Serial.println();
