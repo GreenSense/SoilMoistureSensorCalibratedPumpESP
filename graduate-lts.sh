@@ -20,8 +20,8 @@ git checkout lts && \
 # Ensure it's up to date
 git pull origin lts --quiet && \
 
-# Merge the dev branch
-git merge -q dev && \
+# Merge the master branch
+git merge -q master && \
 
 # Push the updates
 git push origin lts --quiet && \
