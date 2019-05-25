@@ -35,7 +35,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             SimulateSoilMoisture (SimulatedSoilMoisturePercentage);
 
             // Skip some data to give the value time to stabilise
-            WaitForData (2);
+            WaitForData (3);
 
             var dataEntry = WaitForDataEntry ();
 
