@@ -1,5 +1,6 @@
 DEVICE_NAME="$1"
 
+echo ""
 echo "Injecting device name into sketch..."
 
 if [ ! "$DEVICE_NAME" ]; then
@@ -11,12 +12,18 @@ if [ ! "$DEVICE_NAME" ]; then
   exit 1
 fi
 
-echo "Device name: $DEVICE_NAME"
+echo "  Device name: $DEVICE_NAME"
 
 SOURCE_FILE="src/SoilMoistureSensorCalibratedPumpESP/SoilMoistureSensorCalibratedPumpESP.ino"
 
 # Inject the device name into the sketch
 sed -i "s/#define MQTT_DEVICE_NAME .*/#define MQTT_DEVICE_NAME \"$DEVICE_NAME\"/" $SOURCE_FILE
 
+echo "  Source file:"
+echo "    $SOURCE_FILE"
+
 # Create the device name security file needed for tests to run
 echo $DEVICE_NAME > mqtt-device-name.security
+
+echo "Finished injecting device name into sketch."
+echo ""
