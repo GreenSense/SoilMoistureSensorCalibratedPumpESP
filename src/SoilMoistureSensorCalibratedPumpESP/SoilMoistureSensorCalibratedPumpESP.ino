@@ -75,6 +75,8 @@ void setupWiFi()
     Serial.println(WIFI_NAME);
     
     WiFi.begin(WIFI_NAME, WIFI_PASSWORD);
+
+	delay(1000);
      
     Serial.println();
 
@@ -84,35 +86,36 @@ void setupWiFi()
 
       setupMqtt();
     }
-    else
-      Serial.println("Failed to connect to WiFi");
   }
 }
 
 void setupMqtt()
 {
-  client.setServer(MQTT_HOST, MQTT_PORT);
+  if (WiFi.status() == WL_CONNECTED)
+  {
+    client.setServer(MQTT_HOST, MQTT_PORT);
 
-  client.setCallback(callback);
+    client.setCallback(callback);
 
-  if (WiFi.status() == WL_CONNECTED && !client.connected()) {
-    Serial.println("Connecting to MQTT...");
-    Serial.print("MQTT Host: ");
-    Serial.println(MQTT_HOST);
-    Serial.print("MQTT Port: ");
-    Serial.println(MQTT_PORT);
-    Serial.print("Device Name: ");
-    Serial.println(MQTT_DEVICE_NAME);
-    Serial.print("MQTT Username: ");
-    Serial.println(MQTT_USERNAME);
- 
-    if (client.connect(MQTT_DEVICE_NAME, MQTT_USERNAME, MQTT_PASSWORD )) {
-      Serial.println("Connected to MQTT");  
+    if (!client.connected()) {
+      Serial.println("Connecting to MQTT...");
+      Serial.print("MQTT Host: ");
+      Serial.println(MQTT_HOST);
+      Serial.print("MQTT Port: ");
+      Serial.println(MQTT_PORT);
+      Serial.print("Device Name: ");
+      Serial.println(MQTT_DEVICE_NAME);
+      Serial.print("MQTT Username: ");
+      Serial.println(MQTT_USERNAME);
+   
+      if (client.connect(MQTT_DEVICE_NAME, MQTT_USERNAME, MQTT_PASSWORD )) {
+        Serial.println("Connected to MQTT");  
 
-      setupMqttSubscriptions();
-    } else {
-      Serial.print("Failed to connect to MQTT: ");
-      Serial.println(client.state());
+        setupMqttSubscriptions();
+      } else {
+        Serial.print("Failed to connect to MQTT: ");
+        Serial.println(client.state());
+      }
     }
   }
 }
