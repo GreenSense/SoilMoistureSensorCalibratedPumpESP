@@ -76,7 +76,7 @@ void setupWiFi()
     
     WiFi.begin(WIFI_NAME, WIFI_PASSWORD);
 
-	delay(1000);
+	  delay(1000);
      
     Serial.println();
 
