@@ -38,7 +38,7 @@ int serialMode = SERIAL_MODE_CSV;
 #define MQTT_PASSWORD "password"
 #define MQTT_DEVICE_NAME "ESPIrrigator"
 
-int totalSubscribeTopics = 8;
+int totalSubscribeTopics = 9;
 String subscribeTopics[] = {"D", "W", "T", "I", "P", "B", "O", "F", "Q"};
 
 WiFiClient espClient;
