@@ -333,6 +333,8 @@ void setupCalibrationValues()
 void setDrySoilMoistureCalibrationValue(char* msg)
 {
   int length = strlen(msg);
+  
+  //Serial.println(length);
 
   if (length == 1)
     setDrySoilMoistureCalibrationValueToCurrent();
@@ -364,7 +366,7 @@ void setDrySoilMoistureCalibrationValue(int newValue)
 
   drySoilMoistureCalibrationValue = newValue;
   
-  EEPROMWriteLong(drySoilMoistureCalibrationValueAddress, newValue); // Must divide by 4 to make it fit in eeprom
+  EEPROMWriteLong(drySoilMoistureCalibrationValueAddress, newValue);
 
   EEPROM.commit();
 
@@ -375,6 +377,8 @@ void setWetSoilMoistureCalibrationValue(char* msg)
 {
   int length = strlen(msg);
 
+  //Serial.println(length);
+  
   if (length == 1)
     setWetSoilMoistureCalibrationValueToCurrent();
   else
