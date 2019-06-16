@@ -81,12 +81,6 @@
     <Compile Include="TimeoutHelper.cs" />
     <Compile Include="ThresholdEEPROMTestFixture.cs" />
     <Compile Include="ThresholdEEPROMTestHelper.cs" />
-    <Compile Include="ReadIntervalEEPROMTestFixture.cs" />
-    <Compile Include="ReadIntervalEEPROMTestHelper.cs" />
-    <Compile Include="PumpBurstOnTimeEEPROMTestFixture.cs" />
-    <Compile Include="PumpBurstOnTimeEEPROMTestHelper.cs" />
-    <Compile Include="PumpBurstOffTimeEEPROMTestFixture.cs" />
-    <Compile Include="PumpBurstOffTimeEEPROMTestHelper.cs" />
     <Compile Include="CalibrationEEPROMTestFixture.cs" />
     <Compile Include="CalibrationEEPROMTestHelper.cs" />
     <Compile Include="CalibrateCommandTestFixture.cs" />
@@ -99,6 +93,7 @@
     <Compile Include="ReadIntervalCommandTestHelper.cs" />
     <Compile Include="ThresholdCommandTestFixture.cs" />
     <Compile Include="ThresholdCommandTestHelper.cs" />
+    <Compile Include="CommandTestHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

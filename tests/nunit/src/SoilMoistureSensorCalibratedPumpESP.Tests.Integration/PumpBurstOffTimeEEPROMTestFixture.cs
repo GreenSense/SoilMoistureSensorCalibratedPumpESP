@@ -10,42 +10,41 @@ using System.IO.Ports;
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-	[TestFixture(Category = "Integration")]
-	public class PumpBurstOffTimeEEPROMTestFixture : BaseTestFixture
-	{
-		[Test]
-		public void Test_SetPumpBurstOffTime_1sec()
-		{
-			using (var helper = new PumpBurstOffTimeEEPROMTestHelper())
-			{
-				helper.PumpBurstOffTime = 1;
+    // TODO: Remove if not needed. Should be obsolete. Merged with PumpBurstOffTimeCommandTestFixture
+    [TestFixture (Category = "Integration")]
+    public class PumpBurstOffTimeEEPROMTestFixture : BaseTestFixture
+    {
+        [Test]
+        public void Test_SetPumpBurstOffTime_1sec ()
+        {
+            using (var helper = new PumpBurstOffTimeEEPROMTestHelper ()) {
+                helper.PumpBurstOffTime = 1;
 
-				helper.DevicePort = GetDevicePort();
-				helper.DeviceBaudRate = GetDeviceSerialBaudRate();
+                helper.DevicePort = GetDevicePort ();
+                helper.DeviceBaudRate = GetDeviceSerialBaudRate ();
 
-				helper.SimulatorPort = GetSimulatorPort();
-				helper.SimulatorBaudRate = GetSimulatorSerialBaudRate();
+                helper.SimulatorPort = GetSimulatorPort ();
+                helper.SimulatorBaudRate = GetSimulatorSerialBaudRate ();
 
-				helper.TestPumpBurstOffTimeEEPROM();
-			}
-		}
+                helper.TestPumpBurstOffTimeEEPROM ();
+            }
+        }
 
-		[Test]
-		public void Test_SetPumpBurstOffTime_5sec()
-		{
-			using (var helper = new PumpBurstOffTimeEEPROMTestHelper())
-			{
-				helper.PumpBurstOffTime = 5;
+        [Test]
+        public void Test_SetPumpBurstOffTime_5sec ()
+        {
+            using (var helper = new PumpBurstOffTimeEEPROMTestHelper ()) {
+                helper.PumpBurstOffTime = 5;
 
-				helper.DevicePort = GetDevicePort();
-				helper.DeviceBaudRate = GetDeviceSerialBaudRate();
+                helper.DevicePort = GetDevicePort ();
+                helper.DeviceBaudRate = GetDeviceSerialBaudRate ();
 
-				helper.SimulatorPort = GetSimulatorPort();
-				helper.SimulatorBaudRate = GetSimulatorSerialBaudRate();
+                helper.SimulatorPort = GetSimulatorPort ();
+                helper.SimulatorBaudRate = GetSimulatorSerialBaudRate ();
 
-				helper.TestPumpBurstOffTimeEEPROM();
-			}
-		}
+                helper.TestPumpBurstOffTimeEEPROM ();
+            }
+        }
 
-	}
+    }
 }

@@ -16,7 +16,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         public void Test_SetReadIntervalCommand_1Second ()
         {
             using (var helper = new ReadIntervalCommandTestHelper ()) {
-                helper.ReadInterval = 1;
+                helper.ReadingInterval = 1;
 
                 helper.DevicePort = GetDevicePort ();
                 helper.DeviceBaudRate = GetDeviceSerialBaudRate ();
@@ -32,7 +32,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         public void Test_SetReadIntervalCommand_3Seconds ()
         {
             using (var helper = new ReadIntervalCommandTestHelper ()) {
-                helper.ReadInterval = 3;
+                helper.ReadingInterval = 3;
 
                 helper.DevicePort = GetDevicePort ();
                 helper.DeviceBaudRate = GetDeviceSerialBaudRate ();

@@ -2,43 +2,44 @@
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-	public class PumpBurstOffTimeEEPROMTestHelper : GreenSenseIrrigatorHardwareTestHelper
-	{
-		public int PumpBurstOffTime = 3;
+    // TODO: Remove if not needed. Should be obsolete. Merged with PumpBurstOffTimeCommandTestHelper
+    public class PumpBurstOffTimeEEPROMTestHelper : GreenSenseIrrigatorHardwareTestHelper
+    {
+        public int PumpBurstOffTime = 3;
 
-		public void TestPumpBurstOffTimeEEPROM()
-		{
-			WriteTitleText("Starting pump burst off time EEPROM test");
+        public void TestPumpBurstOffTimeEEPROM ()
+        {
+            WriteTitleText ("Starting pump burst off time EEPROM test");
 
-			Console.WriteLine("Pump burst off time: " + PumpBurstOffTime + "%");
-			Console.WriteLine("");
+            Console.WriteLine ("Pump burst off time: " + PumpBurstOffTime + "%");
+            Console.WriteLine ("");
 
-			ConnectDevices();
+            ConnectDevices ();
 
-			ResetDeviceSettings ();
+            ResetDeviceSettings ();
 
-			SendPumpBurstOffTimeCommand();
+            SendPumpBurstOffTimeCommand ();
 
-			ResetDeviceViaPin ();
+            ResetDeviceViaPin ();
 
-			var dataEntry = WaitForDataEntry ();
+            var dataEntry = WaitForDataEntry ();
 
-			AssertDataValueEquals(dataEntry, "O", PumpBurstOffTime);
-		}
+            AssertDataValueEquals (dataEntry, "O", PumpBurstOffTime);
+        }
 
-		public void SendPumpBurstOffTimeCommand()
-		{
-			var command = "O" + PumpBurstOffTime;
+        public void SendPumpBurstOffTimeCommand ()
+        {
+            var command = "O" + PumpBurstOffTime;
 
-			WriteParagraphTitleText("Sending pump burst off time command...");
+            WriteParagraphTitleText ("Sending pump burst off time command...");
 
-			SendDeviceCommand(command);
+            SendDeviceCommand (command);
 
-			var dataEntry = WaitForDataEntry();
+            var dataEntry = WaitForDataEntry ();
 
-			WriteParagraphTitleText("Checking pump burst off time value...");
+            WriteParagraphTitleText ("Checking pump burst off time value...");
 
-			AssertDataValueEquals(dataEntry, "O", PumpBurstOffTime);
-		}
-	}
+            AssertDataValueEquals (dataEntry, "O", PumpBurstOffTime);
+        }
+    }
 }

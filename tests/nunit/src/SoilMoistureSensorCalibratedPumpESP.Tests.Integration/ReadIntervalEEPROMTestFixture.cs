@@ -10,6 +10,7 @@ using System.IO.Ports;
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
+    // TODO: Remove if not needed. Should be obsolete. It's been merged with the ReadIntervalCommandTestFixture
     [TestFixture (Category = "Integration")]
     public class ReadIntervalEEPROMTestFixture : BaseTestFixture
     {

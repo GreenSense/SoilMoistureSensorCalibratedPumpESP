@@ -1,26 +1,62 @@
 ﻿using System;
+
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-	public class PumpBurstOnTimeCommandTestHelper : GreenSenseIrrigatorHardwareTestHelper
-	{
-		public int PumpBurstOnTime = 1;
+    public class PumpBurstOnTimeCommandTestHelper : SerialCommandTestHelper
+    {
+        public int PumpBurstOnTime = 1;
 
-		public void TestPumpBurstOnTimeCommand()
-		{
-			WriteTitleText("Starting pump burst on time command test");
+        public void TestPumpBurstOnTimeCommand ()
+        {
+            Letter = "O";
+            Value = PumpBurstOnTime;
+            Label = "pump burst on time";
 
-			Console.WriteLine("Pump burst on time: " + PumpBurstOnTime);
-			Console.WriteLine("");
+            TestCommand ();
+        }
 
-			ConnectDevices(false);
+        /*public void TestPumpBurstOnTimeCommand ()
+        {
+            WriteTitleText ("Starting pump burst on time command test");
 
-			var cmd = "B" + PumpBurstOnTime;
+            Console.WriteLine ("Pump burst on time: " + PumpBurstOnTime);
+            Console.WriteLine ("");
 
-			SendDeviceCommand(cmd);
+            ConnectDevices (false);
 
-			var dataEntry = WaitForDataEntry();
+            var cmd = "B" + PumpBurstOnTime;
 
-			AssertDataValueEquals(dataEntry, "B", PumpBurstOnTime);
-		}
-	}
+            SendDeviceCommand (cmd);
+
+            var dataEntry = WaitForDataEntry ();
+
+            AssertDataValueEquals (dataEntry, "B", PumpBurstOnTime);
+        }*/
+
+        /* public void SendPumpBurstOffTimeCommand ()
+        {
+            WriteParagraphTitleText ("Sending pump burst on time command...");
+
+            var command = "B" + PumpBurstOnTime;
+
+            SendDeviceCommand (command);
+
+            WriteParagraphTitleText ("Checking pump burst on time value...");
+
+            var dataEntry = WaitForDataEntry ();
+
+            AssertDataValueEquals (dataEntry, "B", PumpBurstOnTime);
+        }
+
+        public void ResetAndCheckPumpBurstOffTimeIsPreserved ()
+        {
+            ResetDeviceViaPin ();
+
+            WriteParagraphTitleText ("Checking pump burst on time value...");
+
+            var dataEntry = WaitForDataEntry ();
+
+            AssertDataValueEquals (dataEntry, "O", PumpBurstOffTime);
+        }*/
+    }
 }

@@ -2,13 +2,20 @@
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-    public class PumpCommandTestHelper : GreenSenseIrrigatorHardwareTestHelper
+    public class PumpCommandTestHelper : SerialCommandTestHelper
     {
         public PumpStatus PumpCommand = PumpStatus.Auto;
 
         public void TestPumpCommand ()
         {
-            WriteTitleText ("Starting pump command test");
+            Letter = "P";
+            Value = (int)PumpCommand;
+            Label = "pump mode";
+            ValueIsSavedInEEPROM = false;
+
+            TestCommand ();
+
+            /*WriteTitleText ("Starting pump command test");
 
             Console.WriteLine ("Pump command: " + PumpCommand);
             Console.WriteLine ("");
@@ -23,7 +30,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             WaitForData (1);
 
             var dataEntry = WaitForDataEntry ();
-            AssertDataValueEquals (dataEntry, "P", (int)PumpCommand);
+            AssertDataValueEquals (dataEntry, "P", (int)PumpCommand);*/
         }
     }
 }
