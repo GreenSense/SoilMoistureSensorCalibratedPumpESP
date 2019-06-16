@@ -45,6 +45,11 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 bool isMqttConnected = false;
+bool isWiFiConnected = false;
+bool isWiFiConnecting = false;
+
+long wifiStartConnectingTime = 0;
+long wifiRetryInterval = 10 * 1000;
 
 void setup()
 {
@@ -63,26 +68,41 @@ void setup()
   setupIrrigation();
 
   serialOutputIntervalInSeconds = soilMoistureSensorReadingIntervalInSeconds;
-
-  timeClient.begin();
 }
 
 void setupWiFi()
 {
-  if (WiFi.status() != WL_CONNECTED)
+  if (!isWiFiConnected)
   {
-    Serial.print("Connecting to WiFi network: ");
-    Serial.println(WIFI_NAME);
+    if (WiFi.status() != WL_CONNECTED)
+    {
+      bool isReconnectRetryTime = wifiStartConnectingTime > 0 &&
+                                  millis() - wifiRetryInterval > wifiStartConnectingTime;
     
-    WiFi.begin(WIFI_NAME, WIFI_PASSWORD);
-
-	  delay(1000);
-     
-    Serial.println();
-
-    if (WiFi.status() == WL_CONNECTED)
+      if (isReconnectRetryTime)
+      {
+        Serial.println("Failed to connect to WiFi. Retrying...");
+      }
+    
+      if (!isWiFiConnecting || isReconnectRetryTime)
+      {
+        Serial.print("Connecting to WiFi network: ");
+        Serial.println(WIFI_NAME);
+        
+        WiFi.begin(WIFI_NAME, WIFI_PASSWORD);
+        
+        wifiStartConnectingTime = millis();
+        
+        isWiFiConnecting = true;
+      }
+    }
+    else
     {
       Serial.println("Connected to WiFi");
+
+      isWiFiConnected = true;
+      
+      timeClient.begin();
 
       setupMqtt();
     }
@@ -91,7 +111,7 @@ void setupWiFi()
 
 void setupMqtt()
 {
-  if (WiFi.status() == WL_CONNECTED)
+  if (isWiFiConnected && !isMqttConnected)
   {
     client.setServer(MQTT_HOST, MQTT_PORT);
 
@@ -110,6 +130,8 @@ void setupMqtt()
    
       if (client.connect(MQTT_DEVICE_NAME, MQTT_USERNAME, MQTT_PASSWORD )) {
         Serial.println("Connected to MQTT");  
+
+        isMqttConnected = true;
 
         setupMqttSubscriptions();
       } else {
@@ -254,7 +276,7 @@ void serialPrintDeviceInfo()
 /* MQTT Publish */
 void mqttPublishData()
 {
-  if (soilMoistureSensorReadingHasBeenTaken)
+  if (isMqttConnected && soilMoistureSensorReadingHasBeenTaken)
   {
     if (isDebugMode)
       Serial.println("Publishing");
