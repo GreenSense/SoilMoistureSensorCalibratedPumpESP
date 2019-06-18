@@ -1,22 +1,27 @@
 ﻿using System;
-using System.Threading;
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-    public class CalibrateCommandTestHelper : SerialCommandTestHelper
+    public class CalibrateToCurrentCommandTestHelper : GreenSenseHardwareTestHelper
     {
+        public string Label;
+        public string Letter;
+        public int SimulatedSoilMoisturePercentage = -1;
         public int RawSoilMoistureValue = 0;
 
-        public CalibrateCommandTestHelper ()
+        public CalibrateToCurrentCommandTestHelper ()
         {
         }
 
         public void TestCalibrateCommand ()
         {
-            Value = RawSoilMoistureValue;
-            TestCommand ();
+            WriteTitleText ("Starting calibrate " + Label + " command test");
 
-            /*WriteTitleText ("Starting calibrate " + Label + " command test");
+
+            Console.WriteLine ("Simulated soil moisture: " + SimulatedSoilMoisturePercentage + "%");
+
+            if (RawSoilMoistureValue == 0)
+                RawSoilMoistureValue = SimulatedSoilMoisturePercentage * AnalogPinMaxValue / 100;
 
             Console.WriteLine ("Raw soil moisture value: " + RawSoilMoistureValue);
             Console.WriteLine ("");
@@ -36,10 +41,10 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
                 AssertDataValueIsWithinRange (dataEntry, "R", RawSoilMoistureValue, RawValueMarginOfError);
             }
 
-            SendCalibrationCommand ();*/
+            SendCalibrationCommand ();
         }
 
-        /*public void SendCalibrationCommand ()
+        public void SendCalibrationCommand ()
         {
             var command = Letter;
 
@@ -59,6 +64,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
                 AssertDataValueIsWithinRange (dataEntry, Letter, RawSoilMoistureValue, RawValueMarginOfError);
             else // Otherwise it needs to be exact
                 AssertDataValueEquals (dataEntry, Letter, RawSoilMoistureValue);
-        }*/
+        }
     }
 }
+

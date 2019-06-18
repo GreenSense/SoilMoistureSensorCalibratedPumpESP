@@ -4,7 +4,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
     public class PumpCommandTestHelper : SerialCommandTestHelper
     {
-        public PumpStatus PumpCommand = PumpStatus.Auto;
+        public PumpMode PumpCommand = PumpMode.Auto;
 
         public void TestPumpCommand ()
         {

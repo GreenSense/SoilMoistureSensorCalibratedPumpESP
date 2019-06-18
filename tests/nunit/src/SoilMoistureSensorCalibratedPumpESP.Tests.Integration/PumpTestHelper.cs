@@ -7,7 +7,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
     public class PumpTestHelper : GreenSenseIrrigatorHardwareTestHelper
     {
-        public PumpStatus PumpCommand = PumpStatus.Auto;
+        public PumpMode PumpCommand = PumpMode.Auto;
         public int SimulatedSoilMoisturePercentage = 50;
         public int BurstOnTime = 3;
         public int BurstOffTime = 3;
@@ -54,13 +54,13 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             AssertDataValueIsWithinRange (dataEntry, "C", SimulatedSoilMoisturePercentage, CalibratedValueMarginOfError);
 
             switch (PumpCommand) {
-            case PumpStatus.Off:
+            case PumpMode.Off:
                 CheckPumpIsOff ();
                 break;
-            case PumpStatus.On:
+            case PumpMode.On:
                 CheckPumpIsOn ();
                 break;
-            case PumpStatus.Auto:
+            case PumpMode.Auto:
                 CheckPumpIsAuto ();
                 break;
             }

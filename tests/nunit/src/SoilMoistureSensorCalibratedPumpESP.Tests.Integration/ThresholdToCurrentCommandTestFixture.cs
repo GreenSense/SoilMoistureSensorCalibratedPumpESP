@@ -1,24 +1,19 @@
 ﻿using System;
 using NUnit.Framework;
-using duinocom;
-using System.Threading;
-using ArduinoSerialControllerClient;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.IO.Ports;
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-    // TODO: Remove if not needed. Should be obsolete. It's been merged with the ReadIntervalCommandTestFixture
     [TestFixture (Category = "Integration")]
-    public class ReadIntervalEEPROMTestFixture : BaseTestFixture
+    public class ThresholdToCurrentCommandTestFixture : BaseTestFixture
     {
         [Test]
-        public void Test_SetReadInterval_1sec ()
+        public void Test_SetThresholdToCurrentSoilMoistureValueCommand_15Percent ()
         {
-            using (var helper = new ReadIntervalEEPROMTestHelper ()) {
-                helper.ReadInterval = 1;
+            using (var helper = new ThresholdToCurrentCommandTestHelper ()) {
+                var value = 15;
+
+                helper.SimulatedSoilMoisturePercentage = value;
+                helper.Threshold = value;
 
                 helper.DevicePort = GetDevicePort ();
                 helper.DeviceBaudRate = GetDeviceSerialBaudRate ();
@@ -26,15 +21,18 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
                 helper.SimulatorPort = GetSimulatorPort ();
                 helper.SimulatorBaudRate = GetSimulatorSerialBaudRate ();
 
-                helper.TestReadIntervalEEPROM ();
+                helper.TestThresholdCommand ();
             }
         }
 
         [Test]
-        public void Test_SetReadInterval_3sec ()
+        public void Test_SetThresholdToCurrentSoilMoistureValueCommand_25Percent ()
         {
-            using (var helper = new ReadIntervalEEPROMTestHelper ()) {
-                helper.ReadInterval = 3;
+            using (var helper = new ThresholdToCurrentCommandTestHelper ()) {
+                var value = 25;
+
+                helper.SimulatedSoilMoisturePercentage = value;
+                helper.Threshold = value;
 
                 helper.DevicePort = GetDevicePort ();
                 helper.DeviceBaudRate = GetDeviceSerialBaudRate ();
@@ -42,9 +40,9 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
                 helper.SimulatorPort = GetSimulatorPort ();
                 helper.SimulatorBaudRate = GetSimulatorSerialBaudRate ();
 
-                helper.TestReadIntervalEEPROM ();
+                helper.TestThresholdCommand ();
             }
         }
-
     }
 }
+

@@ -2,18 +2,14 @@
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-    public class ThresholdCommandTestHelper : SerialCommandTestHelper
+    public class ThresholdToCurrentCommandTestHelper : GreenSenseIrrigatorHardwareTestHelper
     {
         public int Threshold = 30;
+        public int SimulatedSoilMoisturePercentage = -1;
 
         public void TestThresholdCommand ()
         {
-            Label = "threshold";
-            Letter = "T";
-            Value = Threshold;
-
-            TestCommand ();
-            /*WriteTitleText ("Starting threshold command test");
+            WriteTitleText ("Starting threshold command test");
 
             Console.WriteLine ("Simulated soil moisture: " + SimulatedSoilMoisturePercentage + "%");
             Console.WriteLine ("Threshold: " + Threshold + "%");
@@ -34,10 +30,10 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
                 AssertDataValueIsWithinRange (dataEntry, "C", SimulatedSoilMoisturePercentage, CalibratedValueMarginOfError);
             }
 
-            SendThresholdCommand ();*/
+            SendThresholdCommand ();
         }
 
-        /*public void SendThresholdCommand ()
+        public void SendThresholdCommand ()
         {
             var simulatorIsNeeded = SimulatedSoilMoisturePercentage > -1;
 
@@ -60,6 +56,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             } else { // Otherwise it needs to be exact
                 AssertDataValueEquals (dataEntry, "T", Threshold);
             }
-        }*/
+        }
     }
 }
+

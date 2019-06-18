@@ -55,7 +55,6 @@
     <Compile Include="SoilMoistureSensorPowerTestFixture.cs" />
     <Compile Include="SoilMoistureSensorPowerTestHelper.cs" />
     <Compile Include="PumpCommandTestHelper.cs" />
-    <Compile Include="PumpStatus.cs" />
     <Compile Include="PumpTestFixture.cs" />
     <Compile Include="MqttTestHelper.cs" />
     <Compile Include="GreenSenseMqttHardwareTestHelper.cs" />
@@ -79,10 +78,6 @@
     <Compile Include="MqttOutputTestFixture.cs" />
     <Compile Include="MqttOutputTestHelper.cs" />
     <Compile Include="TimeoutHelper.cs" />
-    <Compile Include="ThresholdEEPROMTestFixture.cs" />
-    <Compile Include="ThresholdEEPROMTestHelper.cs" />
-    <Compile Include="CalibrationEEPROMTestFixture.cs" />
-    <Compile Include="CalibrationEEPROMTestHelper.cs" />
     <Compile Include="CalibrateCommandTestFixture.cs" />
     <Compile Include="CalibrateCommandTestHelper.cs" />
     <Compile Include="PumpBurstOffTimeCommandTestFixture.cs" />
@@ -94,6 +89,11 @@
     <Compile Include="ThresholdCommandTestFixture.cs" />
     <Compile Include="ThresholdCommandTestHelper.cs" />
     <Compile Include="CommandTestHelper.cs" />
+    <Compile Include="CalibrateToCurrentCommandTestFixture.cs" />
+    <Compile Include="CalibrateToCurrentCommandTestHelper.cs" />
+    <Compile Include="ThresholdToCurrentCommandTestFixture.cs" />
+    <Compile Include="ThresholdToCurrentCommandTestHelper.cs" />
+    <Compile Include="PumpMode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
