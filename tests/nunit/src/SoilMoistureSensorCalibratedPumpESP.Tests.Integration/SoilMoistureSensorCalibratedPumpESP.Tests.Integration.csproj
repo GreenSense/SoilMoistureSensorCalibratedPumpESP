@@ -88,12 +88,14 @@
     <Compile Include="ReadIntervalCommandTestHelper.cs" />
     <Compile Include="ThresholdCommandTestFixture.cs" />
     <Compile Include="ThresholdCommandTestHelper.cs" />
-    <Compile Include="CommandTestHelper.cs" />
+    <Compile Include="SerialCommandTestHelper.cs" />
     <Compile Include="CalibrateToCurrentCommandTestFixture.cs" />
     <Compile Include="CalibrateToCurrentCommandTestHelper.cs" />
     <Compile Include="ThresholdToCurrentCommandTestFixture.cs" />
     <Compile Include="ThresholdToCurrentCommandTestHelper.cs" />
     <Compile Include="PumpMode.cs" />
+    <Compile Include="WiFiSettingsCommandTestFixture.cs" />
+    <Compile Include="MqttSettingsCommandTestFixture.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

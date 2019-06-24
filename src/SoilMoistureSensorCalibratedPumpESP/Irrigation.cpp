@@ -2,7 +2,7 @@
 
 #include <EEPROM.h>
 
-#include <duinocom.h>
+#include <duinocom2.h>
 
 #include "Common.h"
 #include "SoilMoistureSensor.h"

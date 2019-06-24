@@ -6,7 +6,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
     public class CalibrateMqttCommandTestHelper : GreenSenseMqttHardwareTestHelper
     {
         public string Label;
-        public string Letter;
+        public string Key;
         public int RawSoilMoistureValue = 0;
 
         public void TestCalibrateCommand ()
@@ -25,7 +25,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public void SendMqttCalibrationCommand ()
         {      
-            Mqtt.SendCommand (Letter, RawSoilMoistureValue);
+            Mqtt.SendCommand (Key, RawSoilMoistureValue);
 
             // Skip some data
             WaitForData (1);
@@ -34,9 +34,9 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             // If using the soil moisture simulator then the value needs to be within a specified range
             if (SimulatorIsEnabled)
-                AssertDataValueIsWithinRange (dataEntry, Letter, RawSoilMoistureValue, RawValueMarginOfError);
+                AssertDataValueIsWithinRange (dataEntry, Key, RawSoilMoistureValue, RawValueMarginOfError);
             else // Otherwise it needs to be exact
-                AssertDataValueEquals (dataEntry, Letter, RawSoilMoistureValue);
+                AssertDataValueEquals (dataEntry, Key, RawSoilMoistureValue);
         }
     }
 }

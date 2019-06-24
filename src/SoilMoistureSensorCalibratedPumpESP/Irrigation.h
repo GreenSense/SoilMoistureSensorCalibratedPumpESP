@@ -2,6 +2,7 @@
 #define IRRIGATION_H_
 
 #include <Arduino.h>
+#include <EEPROMHelper.h>
 
 #define PUMP_PIN 13 // Mapped to physical pin 11 on Wemos D1
 

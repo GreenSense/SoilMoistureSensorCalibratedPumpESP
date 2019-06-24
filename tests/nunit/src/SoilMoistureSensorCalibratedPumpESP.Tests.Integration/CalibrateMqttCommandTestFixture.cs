@@ -11,7 +11,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			using (var helper = new CalibrateMqttCommandTestHelper())
 			{
 				helper.Label = "dry";
-				helper.Letter = "D";
+				helper.Key = "D";
 				helper.RawSoilMoistureValue = 200;
 
 				helper.DevicePort = GetDevicePort();
@@ -30,7 +30,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			using (var helper = new CalibrateMqttCommandTestHelper())
 			{
 				helper.Label = "dry";
-				helper.Letter = "D";
+				helper.Key = "D";
 				helper.RawSoilMoistureValue = 220;
 
 				helper.DevicePort = GetDevicePort();
@@ -49,7 +49,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			using (var helper = new CalibrateMqttCommandTestHelper())
 			{
 				helper.Label = "wet";
-				helper.Letter = "W";
+				helper.Key = "W";
 				helper.RawSoilMoistureValue = 880;
 
 				helper.DevicePort = GetDevicePort();
@@ -68,7 +68,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 			using (var helper = new CalibrateMqttCommandTestHelper())
 			{
 				helper.Label = "wet";
-				helper.Letter = "W";
+				helper.Key = "W";
 				helper.RawSoilMoistureValue = 900;
 
 				helper.DevicePort = GetDevicePort();

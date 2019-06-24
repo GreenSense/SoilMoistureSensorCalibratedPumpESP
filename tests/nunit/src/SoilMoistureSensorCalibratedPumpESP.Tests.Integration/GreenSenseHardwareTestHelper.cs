@@ -19,6 +19,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
       
         public bool CalibrationIsReversedByDefault = true;
 
+        public bool RequiresResetSettings = true;
+
         public GreenSenseHardwareTestHelper ()
         {
         }
@@ -47,17 +49,18 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         {
             Console.WriteLine ("Preparing device for test...");
 
-            ResetDeviceSettings ();
+            if (RequiresResetSettings) {
+                ResetDeviceSettings ();
 
-            SetDeviceReadInterval (1);
+                SetDeviceReadInterval (1);
 
-            SetDryCalibrationValue (AnalogPinMaxValue);
+                SetDryCalibrationValue (AnalogPinMaxValue);
 
-            SetWetCalibrationValue (0);
+                SetWetCalibrationValue (0);
 
-            if (CalibrationIsReversedByDefault)
-                ReverseDeviceCalibration ();
-
+                if (CalibrationIsReversedByDefault)
+                    ReverseDeviceCalibration ();
+            }
             if (consoleWriteDeviceOutput)
                 ReadFromDeviceAndOutputToConsole ();
         }
@@ -120,6 +123,18 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             SendDeviceCommand (cmd);
         }
 
+        public void SetDeviceReadInterval (int numberOfSeconds)
+        {
+            var cmd = "I" + numberOfSeconds;
+
+            Console.WriteLine ("");
+            Console.WriteLine ("Setting device read interval to " + numberOfSeconds + " second(s)...");
+            Console.WriteLine ("  Sending '" + cmd + "' command to device");
+            Console.WriteLine ("");
+
+            SendDeviceCommand (cmd);
+        }
+
         public void SetDryCalibrationValue (int value)
         {
             var cmd = "D" + value;
@@ -138,18 +153,6 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             Console.WriteLine ("");
             Console.WriteLine ("Setting wet calibration value to: " + value);
-            Console.WriteLine ("  Sending '" + cmd + "' command to device");
-            Console.WriteLine ("");
-
-            SendDeviceCommand (cmd);
-        }
-
-        public void SetDeviceReadInterval (int numberOfSeconds)
-        {
-            var cmd = "I" + numberOfSeconds;
-
-            Console.WriteLine ("");
-            Console.WriteLine ("Setting device read interval to " + numberOfSeconds + " second(s)...");
             Console.WriteLine ("  Sending '" + cmd + "' command to device");
             Console.WriteLine ("");
 

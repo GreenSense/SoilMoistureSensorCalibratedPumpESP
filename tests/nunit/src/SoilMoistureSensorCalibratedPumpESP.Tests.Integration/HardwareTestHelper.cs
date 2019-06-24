@@ -22,8 +22,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         public string SimulatorPort;
         public int SimulatorBaudRate = 0;
 
-        public int DelayAfterConnectingToHardware = 3 * 1000;
-        public int DelayAfterDisconnectingFromHardware = 1000;
+        public int DelayAfterConnectingToHardware = 0;
+        public int DelayAfterDisconnectingFromHardware = 500;
 
         public string DataPrefix = "D;";
         public string DataPostFix = ";;";
@@ -39,12 +39,15 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public int ResetTriggerPin = 4;
 
-        public string IrrigatorStartText = "Starting WiFi irrigator";
+        public string DeviceStartText = "Device started...";
+
+        public string TextToWaitForBeforeTest;
 
         public TimeoutHelper Timeout = new TimeoutHelper ();
 
         public HardwareTestHelper ()
         {
+            TextToWaitForBeforeTest = DeviceStartText;
         }
 
         #region Console Output Functions
@@ -98,7 +101,9 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             Console.WriteLine ("Enabling target hardware device...");
 
-            DeviceClient = new SerialClient (DevicePort, DeviceBaudRate);
+            if (DeviceClient == null) {
+                DeviceClient = new SerialClient (DevicePort, DeviceBaudRate);
+            }
 
             try {
                 DeviceClient.Open ();
@@ -131,7 +136,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             SimulatorIsEnabled = true;
 
-            EnsureSimulatorIsNotResettingDevice ();
+            // Reset the device so it's starting from scratch
+            InitialResetDeviceViaPin ();
 
             Console.WriteLine ("");
         }
@@ -144,7 +150,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public void DisconnectDevice ()
         {
-            DeviceClient.Close ();
+            if (DeviceClient != null)
+                DeviceClient.Close ();
         }
 
         public void DisconnectSimulator ()
@@ -159,11 +166,11 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             DisconnectSimulator ();
         }
 
-        public void WaitForDevicesToConnect ()
+        public virtual void WaitForDevicesToConnect ()
         {
             Thread.Sleep (DelayAfterConnectingToHardware);
 
-            WaitForText ("Connected to MQTT");
+            WaitForText (TextToWaitForBeforeTest);
 
             ReadFromDeviceAndOutputToConsole ();
         }
@@ -184,6 +191,18 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         #region Reset Functions
 
+        public virtual void InitialResetDeviceViaPin ()
+        {
+            // Set the reset trigger pin LOW (false) to begin a reset
+            SimulatorClient.DigitalWrite (ResetTriggerPin, false);
+
+            // Give the pin some time at LOW to ensure reset
+            Thread.Sleep (10);
+
+            // Change the reset trigger pin to an INPUT_PULLUP to cancel the reset
+            SimulatorClient.PinMode (ResetTriggerPin, PinMode.INPUT_PULLUP);
+        }
+
         public virtual void ResetDeviceViaPin ()
         {
             // Close the connection to the device
@@ -201,8 +220,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             // Re-open the connection to the device
             ConnectDevice ();
 
-            // Ensure the irrigator restarted
-            WaitForText (IrrigatorStartText);
+            // Ensure the device restarted
+            WaitForText (DeviceStartText);
         }
 
         #endregion
@@ -366,6 +385,10 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
                 }
             }
 
+            var waitDuration = DateTime.Now.Subtract (Timeout.TimeoutStart);
+
+            Console.WriteLine ("  Wait duration: " + waitDuration.ToString ());
+
             return dataLine;
         }
 
@@ -487,9 +510,14 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public void AssertDataValueEquals (Dictionary<string, string> dataEntry, string dataKey, int expectedValue)
         {
+            AssertDataValueEquals (dataEntry, dataKey, expectedValue.ToString ());
+        }
+
+        public void AssertDataValueEquals (Dictionary<string, string> dataEntry, string dataKey, string expectedValue)
+        {
             Assert.IsTrue (dataEntry.ContainsKey (dataKey), "The key '" + dataKey + "' is not found in the data entry.");
 
-            var value = Convert.ToInt32 (dataEntry [dataKey]);
+            var value = dataEntry [dataKey];
 
             Assert.AreEqual (expectedValue, value, "Data value for '" + dataKey + "' key is incorrect: " + value);
 
@@ -527,13 +555,18 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public bool IsWithinRange (double expectedValue, double actualValue, double allowableMarginOfError)
         {
+            Console.WriteLine ("Checking value is within range...");
+            Console.WriteLine ("  Expected value: " + expectedValue);
+            Console.WriteLine ("  Actual value: " + actualValue);
+            Console.WriteLine ("  Allowable margin of error: " + allowableMarginOfError);
+
             var minAllowableValue = expectedValue - allowableMarginOfError;
             if (minAllowableValue < 0)
                 minAllowableValue = 0;
             var maxAllowableValue = expectedValue + allowableMarginOfError;
 
-            Console.WriteLine ("Checking value '" + actualValue + "' is within range of '" + expectedValue + "'");
-            Console.WriteLine ("  Minimum of '" + minAllowableValue + "' and maximum of '" + maxAllowableValue + "', with '" + allowableMarginOfError + "' as the allowable margin of error");
+            Console.WriteLine ("  Max allowable value: " + maxAllowableValue);
+            Console.WriteLine ("  Min allowable value: " + minAllowableValue);
 
             var isWithinRange = actualValue <= maxAllowableValue &&
                                 actualValue >= minAllowableValue;

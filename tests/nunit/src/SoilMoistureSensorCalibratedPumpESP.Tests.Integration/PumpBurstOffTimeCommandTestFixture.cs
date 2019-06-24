@@ -29,23 +29,6 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             }
         }
 
-        // TODO: Remove if not needed. Should be redundant.
-        /*[Test]
-        public void Test_SetPumpBurstOffTime_1Seconds ()
-        {
-            using (var helper = new PumpBurstOffTimeCommandTestHelper ()) {
-                helper.PumpBurstOffTime = 1;
-
-                helper.DevicePort = GetDevicePort ();
-                helper.DeviceBaudRate = GetDeviceSerialBaudRate ();
-
-                helper.SimulatorPort = GetSimulatorPort ();
-                helper.SimulatorBaudRate = GetSimulatorSerialBaudRate ();
-
-                helper.TestPumpBurstOffTimeCommand ();
-            }
-        }*/
-
         [Test]
         public void Test_SetPumpBurstOffTime_3Seconds ()
         {

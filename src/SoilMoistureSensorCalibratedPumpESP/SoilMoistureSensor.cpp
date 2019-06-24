@@ -1,16 +1,14 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 
-#include <duinocom.h>
+#include <duinocom2.h>
 
 #include "Common.h"
+#include "EEPROMHelper.h"
 #include "SoilMoistureSensor.h"
 
 #define soilMoistureSensorPin A0
-#define soilMoistureSensorPowerPin 12 // Mapped to physical pin 12 on Wemos D1
-
-#define SOIL_MOISTURE_SENSOR_TYPE_RESISTIVE 0
-#define SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE 1
+#define soilMoistureSensorPowerPin 12
 
 int soilMoistureSensorType = SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE;
 
@@ -25,7 +23,7 @@ long lastSoilMoistureSensorReadingTime = 0; // Milliseconds
 int soilMoistureLevelCalibrated = 0;
 int soilMoistureLevelRaw = 0;
 
-bool reverseSoilMoistureSensor = true;
+bool reverseSoilMoistureSensor = false;
 //int drySoilMoistureCalibrationValue = ANALOG_MAX;
 int drySoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 0 : ANALOG_MAX);
 //int wetSoilMoistureCalibrationValue = 0;
@@ -88,15 +86,15 @@ void takeSoilMoistureSensorReading()
     if (isDebugMode)
       Serial.println("Sensor reading is due");
 
-  	bool sensorGetsTurnedOff = secondsToMilliseconds(soilMoistureSensorReadingIntervalInSeconds) > delayAfterTurningSoilMoistureSensorOn;
+    bool sensorGetsTurnedOff = secondsToMilliseconds(soilMoistureSensorReadingIntervalInSeconds) > delayAfterTurningSoilMoistureSensorOn;
   
-  	bool sensorIsOffAndNeedsToBeTurnedOn = !soilMoistureSensorIsOn && sensorGetsTurnedOff;
+    bool sensorIsOffAndNeedsToBeTurnedOn = !soilMoistureSensorIsOn && sensorGetsTurnedOff;
   
-  	bool postSensorOnDelayHasPast = lastSensorOnTime + delayAfterTurningSoilMoistureSensorOn < millis();
+    bool postSensorOnDelayHasPast = lastSensorOnTime + delayAfterTurningSoilMoistureSensorOn < millis();
   
-  	bool soilMoistureSensorIsOnAndReady = soilMoistureSensorIsOn && (postSensorOnDelayHasPast || !sensorGetsTurnedOff);
+    bool soilMoistureSensorIsOnAndReady = soilMoistureSensorIsOn && (postSensorOnDelayHasPast || !sensorGetsTurnedOff);
 
-        bool soilMoistureSensorIsOnButSettling = soilMoistureSensorIsOn && !postSensorOnDelayHasPast && sensorGetsTurnedOff;
+    bool soilMoistureSensorIsOnButSettling = soilMoistureSensorIsOn && !postSensorOnDelayHasPast && sensorGetsTurnedOff;
 
 /*    if (isDebugMode)
     {
@@ -320,8 +318,8 @@ void setupCalibrationValues()
     if (soilMoistureSensorType == SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE)
     {
       Serial.println("Adjusting calibration values for capacitive sensor");
-      drySoilMoistureCalibrationValue = 700;
-      wetSoilMoistureCalibrationValue = 380;
+      drySoilMoistureCalibrationValue = 570;
+      wetSoilMoistureCalibrationValue = 260;
     }
     
     
@@ -367,8 +365,6 @@ void setDrySoilMoistureCalibrationValue(int newValue)
   drySoilMoistureCalibrationValue = newValue;
   
   EEPROMWriteLong(drySoilMoistureCalibrationValueAddress, newValue);
-
-  EEPROM.commit();
 
   setEEPROMIsCalibratedFlag();
 }

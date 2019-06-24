@@ -5,7 +5,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
     public class CalibrateToCurrentCommandTestHelper : GreenSenseHardwareTestHelper
     {
         public string Label;
-        public string Letter;
+        public string Key;
         public int SimulatedSoilMoisturePercentage = -1;
         public int RawSoilMoistureValue = 0;
 
@@ -46,7 +46,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public void SendCalibrationCommand ()
         {
-            var command = Letter;
+            var command = Key;
 
             // If the simulator isn't enabled then the raw value is passed as part of the command to specify it directly
             if (!SimulatorIsEnabled)
@@ -61,9 +61,9 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             // If using the soil moisture simulator then the value needs to be within a specified range
             if (SimulatorIsEnabled)
-                AssertDataValueIsWithinRange (dataEntry, Letter, RawSoilMoistureValue, RawValueMarginOfError);
+                AssertDataValueIsWithinRange (dataEntry, Key, RawSoilMoistureValue, RawValueMarginOfError);
             else // Otherwise it needs to be exact
-                AssertDataValueEquals (dataEntry, Letter, RawSoilMoistureValue);
+                AssertDataValueEquals (dataEntry, Key, RawSoilMoistureValue);
         }
     }
 }

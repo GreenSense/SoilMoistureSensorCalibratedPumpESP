@@ -1,6 +1,9 @@
 #ifndef SOILMOISTURESENSOR_H_
 #define SOILMOISTURESENSOR_H_
 
+#define SOIL_MOISTURE_SENSOR_TYPE_RESISTIVE 0
+#define SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE 1
+
 extern int soilMoistureSensorType;
 
 extern int soilMoistureLevelCalibrated;
@@ -70,4 +73,3 @@ void restoreDefaultSoilMoistureSensorSettings();
 void restoreDefaultSoilMoistureSensorReadingIntervalSettings();
 void restoreDefaultCalibrationSettings();
 #endif
-/* SOILMOISTURESENSOR_H_ */

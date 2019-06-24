@@ -1,12 +1,20 @@
+WIFI_SOURCE_FILE="src/SoilMoistureSensorCalibratedPumpESP/WiFi.cpp"
 
-FULL_VERSION="$VERSION-$BUILD_NUMBER"
+echo "  WiFi source file:"
+echo "    $WIFI_SOURCE_FILE"
 
-SOURCE_FILE="src/SoilMoistureSensorCalibratedPumpESP/SoilMoistureSensorCalibratedPumpESP.ino"
+sed -i "s/String wifiNetwork = .*/String wifiNetwork = \"network\";/" $WIFI_SOURCE_FILE || exit 1
+sed -i "s/String wifiPassword = .*/String wifiPassword = \"password\";/" $WIFI_SOURCE_FILE || exit 1
 
-sed -i "s/#define WIFI_NAME .*/#define WIFI_NAME \"accesspoint\"/" $SOURCE_FILE
-sed -i "s/#define WIFI_PASSWORD .*/#define WIFI_PASSWORD \"password\"/" $SOURCE_FILE
-sed -i "s/#define MQTT_HOST .*/#define MQTT_HOST \"garden\"/" $SOURCE_FILE
-sed -i "s/#define MQTT_USERNAME .*/#define MQTT_USERNAME \"username\"/" $SOURCE_FILE
-sed -i "s/#define MQTT_PASSWORD .*/#define MQTT_PASSWORD \"password\"/" $SOURCE_FILE
+MQTT_SOURCE_FILE="src/SoilMoistureSensorCalibratedPumpESP/MQTT.cpp"
 
-sh inject-device-name.sh "ESPIrrigator"
+echo "  MQTT Source file:"
+echo "    $MQTT_SOURCE_FILE"
+
+sed -i "s/String mqttHost .*/String mqttHost = \"garden\";/" $MQTT_SOURCE_FILE || exit 1
+sed -i "s/String mqttUsername .*/String mqttUsername = \"username\";/" $MQTT_SOURCE_FILE || exit 1
+sed -i "s/String mqttPassword .*/String mqttPassword = \"password\";/" $MQTT_SOURCE_FILE || exit 1
+sed -i "s/long mqttPort .*/long mqttPort = 1883;/" $MQTT_SOURCE_FILE || exit 1
+sed -i "s/String mqttDeviceName .*/String mqttDeviceName = \"WiFiIrrigator\";/" $MQTT_SOURCE_FILE || exit 1
+
+sh set-mqtt-device-name.sh "WiFiIrrigator"
