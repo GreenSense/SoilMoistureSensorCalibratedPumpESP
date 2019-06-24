@@ -6,7 +6,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
     {
         public MqttTestHelper Mqtt;
 
-        public string ConnectedToMqttText = "Connected to MQTT";
+        public string ConnectedToMqttText = "Subscribed to MQTT topics";
 
         public GreenSenseMqttHardwareTestHelper ()
         {

@@ -114,7 +114,8 @@ void setupMqttSubscriptions()
 
     pubSubClient.subscribe(topic.c_str());
   }
-
+  
+  Serial.println("Subscribed to MQTT topics");
   Serial.println();
 }
 
