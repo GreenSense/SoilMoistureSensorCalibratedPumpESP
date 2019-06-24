@@ -28,7 +28,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             Console.WriteLine ("Skipping the next data entries in case they're out of date...");
 
-            WaitForData (2);
+            WaitForData (3);
 
             var dataEntry = WaitForDataEntry ();
 
