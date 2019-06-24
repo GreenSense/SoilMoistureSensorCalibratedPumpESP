@@ -24,6 +24,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public TimeoutHelper Timeout = new TimeoutHelper ();
 
+        public bool RequireMqttConnection = true;
+
         public MqttTestHelper (string deviceName)
         {
             DeviceName = deviceName;

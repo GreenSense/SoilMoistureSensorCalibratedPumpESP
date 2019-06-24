@@ -1,25 +1,34 @@
 ﻿using System;
+
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-	public class GreenSenseMqttHardwareTestHelper : GreenSenseHardwareTestHelper
-	{
-		public MqttTestHelper Mqtt;
+    public class GreenSenseMqttHardwareTestHelper : GreenSenseHardwareTestHelper
+    {
+        public MqttTestHelper Mqtt;
 
-		public GreenSenseMqttHardwareTestHelper()
-		{
-		}
+        public string ConnectedToMqttText = "Connected to MQTT";
 
-		public void EnableMqtt()
-		{
-			Mqtt = new MqttTestHelper();
-			Mqtt.Start();
-		}
+        public GreenSenseMqttHardwareTestHelper ()
+        {
+        }
 
-		public void EnableMqtt(string deviceName)
-		{
-			Mqtt = new MqttTestHelper(deviceName);
-			Mqtt.Start();
-		}
+        public void EnableMqtt ()
+        {
+            Mqtt = new MqttTestHelper ();
+            Mqtt.Start ();
 
-	}
+            if (!FullDeviceOutput.Contains (ConnectedToMqttText))
+                WaitForText (ConnectedToMqttText);
+        }
+
+        public void EnableMqtt (string deviceName)
+        {
+            Mqtt = new MqttTestHelper (deviceName);
+            Mqtt.Start ();
+
+            if (!FullDeviceOutput.Contains (ConnectedToMqttText))
+                WaitForText (ConnectedToMqttText);
+        }
+
+    }
 }

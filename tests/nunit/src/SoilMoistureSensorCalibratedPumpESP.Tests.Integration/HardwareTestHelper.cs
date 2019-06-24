@@ -28,7 +28,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         public string DataPrefix = "D;";
         public string DataPostFix = ";;";
 
-        public int TimeoutWaitingForResponse = 20 * 1000;
+        public int TimeoutWaitingForResponse = 30 * 1000;
 
         public int AnalogPinMaxValue = 1024;
 
