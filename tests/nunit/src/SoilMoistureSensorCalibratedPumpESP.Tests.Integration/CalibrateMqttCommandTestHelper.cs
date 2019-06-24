@@ -28,7 +28,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             Mqtt.SendCommand (Key, RawSoilMoistureValue);
 
             // Skip some data
-            WaitForData (1);
+            WaitForData (2);
 
             var dataEntry = WaitForDataEntry ();
 
