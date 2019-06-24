@@ -19,8 +19,9 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             Mqtt.SendCommand ("P", (int)PumpCommand);
 
+            WaitForData (2);
+
             var dataEntry = WaitForDataEntry ();
-            dataEntry = WaitForDataEntry ();
             AssertDataValueEquals (dataEntry, "P", (int)PumpCommand);
         }
     }

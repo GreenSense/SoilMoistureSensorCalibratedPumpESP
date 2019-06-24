@@ -95,9 +95,6 @@ void handleCommand(char* msg)
 
     int length = strlen(msg);
 
-    Serial.print("Received message: ");
-    Serial.println(msg);
-
     switch (letter)
     {
       case '#':
