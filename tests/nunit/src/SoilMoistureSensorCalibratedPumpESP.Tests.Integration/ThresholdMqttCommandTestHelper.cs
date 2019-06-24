@@ -26,9 +26,9 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             Mqtt.SendCommand ("T", Threshold);
 
-            Console.WriteLine ("Skipping the next data entry/entries in case they're out of date...");
+            Console.WriteLine ("Skipping the next data entries in case they're out of date...");
 
-            WaitForData (1);
+            WaitForData (2);
 
             var dataEntry = WaitForDataEntry ();
 
