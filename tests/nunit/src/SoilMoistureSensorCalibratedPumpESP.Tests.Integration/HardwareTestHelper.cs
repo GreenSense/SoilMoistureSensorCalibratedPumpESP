@@ -35,7 +35,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         public bool On = true;
         public bool Off = false;
 
-        public string FullDeviceOutput;
+        public string FullDeviceOutput = "";
 
         public int ResetTriggerPin = 4;
 
