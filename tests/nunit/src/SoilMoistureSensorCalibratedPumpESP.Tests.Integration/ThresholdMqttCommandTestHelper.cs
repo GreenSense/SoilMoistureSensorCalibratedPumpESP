@@ -1,35 +1,40 @@
 ﻿using System;
+
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-	public class ThresholdMqttCommandTestHelper : GreenSenseIrrigatorHardwareTestHelper
-	{
-		public int Threshold = 30;
+    public class ThresholdMqttCommandTestHelper : GreenSenseIrrigatorHardwareTestHelper
+    {
+        public int Threshold = 30;
 
-		public void TestThresholdCommand()
-		{
-			WriteTitleText("Starting threshold command test");
+        public void TestThresholdCommand ()
+        {
+            WriteTitleText ("Starting threshold command test");
 
-			Console.WriteLine("Threshold: " + Threshold + "%");
-			Console.WriteLine("");
+            Console.WriteLine ("Threshold: " + Threshold + "%");
+            Console.WriteLine ("");
 
-			ConnectDevices(false);
+            ConnectDevices (false);
 
-			EnableMqtt();
+            EnableMqtt ();
 
-			SendThresholdCommand();
-		}
+            SendThresholdCommand ();
+        }
 
-		public void SendThresholdCommand()
-		{
-			WriteParagraphTitleText("Sending threshold command...");
+        public void SendThresholdCommand ()
+        {
+            WriteParagraphTitleText ("Sending threshold command...");
 
-			Mqtt.SendCommand("T", Threshold);
+            Mqtt.SendCommand ("T", Threshold);
 
-			var dataEntry = WaitForDataEntry();
+            Console.WriteLine ("Skipping the next data entry/entries in case they're out of date...");
 
-			WriteParagraphTitleText("Checking threshold value...");
+            WaitForData (1);
 
-			AssertDataValueEquals(dataEntry, "T", Threshold);
-		}
-	}
+            var dataEntry = WaitForDataEntry ();
+
+            WriteParagraphTitleText ("Checking threshold value...");
+
+            AssertDataValueEquals (dataEntry, "T", Threshold);
+        }
+    }
 }
