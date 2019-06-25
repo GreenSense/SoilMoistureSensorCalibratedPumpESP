@@ -14,7 +14,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public void EnableMqtt ()
         {
-            Mqtt = new MqttTestHelper ();
+            Mqtt = new MqttTestHelper (this);
             Mqtt.Start ();
 
             if (!FullDeviceOutput.Contains (ConnectedToMqttText))
@@ -23,7 +23,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public void EnableMqtt (string deviceName)
         {
-            Mqtt = new MqttTestHelper (deviceName);
+            Mqtt = new MqttTestHelper (this, deviceName);
             Mqtt.Start ();
 
             if (!FullDeviceOutput.Contains (ConnectedToMqttText))

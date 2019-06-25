@@ -6,6 +6,7 @@ using System.Threading;
 using NUnit.Framework;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
+using duinocom;
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
@@ -18,6 +19,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public MqttClient Client;
 
+        public GreenSenseHardwareTestHelper Hardware;
+
         public string ExistingStatusMessage;
 
         public int TimeoutWaitingForMqttData = 20 * 1000;
@@ -26,9 +29,15 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public bool RequireMqttConnection = true;
 
-        public MqttTestHelper (string deviceName)
+        public MqttTestHelper (GreenSenseHardwareTestHelper hardware, string deviceName)
         {
             DeviceName = deviceName;
+            Hardware = hardware;
+        }
+
+        public MqttTestHelper (GreenSenseHardwareTestHelper hardware)
+        {
+            Hardware = hardware;
         }
 
         public MqttTestHelper ()
@@ -183,6 +192,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             Console.WriteLine ("Topic: " + inTopic);
             Client.Publish (inTopic, Encoding.UTF8.GetBytes (value.ToString ()));
             Console.WriteLine ("");
+
+            Hardware.WaitForMessageReceived (key + value);
         }
 
         public void PublishSuccess ()
