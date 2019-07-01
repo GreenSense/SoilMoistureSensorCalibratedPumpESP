@@ -20,9 +20,8 @@ exec 3<> $SERIAL_PORT
 
 echo "$COMMAND" >&3
 
-echo "  Waiting 3 seconds for command to be received..."
-
-sleep 3
+echo "  Waiting 5 seconds for command to be received..."
+sleep 5
 
 exec 3>&-
 
