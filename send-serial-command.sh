@@ -18,10 +18,12 @@ echo "  Device port: $SERIAL_PORT"
 
 exec 3<> $SERIAL_PORT
 
+sleep 10
+
 echo "$COMMAND" >&3
 
 echo "  Waiting 5 seconds for command to be received..."
-sleep 50
+sleep 10
 
 exec 3>&-
 
