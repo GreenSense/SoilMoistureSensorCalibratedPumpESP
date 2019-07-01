@@ -20,6 +20,10 @@ exec 3<> $SERIAL_PORT
 
 echo "$COMMAND" >&3
 
+echo "  Waiting 3 seconds for command to be received..."
+
+sleep 3
+
 exec 3>&-
 
 echo "Finished sending command to device via serial"
