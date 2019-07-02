@@ -15,7 +15,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         // conversion from 5v (of the soil moisture simulator) to 3.3v (of the ESP8266 board) in the test system
         public int RawValueMarginOfError = 75;
         public int CalibratedValueMarginOfError = 8;
-        public double TimeErrorMargin = 0.3;
+        public double TimeErrorMargin = 0.4;
       
         public bool CalibrationIsReversedByDefault = true;
 
