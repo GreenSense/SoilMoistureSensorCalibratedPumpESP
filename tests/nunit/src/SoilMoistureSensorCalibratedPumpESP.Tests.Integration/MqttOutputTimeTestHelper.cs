@@ -18,9 +18,9 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             SetDeviceReadInterval (ReadInterval);
 
-            Console.WriteLine ("Skipping next data entry in case it's out of date...");
+            Console.WriteLine ("Skipping next data entries in case they're out of date...");
 
-            Mqtt.WaitUntilData (1);
+            Mqtt.WaitUntilData (2);
 
             Console.WriteLine ("Waiting for the next data entry...");
 
