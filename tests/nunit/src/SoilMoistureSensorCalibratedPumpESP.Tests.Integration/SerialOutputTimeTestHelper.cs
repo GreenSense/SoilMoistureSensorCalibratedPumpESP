@@ -12,14 +12,13 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             Console.WriteLine ("Read interval: " + ReadInterval);
 
-            ConnectDevices (false);
+            ConnectDevices ();
 
             SetDeviceReadInterval (ReadInterval);
 
             ReadFromDeviceAndOutputToConsole ();
 
             // Skip some data
-            //WaitForData (7); // TODO: See if this can be reduced
             WaitForData (2); // TODO: See if this can be reduced
 
             // Get the time until the next data line
