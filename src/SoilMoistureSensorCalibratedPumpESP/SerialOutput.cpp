@@ -8,6 +8,7 @@
 void serialPrintDeviceInfo()
 {
   Serial.println("");
+  Serial.println("-- Start Device Info");
   Serial.println("Family: GreenSense");
   Serial.println("Group: irrigator");
   Serial.println("Project: SoilMoistureSensorCalibratedPumpESP");
@@ -15,6 +16,8 @@ void serialPrintDeviceInfo()
   Serial.println(BOARD_TYPE);
   Serial.print("Version: ");
   Serial.println(VERSION);
+  Serial.println("ScriptCode: irrigator");
+  Serial.println("-- End Device Info");
   Serial.println("");
 }
 
