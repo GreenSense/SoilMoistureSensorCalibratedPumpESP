@@ -64,13 +64,13 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         {
             WriteParagraphTitleText ("Checking calibrated value...");
 
-            AssertDataValueIsWithinRange (dataEntry, "C", soilMoisturePercentage, CalibratedValueMarginOfError + 5); // TODO: Should the +5 be moved to a property?
+            AssertDataValueIsWithinRange (dataEntry, "C", ApplyOffset(soilMoisturePercentage, CalibratedValueOffset), CalibratedValueMarginOfError);
 
             WriteParagraphTitleText ("Checking raw value...");
 
             var expectedRawValue = soilMoisturePercentage * AnalogPinMaxValue / 100;
 
-            AssertDataValueIsWithinRange (dataEntry, "R", expectedRawValue, RawValueMarginOfError + 10); // TODO: Should the +10 be moved to a property?
+            AssertDataValueIsWithinRange (dataEntry, "R", ApplyOffset(expectedRawValue, RawValueOffset), RawValueMarginOfError);
 
         }
 
@@ -80,10 +80,10 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             Console.WriteLine ("  Current soil moisture level: " + soilMoisturePercentage + "%");
 
-            if (soilMoisturePercentage > SoilMoisturePercentageMaximum)
+            if (ApplyOffset(soilMoisturePercentage, CalibratedValueOffset) > SoilMoisturePercentageMaximum)
                 Assert.Fail ("Soil moisture went above " + SoilMoisturePercentageMaximum + "%");
 
-            if (soilMoisturePercentage < SoilMoisturePercentageMinimum)
+            if (ApplyOffset(soilMoisturePercentage, CalibratedValueOffset) < SoilMoisturePercentageMinimum)
                 Assert.Fail ("Soil moisture dropped below " + SoilMoisturePercentageMinimum + "%");
         }
 

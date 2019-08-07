@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using NUnit.Framework;
 
@@ -16,6 +16,9 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         public int RawValueMarginOfError = 78;
         public int CalibratedValueMarginOfError = 10;
         public double TimeErrorMargin = 0.4;
+
+        public int RawValueOffset = 50;
+        public int CalibratedValueOffset = -15;
       
         public bool CalibrationIsReversedByDefault = true;
 
@@ -210,6 +213,18 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             AssertSimulatorPinForDuration ("soil moisture sensor power", SoilMoistureSimulatorPowerPin, expectedValue, durationInSeconds);
         }
 
+        #endregion
+
+        #region Apply Offset Functions
+        public int ApplyOffset(int value, int offset)
+        {
+        	var newValue = value + offset;
+
+        	if (newValue < 0)
+        	    newValue = 0;
+
+        	return newValue;
+        }
         #endregion
     }
 }
