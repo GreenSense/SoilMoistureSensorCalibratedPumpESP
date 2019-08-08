@@ -14,13 +14,15 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             ConnectDevices ();
 
+            SetDeviceReadInterval (ReadInterval);
+
             EnableMqtt ();
 
-            SetDeviceReadInterval (ReadInterval);
+            Mqtt.Data.Clear ();
 
             Console.WriteLine ("Skipping next data entries in case they're out of date...");
 
-            Mqtt.WaitUntilData (3);
+            Mqtt.WaitUntilData (4);
 
             Console.WriteLine ("Waiting for the next data entry...");
 
