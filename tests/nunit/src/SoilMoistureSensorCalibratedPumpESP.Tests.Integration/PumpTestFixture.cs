@@ -84,12 +84,12 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         }
 
         [Test]
-        public void Test_PumpAuto_WaterNeeded_Burst1_Off2 ()
+        public void Test_PumpAuto_WaterNeeded_Burst2_Off2 ()
         {
             using (var helper = new PumpTestHelper ()) {
                 helper.PumpCommand = PumpMode.Auto;
                 helper.SimulatedSoilMoisturePercentage = 10;
-                helper.BurstOnTime = 1;
+                helper.BurstOnTime = 2;
                 helper.BurstOffTime = 2;
 
                 helper.DevicePort = GetDevicePort ();
