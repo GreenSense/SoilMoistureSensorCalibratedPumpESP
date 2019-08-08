@@ -10,7 +10,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         public int PumpOffDecreaseValue = 5;
 
         public int SoilMoisturePercentageMaximum = 65;
-        public int SoilMoisturePercentageMinimum = 18;
+        public int SoilMoisturePercentageMinimum = 10;
 
         public void RunFullScaleTest ()
         {
