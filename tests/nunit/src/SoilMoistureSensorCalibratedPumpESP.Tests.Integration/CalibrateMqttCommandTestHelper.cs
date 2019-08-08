@@ -16,9 +16,9 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             Console.WriteLine ("Raw soil moisture value: " + RawSoilMoistureValue);
             Console.WriteLine ("");
 
-            EnableMqtt ();
-
             ConnectDevices ();
+
+            EnableMqtt ();
 
             SendMqttCalibrationCommand ();
         }
