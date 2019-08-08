@@ -8,12 +8,16 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public string ConnectedToMqttText = "Subscribed to MQTT topics";
 
+        public bool RequireMqttConnection = false;
+
         public GreenSenseMqttHardwareTestHelper ()
         {
         }
 
         public void EnableMqtt ()
         {
+            RequireMqttConnection = true;
+
             Mqtt = new MqttTestHelper (this);
             Mqtt.Start ();
 
@@ -30,5 +34,13 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
                 WaitForText (ConnectedToMqttText);
         }
 
+        public override void PrepareDeviceForTest (bool consoleWriteDeviceOutput)
+        {
+            if (RequireMqttConnection)
+                TextToWaitForBeforeTest = ConnectedToMqttText;
+
+            base.PrepareDeviceForTest (consoleWriteDeviceOutput);
+
+        }
     }
 }

@@ -41,6 +41,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public string DeviceStartText = "Device started...";
 
+        public string TextToWaitForAfterSerialConnect;
+
         public string TextToWaitForBeforeTest;
 
         public TimeoutHelper Timeout = new TimeoutHelper ();
@@ -51,7 +53,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public HardwareTestHelper ()
         {
-            TextToWaitForBeforeTest = DeviceStartText;
+            TextToWaitForAfterSerialConnect = DeviceStartText;
 
             // TODO: Find a cleaner way to handle file paths
             WiFiPassword = File.ReadAllText (Path.GetFullPath ("../../../../wifi-password.security")).Trim ();
@@ -178,7 +180,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         {
             Thread.Sleep (DelayAfterConnectingToHardware);
 
-            WaitForText (TextToWaitForBeforeTest);
+            WaitForText (TextToWaitForAfterSerialConnect);
 
             ReadFromDeviceAndOutputToConsole ();
         }
@@ -358,22 +360,24 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public string WaitForText (string text)
         {
-            Console.WriteLine ("Waiting for text: " + text);
+            Console.WriteLine ("Waiting for text: " + CleanSerialOutput (text));
 
             var output = String.Empty;
             var containsText = false;
 
-            Timeout.Start ();
+            if (!FullDeviceOutput.Contains (text)) {
+                Timeout.Start ();
 
-            while (!containsText) {
-                output += ReadLineFromDevice ();
+                while (!containsText) {
+                    output += ReadLineFromDevice ();
 
-                if (output.Contains (text)) {
-                    //Console.WriteLine ("  Found text: " + text);
+                    if (output.Contains (text)) {
+                        //Console.WriteLine ("  Found text: " + text);
 
-                    containsText = true;
-                } else
-                    Timeout.Check (TimeoutWaitingForResponse, "Timed out waiting for text: " + text);
+                        containsText = true;
+                    } else
+                        Timeout.Check (TimeoutWaitingForResponse, "Timed out waiting for text: " + CleanSerialOutput (text));
+                }
             }
 
             return output;

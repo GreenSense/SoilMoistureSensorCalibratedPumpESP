@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using NUnit.Framework;
+using System.IO;
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
@@ -53,6 +54,10 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         public virtual void PrepareDeviceForTest (bool consoleWriteDeviceOutput)
         {
             Console.WriteLine ("Preparing device for test...");
+            
+            SetWiFiSettings ();
+
+            SetMqttSettings ();
 
             if (RequiresResetSettings) {
                 ResetDeviceSettings ();
@@ -66,8 +71,12 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
                 if (CalibrationIsReversedByDefault)
                     ReverseDeviceCalibration ();
             }
+
             if (consoleWriteDeviceOutput)
                 ReadFromDeviceAndOutputToConsole ();
+
+            if (!String.IsNullOrEmpty (TextToWaitForBeforeTest))
+                WaitForText (TextToWaitForBeforeTest);
         }
 
         #endregion
@@ -115,6 +124,26 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         #endregion
 
         #region Specific Device Command Functions
+
+        public void SetWiFiSettings ()
+        {
+            var wiFiName = File.ReadAllText (Path.GetFullPath ("../../../../wifi-name.security")).Trim ();
+            SendDeviceCommand ("WName:" + wiFiName);
+            var wiFiPassword = File.ReadAllText (Path.GetFullPath ("../../../../wifi-password.security")).Trim ();
+            SendDeviceCommand ("WPass:" + wiFiPassword);
+        }
+
+        public void SetMqttSettings ()
+        {
+            var mqttHost = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-host.security")).Trim ();
+            SendDeviceCommand ("MHost:" + mqttHost);
+            var mqttUsername = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-username.security")).Trim ();
+            SendDeviceCommand ("MUser:" + mqttUsername);
+            var mqttPassword = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-password.security")).Trim ();
+            SendDeviceCommand ("MPass:" + mqttPassword);
+            var mqttPort = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-port.security")).Trim ();
+            SendDeviceCommand ("MPort:" + mqttPort);
+        }
 
         public void ResetDeviceSettings ()
         {

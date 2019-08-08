@@ -16,27 +16,25 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             Console.WriteLine ("Raw soil moisture value: " + RawSoilMoistureValue);
             Console.WriteLine ("");
 
-            ConnectDevices (false);
-
             EnableMqtt ();
+
+            ConnectDevices ();
 
             SendMqttCalibrationCommand ();
         }
 
         public void SendMqttCalibrationCommand ()
-        {      
-            Mqtt.SendCommand (Key, RawSoilMoistureValue);
+        {
+            Mqtt.Data.Clear ();
+
+            Mqtt.SendCommand (Letter, RawSoilMoistureValue);
 
             // Skip some data
-            WaitForData (2);
+            WaitForData (1);
 
             var dataEntry = WaitForDataEntry ();
 
-            // If using the soil moisture simulator then the value needs to be within a specified range
-            if (SimulatorIsEnabled)
-                AssertDataValueIsWithinRange (dataEntry, Key, RawSoilMoistureValue, RawValueMarginOfError);
-            else // Otherwise it needs to be exact
-                AssertDataValueEquals (dataEntry, Key, RawSoilMoistureValue);
+            AssertDataValueEquals (dataEntry, Key, RawSoilMoistureValue);
         }
     }
 }
