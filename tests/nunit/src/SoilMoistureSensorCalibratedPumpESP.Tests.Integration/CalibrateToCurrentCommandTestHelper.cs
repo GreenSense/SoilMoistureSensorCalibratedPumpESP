@@ -1,4 +1,5 @@
 ﻿using System;
+using NUnit.Framework;
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
@@ -59,11 +60,11 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             var dataEntry = WaitForDataEntry ();
 
-            // If using the soil moisture simulator then the value needs to be within a specified range
-            if (SimulatorIsEnabled)
-                AssertDataValueIsWithinRange (dataEntry, Key, RawSoilMoistureValue, RawValueMarginOfError);
-            else // Otherwise it needs to be exact
-                AssertDataValueEquals (dataEntry, Key, RawSoilMoistureValue);
+            Assert.IsTrue (dataEntry.ContainsKey (Key), "Data entry doesn't contain " + Label + " '" + Key + "' key/value.");
+
+            var value = Convert.ToInt32 (dataEntry [Key]);
+
+            AssertIsWithinRange (Label, value, ApplyOffset (RawSoilMoistureValue, ExpectedRawValueOffset), RawValueMarginOfError);
         }
     }
 }

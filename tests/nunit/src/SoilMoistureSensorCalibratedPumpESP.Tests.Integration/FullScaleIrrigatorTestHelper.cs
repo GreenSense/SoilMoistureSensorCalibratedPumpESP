@@ -64,13 +64,13 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         {
             WriteParagraphTitleText ("Checking calibrated value...");
 
-            AssertDataValueIsWithinRange (dataEntry, "C", ApplyOffset(soilMoisturePercentage, CalibratedValueOffset), CalibratedValueMarginOfError);
+            AssertDataValueIsWithinRange (dataEntry, "C", soilMoisturePercentage, CalibratedValueMarginOfError);
 
             WriteParagraphTitleText ("Checking raw value...");
 
             var expectedRawValue = soilMoisturePercentage * AnalogPinMaxValue / 100;
 
-            AssertDataValueIsWithinRange (dataEntry, "R", ApplyOffset(expectedRawValue, RawValueOffset), RawValueMarginOfError);
+            AssertDataValueIsWithinRange (dataEntry, "R", expectedRawValue, RawValueMarginOfError);
 
         }
 
@@ -80,11 +80,11 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             Console.WriteLine ("  Current soil moisture level: " + soilMoisturePercentage + "%");
 
-            if (ApplyOffset(soilMoisturePercentage, CalibratedValueOffset) > SoilMoisturePercentageMaximum)
-                Assert.Fail ("Soil moisture went above " + SoilMoisturePercentageMaximum + "%");
+            if (soilMoisturePercentage > ApplyOffset (SoilMoisturePercentageMaximum, ExpectedCalibratedValueOffset))
+                Assert.Fail ("Soil moisture went above " + ApplyOffset (SoilMoisturePercentageMaximum, ExpectedCalibratedValueOffset) + "%");
 
-            if (ApplyOffset(soilMoisturePercentage, CalibratedValueOffset) < SoilMoisturePercentageMinimum)
-                Assert.Fail ("Soil moisture dropped below " + SoilMoisturePercentageMinimum + "%");
+            if (soilMoisturePercentage < ApplyOffset (SoilMoisturePercentageMinimum, ExpectedCalibratedValueOffset))
+                Assert.Fail ("Soil moisture dropped below " + ApplyOffset (SoilMoisturePercentageMinimum, ExpectedCalibratedValueOffset) + "%");
         }
 
         public int AdjustSoilMoisturePercentageBasedOnPumpPin (int soilMoisturePercentage, bool pumpPinValue)

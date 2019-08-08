@@ -51,7 +51,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             // TODO: Check PO value matches the pump
 
-            AssertDataValueIsWithinRange (dataEntry, "C", ApplyOffset(SimulatedSoilMoisturePercentage, CalibratedValueOffset), CalibratedValueMarginOfError);
+            AssertDataValueIsWithinRange (dataEntry, "C", SimulatedSoilMoisturePercentage, CalibratedValueMarginOfError);
 
             switch (PumpCommand) {
             case PumpMode.Off:

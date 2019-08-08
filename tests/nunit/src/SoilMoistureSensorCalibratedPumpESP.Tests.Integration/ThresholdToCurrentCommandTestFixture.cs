@@ -21,7 +21,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
                 helper.SimulatorPort = GetSimulatorPort ();
                 helper.SimulatorBaudRate = GetSimulatorSerialBaudRate ();
 
-                helper.TestThresholdCommand ();
+                helper.TestThresholdToCurrentValueCommand ();
             }
         }
 
@@ -40,7 +40,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
                 helper.SimulatorPort = GetSimulatorPort ();
                 helper.SimulatorBaudRate = GetSimulatorSerialBaudRate ();
 
-                helper.TestThresholdCommand ();
+                helper.TestThresholdToCurrentValueCommand ();
             }
         }
     }

@@ -22,7 +22,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         public string SimulatorPort;
         public int SimulatorBaudRate = 0;
 
-        public int DelayAfterConnectingToHardware = 1000;
+        public int DelayAfterConnectingToHardware = 500;
         public int DelayAfterDisconnectingFromHardware = 500;
 
         public string DataPrefix = "D;";
@@ -542,7 +542,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             Console.WriteLine ("");
         }
 
-        public void AssertDataValueIsWithinRange (Dictionary<string, string> dataEntry, string dataKey, int expectedValue, int allowableMarginOfError)
+        public virtual void AssertDataValueIsWithinRange (Dictionary<string, string> dataEntry, string dataKey, int expectedValue, int allowableMarginOfError)
         {
             var value = Convert.ToInt32 (dataEntry [dataKey]);
 
@@ -563,6 +563,9 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             var minValue = expectedValue - allowableMarginOfError;
             var maxValue = expectedValue + allowableMarginOfError;
+
+            if (minValue < 0)
+                minValue = 0;
 
             Assert.IsTrue (isWithinRange, "The " + label + " value is outside the specified range: " + actualValue + " (Expected: " + minValue + " - " + maxValue + ")");
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using NUnit.Framework;
 
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
@@ -7,7 +8,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         public int Threshold = 30;
         public int SimulatedSoilMoisturePercentage = -1;
 
-        public void TestThresholdCommand ()
+        public void TestThresholdToCurrentValueCommand ()
         {
             WriteTitleText ("Starting threshold command test");
 
@@ -35,12 +36,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         public void SendThresholdCommand ()
         {
-            var simulatorIsNeeded = SimulatedSoilMoisturePercentage > -1;
-
             var command = "T";
-            // If the simulator isn't enabled then the raw value is passed as part of the command to specify it directly
-            if (!simulatorIsNeeded)
-                command = command + Threshold;
 
             WriteParagraphTitleText ("Sending threshold command...");
 
@@ -50,12 +46,11 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             WriteParagraphTitleText ("Checking threshold value...");
 
-            // If using the soil moisture simulator then the value needs to be within a specified range
-            if (simulatorIsNeeded) {
-                AssertDataValueIsWithinRange (dataEntry, "T", Threshold, CalibratedValueMarginOfError);
-            } else { // Otherwise it needs to be exact
-                AssertDataValueEquals (dataEntry, "T", Threshold);
-            }
+            Assert.IsTrue (dataEntry.ContainsKey ("T"), "Data entry doesn't contain threshold 'T' key/value.");
+
+            var threshold = Convert.ToInt32 (dataEntry ["T"]);
+
+            AssertIsWithinRange ("threshold", ApplyOffset (SimulatedSoilMoisturePercentage, ExpectedCalibratedValueOffset), threshold, CalibratedValueMarginOfError);
         }
     }
 }
