@@ -12,8 +12,8 @@
 
 extern int threshold;
 extern bool pumpIsOn;
-extern long pumpStartTime;
-extern long lastPumpFinishTime;
+extern unsigned long pumpStartTime;
+extern unsigned long lastPumpFinishTime;
 extern int pumpBurstOnTime;
 extern int pumpBurstOffTime;
 extern int pumpStatus;

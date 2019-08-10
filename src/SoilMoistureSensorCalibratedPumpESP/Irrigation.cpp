@@ -11,8 +11,8 @@
 int threshold = 30;
 
 bool pumpIsOn = 0;
-long pumpStartTime = 0;
-long lastPumpFinishTime = 0;
+unsigned long pumpStartTime = 0;
+unsigned long lastPumpFinishTime = 0;
 int pumpBurstOnTime = 3;
 int pumpBurstOffTime = 5;
 
@@ -116,13 +116,13 @@ void irrigateIfNeeded()
   if (pumpStatus == PUMP_STATUS_AUTO)
   {
     bool readingHasBeenTaken = lastSoilMoistureSensorReadingTime > 0;
-    bool pumpBurstFinished = pumpStartTime + secondsToMilliseconds(pumpBurstOnTime) < millis();
+    bool pumpBurstFinished = pumpBurstOffTime > 0 && pumpStartTime + secondsToMilliseconds(pumpBurstOnTime) < millis();
     bool waterIsNeeded = soilMoistureLevelCalibrated <= threshold && readingHasBeenTaken;
     bool pumpIsReady = lastPumpFinishTime + secondsToMilliseconds(pumpBurstOffTime) < millis() || lastPumpFinishTime == 0;
 
     if (pumpIsOn)
     {
-      if (pumpBurstFinished)
+      if (pumpBurstFinished || !waterIsNeeded)
       {
         if (isDebugMode)
           Serial.println("  Pump burst finished");
