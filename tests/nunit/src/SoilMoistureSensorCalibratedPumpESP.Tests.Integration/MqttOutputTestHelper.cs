@@ -56,7 +56,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             var value = Convert.ToInt32 (valueString);
 
-            AssertIsWithinRange ("MQTT calibrated soil moisture", SimulatedSoilMoistureSensorValue, value, CalibratedValueMarginOfError);
+            AssertIsWithinRange ("MQTT calibrated soil moisture", SimulatedSoilMoistureSensorValue, ApplyOffset (value, ExpectedCalibratedValueOffset), CalibratedValueMarginOfError);
         }
     }
 }

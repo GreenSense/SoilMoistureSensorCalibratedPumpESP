@@ -13,7 +13,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             Console.WriteLine ("Pump burst on time: " + PumpBurstOnTime);
             Console.WriteLine ("");
 
-            ConnectDevices (false);
+            ConnectDevices ();
 
             EnableMqtt ();
 

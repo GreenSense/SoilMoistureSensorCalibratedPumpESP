@@ -116,9 +116,9 @@ void irrigateIfNeeded()
   if (pumpStatus == PUMP_STATUS_AUTO)
   {
     bool readingHasBeenTaken = lastSoilMoistureSensorReadingTime > 0;
-    bool pumpBurstFinished = pumpBurstOffTime > 0 && pumpStartTime + secondsToMilliseconds(pumpBurstOnTime) < millis();
+    bool pumpBurstFinished = pumpBurstOffTime > 0 && millis() - pumpStartTime >= secondsToMilliseconds(pumpBurstOnTime);
     bool waterIsNeeded = soilMoistureLevelCalibrated <= threshold && readingHasBeenTaken;
-    bool pumpIsReady = lastPumpFinishTime + secondsToMilliseconds(pumpBurstOffTime) < millis() || lastPumpFinishTime == 0;
+    bool pumpIsReady = millis() - lastPumpFinishTime >= secondsToMilliseconds(pumpBurstOffTime) || lastPumpFinishTime == 0;
 
     if (pumpIsOn)
     {

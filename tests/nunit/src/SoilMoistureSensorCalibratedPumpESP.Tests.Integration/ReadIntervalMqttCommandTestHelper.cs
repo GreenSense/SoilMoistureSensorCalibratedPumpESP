@@ -1,27 +1,28 @@
 ﻿using System;
+
 namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 {
-	public class ReadIntervalMqttCommandTestHelper : GreenSenseMqttHardwareTestHelper
-	{
-		public int ReadInterval = 1;
+    public class ReadIntervalMqttCommandTestHelper : GreenSenseMqttHardwareTestHelper
+    {
+        public int ReadInterval = 1;
 
-		public void TestSetReadIntervalCommand()
-		{
-			WriteTitleText("Starting read interval command test");
+        public void TestSetReadIntervalCommand ()
+        {
+            WriteTitleText ("Starting read interval command test");
 
-			Console.WriteLine("Read interval: " + ReadInterval);
+            Console.WriteLine ("Read interval: " + ReadInterval);
 
-			ConnectDevices(false);
+            ConnectDevices ();
 
-			EnableMqtt();
+            EnableMqtt ();
 
-			Mqtt.SendCommand("I", ReadInterval);
+            Mqtt.SendCommand ("I", ReadInterval);
 
-			var entries = WaitForData(2);
+            WaitForData (1);
 
-			var dataEntry = entries[entries.Length-1];
+            var dataEntry = WaitForDataEntry ();
 
-			AssertDataValueEquals(dataEntry, "I", ReadInterval);
-		}
-	}
+            AssertDataValueEquals (dataEntry, "I", ReadInterval);
+        }
+    }
 }
