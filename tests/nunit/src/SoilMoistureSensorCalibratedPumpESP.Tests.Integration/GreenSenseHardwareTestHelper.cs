@@ -19,9 +19,9 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         public double TimeErrorMargin = 0.4;
 
         // Offset to take into account voltage drop via the simulated soil moisture sensor readings
-        public int ExpectedRawValueOffset = 30;
+        public int ExpectedRawValueOffset = 10;
         // Offset to take into account voltage drop via the simulated soil moisture sensor readings
-        public int ExpectedCalibratedValueOffset = 2;
+        public int ExpectedCalibratedValueOffset = -2;
       
         public bool CalibrationIsReversedByDefault = true;
 
