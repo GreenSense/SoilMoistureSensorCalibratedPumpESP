@@ -14,8 +14,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
         // The margin of error is higher in the ESP8266 version of the test than the arduino version because of the
         // conversion from 5v (of the soil moisture simulator) to 3.3v (of the ESP8266 board) in the test system
-        public int RawValueMarginOfError = 40;
-        public int CalibratedValueMarginOfError = 4;
+        public int RawValueMarginOfError = 50;
+        public int CalibratedValueMarginOfError = 6;
         public double TimeErrorMargin = 0.4;
 
         // Offset to take into account voltage drop via the simulated soil moisture sensor readings
