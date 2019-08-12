@@ -15,14 +15,15 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             Console.WriteLine ("Read interval: " + ReadInterval);
             Console.WriteLine ("Soil moisture sensor value: " + SimulatedSoilMoistureSensorValue);
 
-            ConnectDevices (SimulatedSoilMoistureSensorValue > -1);
+            ConnectDevices ();
 
             EnableMqtt ();
 
             SetDeviceReadInterval (ReadInterval);
 
-            if (SimulatedSoilMoistureSensorValue > -1)
-                SimulateSoilMoisture (SimulatedSoilMoistureSensorValue);
+            SimulateSoilMoisture (SimulatedSoilMoistureSensorValue);
+
+            Mqtt.Data.Clear ();
 
             Console.WriteLine ("Waiting for MQTT data...");
 
@@ -56,7 +57,7 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
 
             var value = Convert.ToInt32 (valueString);
 
-            AssertIsWithinRange ("MQTT calibrated soil moisture", SimulatedSoilMoistureSensorValue, ApplyOffset (value, ExpectedCalibratedValueOffset), CalibratedValueMarginOfError);
+            AssertIsWithinRange ("MQTT calibrated soil moisture", ApplyOffset (SimulatedSoilMoistureSensorValue, ExpectedCalibratedValueOffset), value, CalibratedValueMarginOfError);
         }
     }
 }
