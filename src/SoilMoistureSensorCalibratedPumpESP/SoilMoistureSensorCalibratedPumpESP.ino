@@ -25,13 +25,13 @@ void setup()
   
   EEPROM.begin(512);
 
-  setupWiFi();
-
   setupSoilMoistureSensor();
 
   setupIrrigation();
 
   serialOutputIntervalInSeconds = soilMoistureSensorReadingIntervalInSeconds;
+  
+  delay(200);
 }
 
 void loop()

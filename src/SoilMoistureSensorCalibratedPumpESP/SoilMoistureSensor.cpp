@@ -173,7 +173,7 @@ void takeSoilMoistureSensorReading()
   }
   else
   {
-    if (isDebugMode)
+    /*if (isDebugMode)
     {
       Serial.println("Sensor reading is not due");
       
@@ -189,13 +189,13 @@ void takeSoilMoistureSensorReading()
       Serial.print("  Time left until next soil moisture sensor reading: ");
       Serial.print(millisecondsToSecondsWithDecimal(timeLeftUntilNextReading));
       Serial.println(" seconds");
-    }
+    }*/
   }
 }
 
-double getAverageSoilMoistureSensorReading()
+int getAverageSoilMoistureSensorReading()
 {
-  int readingSum  = 0;
+  long readingSum = 0;
   int totalReadings = 10;
 
   for (int i = 0; i < totalReadings; i++)
@@ -203,14 +203,16 @@ double getAverageSoilMoistureSensorReading()
     int reading = analogRead(soilMoistureSensorPin);
 
     readingSum += reading;
+    
+    delay(1);
   }
 
-  double averageReading = readingSum / totalReadings;
+  int averageReading = readingSum / totalReadings;
 
   return averageReading;
 }
 
-double calculateSoilMoistureLevel(int soilMoistureSensorReading)
+int calculateSoilMoistureLevel(int soilMoistureSensorReading)
 {
   return map(soilMoistureSensorReading, drySoilMoistureCalibrationValue, wetSoilMoistureCalibrationValue, 0, 100);
 }

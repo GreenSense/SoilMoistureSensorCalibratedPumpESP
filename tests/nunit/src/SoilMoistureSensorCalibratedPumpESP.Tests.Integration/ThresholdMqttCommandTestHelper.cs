@@ -13,6 +13,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             Console.WriteLine ("Threshold: " + Threshold + "%");
             Console.WriteLine ("");
 
+            RequireMqttConnection = true;
+
             ConnectDevices ();
 
             EnableMqtt ();

@@ -100,6 +100,9 @@ void handleCommand(char* msg)
       case '#':
         serialPrintDeviceInfo();
         break;
+      case '!': // Disable WiFi and MQTT to speed up tests which don't require them
+        disableWiFi();
+        disableMqtt();
       case 'P':
         setPumpStatus(msg);
         break;

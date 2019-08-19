@@ -13,6 +13,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
             Console.WriteLine ("Pump command: " + PumpCommand);
             Console.WriteLine ("");
 
+            RequireMqttConnection = true;
+
             ConnectDevices ();
 
             EnableMqtt ();

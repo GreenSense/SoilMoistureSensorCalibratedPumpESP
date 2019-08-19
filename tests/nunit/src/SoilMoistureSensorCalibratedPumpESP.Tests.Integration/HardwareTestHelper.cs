@@ -22,8 +22,8 @@ namespace SoilMoistureSensorCalibratedPumpESP.Tests.Integration
         public string SimulatorPort;
         public int SimulatorBaudRate = 0;
 
-        public int DelayAfterConnectingToHardware = 100;
-        public int DelayAfterDisconnectingFromHardware = 100;
+        public int DelayAfterConnectingToHardware = 0;
+        public int DelayAfterDisconnectingFromHardware = 0;
 
         public string DataPrefix = "D;";
         public string DataPostFix = ";;";

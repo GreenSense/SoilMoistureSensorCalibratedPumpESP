@@ -5,12 +5,12 @@
 
 const int ANALOG_MAX = 1024;
 
-long lastSerialOutputTime = 0;
+unsigned long lastSerialOutputTime = 0;
 long serialOutputIntervalInSeconds = 1;
 
 bool isDebugMode = false;
 
-int loopNumber = 0;
+unsigned long loopNumber = 0;
 
 void serialPrintLoopHeader()
 {
@@ -37,7 +37,7 @@ void serialPrintLoopFooter()
   }
 }
 
-long secondsToMilliseconds(int seconds)
+unsigned long secondsToMilliseconds(int seconds)
 {
   return seconds * 1000;
 }

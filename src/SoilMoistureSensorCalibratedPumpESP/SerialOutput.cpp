@@ -23,13 +23,15 @@ void serialPrintDeviceInfo()
 
 void serialPrintData()
 {
-   bool isTimeToPrintData = lastSerialOutputTime + secondsToMilliseconds(serialOutputIntervalInSeconds) < millis()
+  bool isTimeToPrintData = millis() - lastSerialOutputTime >= secondsToMilliseconds(serialOutputIntervalInSeconds)
       || lastSerialOutputTime == 0;
 
   bool isReadyToPrintData = isTimeToPrintData && soilMoistureSensorReadingHasBeenTaken;
 
   if (isReadyToPrintData)
   {
+    lastSerialOutputTime = millis();
+
     if (isDebugMode)
     {
       Serial.println("Printing serial data");
@@ -85,7 +87,6 @@ void serialPrintData()
       Serial.println(lastPumpFinishTime);
     }
 
-    lastSerialOutputTime = millis();
   }
 }
 
